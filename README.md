@@ -15,7 +15,7 @@ The application allows visitors to explore the lodge, learn about island attract
 
 ## Key Features
 - **Landing Page** – Modern marketing design to welcome guests.
-- **About Us, Contact Us & Attractions** – Static HTML/CSS pages highlighting the lodge and island activities (hiking, kayaking, whale watching, scuba diving).
+- **About Us, Contact Us & Attractions** – Static HTML/CSS pages highlighting the lodge and island activities.
 - **User Registration & Login** – Email-based authentication, password rules, and secure storage using hashing.
 - **Vacation Booking** – Select room size, guest count, and check-in/check-out dates.
 - **Reservation Summary & Confirmation** – Review and confirm bookings, with cancellation and submission options.
