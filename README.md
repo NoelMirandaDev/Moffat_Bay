@@ -9,7 +9,7 @@
 ---
 
 ## Introduction
-Welcome to the Moffat Bay Lodge Reservation System, a full-stack web application designed for the fictional Joviedsa Island Resort in Washington State’s San Juan Islands. This project simulates a real-world development scenario where our team was tasked with creating a secure, user-friendly, and visually appealing website for a newly built resort and marina.
+Welcome to the Moffat Bay Lodge Reservation System, a full-stack Python web application designed for the fictional Joviedsa Island Resort in Washington State’s San Juan Islands. This project simulates a real-world development scenario where our team was tasked with creating a secure, user-friendly, and visually appealing website for a newly built resort and marina.
 
 The application allows visitors to explore the lodge, learn about island attractions, and make reservations through a streamlined booking process. Customers can browse all public pages without logging in, but must register for a free account to confirm a booking. The system securely stores user credentials and reservation details in a MySQL database, applying modern best practices for password validation and encryption.
 
@@ -20,6 +20,47 @@ The application allows visitors to explore the lodge, learn about island attract
 - **Vacation Booking** – Select room size, guest count, and check-in/check-out dates.
 - **Reservation Summary & Confirmation** – Review and confirm bookings, with cancellation and submission options.
 - **Reservation Lookup** – Search previous reservations by ID or email.
+
+---
+
+## Getting Started (set up for local development)  
+
+Follow the steps below to set up and run the project locally.
+
+### Prerequisites
+- Python 3.10 or newer
+- Git
+- MySQL (to be integrated later)
+
+### 1. Clone the Repository  
+``git clone https://github.com/<your-username>/Moffat_Bay.git``  
+
+``cd Moffat_Bay/src``
+
+### 2. Create a Virtual Environment (keeps project dependencies separate from your global Python installation)  
+``python -m venv venv``  
+
+Note: This step only needs to be done once. The virtual environment folder venv will store all Python packages locally for this project.
+
+### 3. Activate the Virtual Environment (After activation, all Python commands and installed packages are isolated to this project.)  
+- Mac/Linux: ``source venv/bin/activate``
+- Windows: ``venv\Scripts\activate``
+
+### 4. Install Dependencies (This installs Flask and any other required packages.)  
+``pip install -r requirements.txt``  
+
+Note: This step only needs to be done once. Dependencies only need to be installed once per virtual environment.
+
+### 5. Run the Flask Application (Make sure your virtual environment is activated before attempting to run)  
+``python app.py``
+
+### 6. Stop the Server
+**Press CTRL + C in the terminal.**
+
+### 7. Deactivate the Virtual Environment
+``Deactivate``  
+
+Note: This turns off the virtual environment and returns you to your system Python. The installed packages remain in the venv folder and do not need to be reinstalled.
 
 ---
 
