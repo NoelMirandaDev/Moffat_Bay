@@ -33,7 +33,7 @@ Follow the steps below to set up and run the project locally.
 - MySQL (to be integrated later)
 
 ### 1. Clone the Repository  
-``git clone https://github.com/<your-username>/Moffat_Bay.git``  
+``git clone https://github.com/NoelMirandaDev/Moffat_Bay.git``  
 
 ``cd Moffat_Bay/src``
 
