@@ -76,6 +76,23 @@ Note: This turns off the virtual environment and returns you to your system Pyth
 
 ---
 
+## Database Setup (MySQL)
+
+To **set up the schema locally**, follow these steps:
+
+1. Make sure MySQL is installed and running on your machine.  
+
+2. From the project root directory (`Moffat_Bay`), run the following command in your terminal (NOTE this will DROP the old moffat_bay database if it exists.):  
+``mysql -u root -p < db/schema.sql``  
+
+To **populate the database**, follow these steps (**Not yet included in this repo, WIP**):
+
+1. From the project root directory (`Moffat_Bay`), run the following command in your terminal:
+``mysql -u root -p moffat_bay < db/data.sql``
+
+
+---
+
 ## Contributors
 | Role              | Name           |
 |-------------------|----------------|
