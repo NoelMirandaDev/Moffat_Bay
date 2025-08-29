@@ -5,7 +5,6 @@
 # Moffat Bay Lodge Reservation System
 *CSD460-A311 Capstone in Software Development*  
 <sub>Bellevue University 9-week project-based course</sub>
-
 ---
 
 ## Introduction
@@ -30,15 +29,19 @@ Follow the steps below to set up and run the project locally.
 ### Prerequisites
 - Python 3.10 or newer
 - Git
-- MySQL (to be integrated later)
+- MySQL
 
 ### 1. Clone the Repository  
 ``git clone https://github.com/NoelMirandaDev/Moffat_Bay.git``  
 
-``cd Moffat_Bay/src``
+``cd Moffat_Bay``
 
 ### 2. Create a Virtual Environment (keeps project dependencies separate from your global Python installation)  
-``python -m venv venv``  
+``python3 -m venv venv``  
+
+or 
+
+``python -m venv venv`` (older python versions & windows)
 
 Note: This step only needs to be done once. The virtual environment folder venv will store all Python packages locally for this project.
 
@@ -46,19 +49,28 @@ Note: This step only needs to be done once. The virtual environment folder venv 
 - Mac/Linux: ``source venv/bin/activate``
 - Windows: ``venv\Scripts\activate``
 
-### 4. Install Dependencies (This installs Flask and any other required packages.)  
+### 4.a Install Dependencies (This installs Flask and any other required packages.)  
 ``pip install -r requirements.txt``  
 
 Note: This step only needs to be done once. Dependencies only need to be installed once per virtual environment.
 
+### 4.b Create .env file (This file is for your MySQL database credentials)  
+
+- ``cp .env.example .env``
+- Change placeholders to your MySQL credentials
+
+Note: This step only needs to be done once. Do not worry of credentials being uploaded to GitHub, it is accounted for in the .gitignore file.
+
 ### 5. Run the Flask Application (Make sure your virtual environment is activated before attempting to run)  
-``python app.py``
+``cd src``  
+
+``python3 app.py``
 
 ### 6. Stop the Server
 **Press CTRL + C in the terminal.**
 
 ### 7. Deactivate the Virtual Environment
-``Deactivate``  
+``deactivate``  
 
 Note: This turns off the virtual environment and returns you to your system Python. The installed packages remain in the venv folder and do not need to be reinstalled.
 
