@@ -26,9 +26,10 @@ CREATE TABLE `customer` (
 -- --------------------------------------------------------
 CREATE TABLE `roomtype` (
   `RoomTypeID` int(11) NOT NULL AUTO_INCREMENT,
-  `TypeName` varchar(50) NOT NULL,
+  `TypeName` varchar(50) NOT NULL UNIQUE,
   `BedConfiguration` varchar(50) DEFAULT NULL,
   `PricePerNight` decimal(8,2) NOT NULL,
+  `MaxOccupancy` int(11) NOT NULL,
   PRIMARY KEY (`RoomTypeID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -37,7 +38,7 @@ CREATE TABLE `roomtype` (
 -- --------------------------------------------------------
 CREATE TABLE `amenity` (
   `AmenityID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
+  `Name` varchar(50) NOT NULL UNIQUE,
   `Description` text DEFAULT NULL,
   PRIMARY KEY (`AmenityID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -49,7 +50,7 @@ CREATE TABLE `room` (
   `RoomID` int(11) NOT NULL AUTO_INCREMENT,
   `RoomNumber` varchar(10) NOT NULL UNIQUE,
   `RoomTypeID` int(11) NOT NULL,
-  `HandicapAccessible` tinyint(1) DEFAULT 0,
+  `ADAAccessible` tinyint(1) DEFAULT 0,
   `Description` text DEFAULT NULL,
   PRIMARY KEY (`RoomID`),
   KEY `RoomTypeID` (`RoomTypeID`),

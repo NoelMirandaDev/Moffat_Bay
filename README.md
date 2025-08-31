@@ -85,7 +85,7 @@ To **set up the schema locally**, follow these steps:
 2. From the project root directory (`Moffat_Bay`), run the following command in your terminal (NOTE this will DROP the old moffat_bay database if it exists.):  
 ``mysql -u root -p < db/schema.sql``  
 
-To **populate the database**, follow these steps (**Not yet included in this repo, WIP**):
+To **populate the database**, follow these steps:
 
 1. From the project root directory (`Moffat_Bay`), run the following command in your terminal:
 ``mysql -u root -p moffat_bay < db/data.sql``
