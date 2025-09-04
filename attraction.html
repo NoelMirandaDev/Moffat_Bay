@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Attractions - Moffat Bay Lodge</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="logo">
+      <img src="images/moffat_logo-clean.png" alt="Moffat Bay Lodge Logo" />
+    </div>
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="attraction.html">Attraction</a>
+      <a href="lodge_reservation.html">Lodge Reservation</a>
+      <a href="reservation_lookup.html">Reservation Lookup</a>
+      <a href="reservation_summary.html">Reservation Summary</a>
+      <a href="about.html">About Us</a>
+      <button class="btn-brown">Login / Register</button>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="basic-section">
+      <h1>Island Attractions</h1>
+      <p>This is a placeholder for the Attractions page. Highlight hiking, kayaking, whale watching, scuba diving, and more!</p>
+    </section>
+  </main>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="attraction.html">Attraction</a>
+    <a href="lodge_reservation.html">Lodge Reservation</a>
+    <a href="reservation_lookup.html">Reservation Lookup</a>
+    <a href="reservation_summary.html">Reservation Summary</a>
+    <a href="about.html">About Us</a>
+  </div>
+  <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
+    <h2 id="loginTitle">Welcome back</h2>
+    
+    <form class="login-form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+      <button type="submit" class="btn-green">Log In</button>
+      <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
+    </form>
+  </div>
+</div>
+
+<script>
+  const loginModal = document.getElementById('loginModal');
+  const loginButtons = document.querySelectorAll('.btn-brown');
+  const closeTriggers = document.querySelectorAll('[data-close-modal]');
+
+  loginButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      loginModal.classList.add('show');
+    });
+  });
+
+  closeTriggers.forEach(el => {
+    el.addEventListener('click', () => {
+      loginModal.classList.remove('show');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === "Escape") {
+      loginModal.classList.remove('show');
+    }
+  });
+</script>
+
+
+</body>
+</html>

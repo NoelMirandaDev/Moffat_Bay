@@ -1,0 +1,212 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moffat Bay Lodge</title>
+
+  <!-- Link to external stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- =============================
+       HEADER + NAVIGATION BAR
+       ============================= -->
+<header class="site-header">
+    <div class="header-inner">
+
+      <!-- Logo (left side of nav) -->
+      <div class="logo">
+        <img src="images/moffat_logo-clean.png" alt="Moffat Bay Lodge Logo">
+      </div>
+
+      <!-- Navigation Links (right side of nav) -->
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="attraction.html">Attraction</a>
+        <a href="lodge_reservation.html">Lodge Reservation</a>
+        <a href="reservation_lookup.html">Reservation Lookup</a>
+        <a href="reservation_summary.html">Reservation Summary</a>
+        <a href="about.html">About Us</a>
+        <button class="btn-brown">Login / Register</button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- =============================
+       HERO SECTION (Landing Banner)
+       ============================= -->
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Discover Moffat Bay Lodge</h1>
+      <p>Escape to pristine wilderness where comfort meets adventure. Enjoy breathtaking waterfront views, world-class amenities, and unforgettable experiences surrounded by nature's beauty.</p>
+      <div class="hero-buttons">
+        <button class="btn-green">Book Your Stay</button>
+        <button class="btn-light">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================
+       FEATURED LINKS SECTION
+       (Photo Cards linking to main pages)
+       ============================= -->
+
+  <section class="feature-grid">
+
+    <!-- Attractions Card -->
+    <a href="attraction.html" class="feature-card">
+      <img src="images/Island.jpg" alt="Aerial view of the island coastline">
+      <div class="card-text">
+        <h3>Explore the Island</h3>
+        <p>Discover hiking trails, kayaking routes, and breathtaking wildlife around Moffat Bay.</p>
+      </div>
+    </a>
+
+    <!-- Lodge Reservation Card -->
+    <a href="lodge_reservation.html" class="feature-card">
+      <img src="images/Reservation.jpg" alt="Interior of a lodge room with fireplace">
+      <div class="card-text">
+        <h3>Book Your Stay</h3>
+        <p>Reserve your lodge room online with real-time availability and seasonal pricing.</p>
+      </div>
+    </a>
+
+    <!-- Reservation Lookup Card -->
+    <a href="reservation_lookup.html" class="feature-card">
+      <img src="images/Booking.jpg" alt="Laptop showing a reservation lookup form">
+      <div class="card-text">
+        <h3>Find Your Booking</h3>
+        <p>Already booked? Look up your reservation with your email or confirmation ID.</p>
+      </div>
+    </a>
+
+    <!-- Reservation Summary Card -->
+    <a href="reservation_summary.html" class="feature-card">
+      <img src="images/Summary.jpg" alt="Group of guests reviewing their itinerary at a table">
+      <div class="card-text">
+        <h3>Trip Summary</h3>
+        <p>View, confirm, or cancel your upcoming reservation in just a few clicks.</p>
+      </div>
+    </a>
+
+  </section>
+
+  <!-- =============================
+       FOOTER WITH PAGE LINKS
+       ============================= -->
+
+  <footer class="site-footer">
+
+    <!-- Footer Navigation -->
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="attraction.html">Attraction</a>
+      <a href="lodge_reservation.html">Lodge Reservation</a>
+      <a href="reservation_lookup.html">Reservation Lookup</a>
+      <a href="reservation_summary.html">Reservation Summary</a>
+      <a href="about.html">About Us</a>
+    </div>
+
+    <!-- Copyright -->
+    <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
+  </footer>
+
+  <!-- =============================
+       LOGIN MODAL (Pop-up Overlay)
+       ============================= -->
+  <div class="modal" id="loginModal">
+
+    <div class="modal-backdrop" data-close-modal></div>
+
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+
+      <!-- Close Button (X) -->
+      <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
+
+      <!-- Login Form -->
+      <h2 id="loginTitle">Welcome back</h2>
+      <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+        <button type="submit" class="btn-green">Log In</button>
+        <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- =============================
+       MODAL JAVASCRIPT FUNCTIONALITY
+       (Opens/Closes Login Modal)
+       ============================= -->
+       
+  <script>
+    const loginModal = document.getElementById('loginModal');
+    const loginButtons = document.querySelectorAll('.btn-brown'); // Any login/register trigger
+    const closeTriggers = document.querySelectorAll('[data-close-modal]'); // Elements that close modal
+
+    // Show modal when login button is clicked
+    loginButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
+    });
+
+    // Close modal when clicking backdrop or X
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
+    });
+
+    // ESC key closes modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+  </script>
+
+  <!-- =============================
+       BACKEND STATUS TEST SCRIPT
+       ============================= -->
+  <script>
+    fetch('http://localhost:5000/')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Backend error: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display the backend message in the page
+        document.body.insertAdjacentHTML('beforeend',
+          `<p style="color:green; text-align:center; margin:1em 0;">Backend says: <strong>${data.message}</strong></p>`);
+        console.log('Backend response:', data);
+      })
+      .catch(error => {
+        document.body.insertAdjacentHTML('beforeend',
+          `<p style="color:red; text-align:center; margin:1em 0;">Could not reach backend: ${error}</p>`);
+        console.error('Error connecting to backend:', error);
+      });
+  </script>
+</body>
+</html>
+
+</body>
+</html>
