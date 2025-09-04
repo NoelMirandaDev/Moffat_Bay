@@ -15,7 +15,8 @@ def create_app():
 
     # Creates the Flask application
     app = Flask(__name__)
-
+    # Secret key to be able to flash
+    app.secret_key = "default"
     # Load configuration values from our Config class
     app.config.from_object(Config)
 
