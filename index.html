@@ -182,5 +182,31 @@
     });
   </script>
 
+  <!-- =============================
+       BACKEND STATUS TEST SCRIPT
+       ============================= -->
+  <script>
+    fetch('http://localhost:5000/')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Backend error: ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display the backend message in the page
+        document.body.insertAdjacentHTML('beforeend',
+          `<p style="color:green; text-align:center; margin:1em 0;">Backend says: <strong>${data.message}</strong></p>`);
+        console.log('Backend response:', data);
+      })
+      .catch(error => {
+        document.body.insertAdjacentHTML('beforeend',
+          `<p style="color:red; text-align:center; margin:1em 0;">Could not reach backend: ${error}</p>`);
+        console.error('Error connecting to backend:', error);
+      });
+  </script>
+</body>
+</html>
+
 </body>
 </html>
