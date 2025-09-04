@@ -1,7 +1,7 @@
 from flask import Flask # Imports Flask to create the web application
 from config import Config # Imports configuration settings (e.g., database connection info)
 from dotenv import load_dotenv, find_dotenv # Imports dotenv tools to load variables from a .env file (for DB credentials, etc.)
-from extensions import db # Imports database object
+from extensions import db, csrf # Imports database object and csrf token instance
 
 def create_app():
     """
@@ -22,6 +22,9 @@ def create_app():
     # Initializes SQLAlchemy from extensions with our Flask app
     # This allows us to interact with the database using Python objects (ORM)
     db.init_app(app)
+
+    # Enables CSRF for all POST/PUT/DELETE
+    csrf.init_app(app)
 
     # Registers all the routes
     from routes import register_routes
