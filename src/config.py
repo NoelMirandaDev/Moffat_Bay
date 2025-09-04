@@ -9,6 +9,7 @@ class Config:
     DB_PORT = os.getenv("DB_PORT", "3306")
     DB_NAME = os.getenv("DB_NAME", "moffat_bay")
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
+    WTF_CSRF_Enabled = True
 
     # Builds the full database connection string (URI) that SQLAlchemy uses
     SQLALCHEMY_DATABASE_URI = (
