@@ -15,7 +15,6 @@ def create_app():
 
     # Creates the Flask application
     app = Flask(__name__)
-
     # Load configuration values from our Config class
     app.config.from_object(Config)
 
