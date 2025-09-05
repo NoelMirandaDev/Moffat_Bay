@@ -32,14 +32,8 @@ def register_routes(app):
             phone = request.form["phone"]
             
             try:
-                # Connect to DB
-                with db.engine.connect() as conn:
-                    # Check DB to see if email is already registered
-                    result = conn.execute(text("SELECT * FROM customer WHERE email = :email"), {"email": email}).fetchone()
-                    if result:
-                        flash("Email is already registered.", "error")
                     # Check if email address is valid
-                    elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                         flash("Invalid email address", "error")
                     # Check if first and last name are valid.
                     elif not re.match(r"[A-Za-z]+$", first) or not re.match(r"[A-Za-z]+$", last):
@@ -50,12 +44,22 @@ def register_routes(app):
                     # Check if password is valid
                     elif not re.match(r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}", password):
                         flash("Password must be atleast 8 charcters, contain 1 uppercase and lowercase letter and a number." "error")
+                    # Check database to see if email already exists
+                    else:
+                        result = db.session.execute(text("SELECT * FROM customer WHERE email = :email"), {"email": email}).fetchone()
+                    if result:
+                        flash("Email is already registered.", "error")
                     # Everything is valid, hash password and register user to database
                     else:
                         pw_hash = generate_password_hash(password)
-                        conn.execute(text("INSERT INTO customer (FirstName, LastName, Email, Phone, PasswordHash) VALUES (:first, :last, :email, :phone, :pw_hash)"), {"first": first, "last": last, "email": email, "phone": phone, "pw_hash": pw_hash})
-                        conn.commit()
-                        flash("You have successfully registered.", "success")
+                        try:
+                            db.session.execute(text("INSERT INTO customer (FirstName, LastName, Email, Phone, PasswordHash) VALUES (:first, :last, :email, :phone, :pw_hash)"), {"first": first, "last": last, "email": email, "phone": phone, "pw_hash": pw_hash})
+                            db.session.commit()
+                            flash("You have successfully registered.", "success")
+                            return redirect(url_for("login"))
+                        except Exception as e:
+                            db.session.rollback()
+                            print(f"Error: {e}")
                 
             except Exception:
                 flash("Something went wrong, please try again.", "error")         
