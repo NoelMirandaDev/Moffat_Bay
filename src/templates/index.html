@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moffat Bay Lodge Backend Connection</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f8fa;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .video-hero {
+      position: relative;
+      width: 100vw;
+      height: 50vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      margin-bottom: 40px;
+    }
+    .video-hero video {
+      width: 100vw;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.9;
+    }
+    .video-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 2;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-shadow: 0 2px 8px #222;
+    }
+    .video-overlay h1 {
+      font-size: 2.7rem;
+      font-weight: 800;
+      margin-bottom: 22px;
+      letter-spacing: 1.2px;
+    }
+    .typewriter {
+      font-size: 1.25rem;
+      font-weight: 500;
+      width: 80vw;
+      max-width: 700px;
+      text-align: center;
+      margin: 0 auto;
+      border-right: 3px solid #fff;
+      white-space: pre-line;
+      overflow: hidden;
+      min-height: 3.2em;
+      animation: blink-caret 1s step-end infinite;
+    }
+    .typewriter.nocaret {
+      border-right: none;
+      animation: none;
+    }
+    @keyframes blink-caret {
+      0%, 100% { border-color: #fff; }
+      50% { border-color: transparent; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER + NAVIGATION BAR -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/moffat_logo-clean.png') }}" alt="Moffat Bay Lodge Logo">
+      </div>
+      <nav class="navbar">
+        <a href="index.html">Home</a>
+        <a href="attraction.html">Attraction</a>
+        <a href="lodge_reservation.html">Lodge Reservation</a>
+        <a href="reservation_lookup.html">Reservation Lookup</a>
+        <a href="reservation_summary.html">Reservation Summary</a>
+        <a href="about.html">About Us</a>
+        <button class="btn-brown">Login / Register</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- VIDEO HERO SECTION WITH TYPEWRITER TEXT -->
+  <section class="video-hero">
+    <video autoplay loop playsinline controls>
+      <source src="{{ url_for('static', filename='images/Moffat_video.MP4') }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay">
+      <h1>Moffat Bay Lodge</h1>
+      <div class="typewriter" id="typewriter"></div>
+    </div>
+  </section>
+
+  <!-- FEATURED LINKS SECTION (Photo Cards linking to main pages) -->
+  <section class="feature-grid">
+    <a href="attraction.html" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Island.jpg') }}" alt="Aerial view of the island coastline">
+      <div class="card-text">
+        <h3>Explore the Island</h3>
+        <p>Discover hiking trails, kayaking routes, and breathtaking wildlife around Moffat Bay.</p>
+      </div>
+    </a>
+    <a href="lodge_reservation.html" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Reservation.jpg') }}" alt="Interior of a lodge room with fireplace">
+      <div class="card-text">
+        <h3>Book Your Stay</h3>
+        <p>Reserve your lodge room online with real-time availability and seasonal pricing.</p>
+      </div>
+    </a>
+    <a href="reservation_lookup.html" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Booking.jpg') }}" alt="Laptop showing a reservation lookup form">
+      <div class="card-text">
+        <h3>Find Your Booking</h3>
+        <p>Already booked? Look up your reservation with your email or confirmation ID.</p>
+      </div>
+    </a>
+    <a href="reservation_summary.html" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Summary.jpg') }}" alt="Group of guests reviewing their itinerary at a table">
+      <div class="card-text">
+        <h3>Trip Summary</h3>
+        <p>View, confirm, or cancel your upcoming reservation in just a few clicks.</p>
+      </div>
+    </a>
+  </section>
+
+  <!-- FOOTER WITH PAGE LINKS -->
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="attraction.html">Attraction</a>
+      <a href="lodge_reservation.html">Lodge Reservation</a>
+      <a href="reservation_lookup.html">Reservation Lookup</a>
+      <a href="reservation_summary.html">Reservation Summary</a>
+      <a href="about.html">About Us</a>
+    </div>
+    <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
+  </footer>
+
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  <div class="modal" id="loginModal">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
+      <h2 id="loginTitle">Welcome back</h2>
+      <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="your@email.com" required />
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required />
+        <button type="submit" class="btn-green">Log In</button>
+        <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal functionality (unchanged)
+    const loginModal = document.getElementById('loginModal');
+    const loginButtons = document.querySelectorAll('.btn-brown');
+    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+
+    loginButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
+    });
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+
+    // Typewriter effect for the message
+    const text = `Welcome to the Moffat Bay Lodge backend connection portal.\n\nExperience the perfect escape into pristine wilderness, where comfort meets adventure. Enjoy breathtaking waterfront views, world-class amenities, and unforgettable moments surrounded by nature's beauty.`;
+    const speed = 32; // typing speed in ms
+    let i = 0;
+    function typeWriter() {
+      const typewriterElem = document.getElementById("typewriter");
+      if (i < text.length) {
+        typewriterElem.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      } else {
+        // Remove blinking caret after typing finishes
+        typewriterElem.classList.add('nocaret');
+      }
+    }
+    window.onload = typeWriter;
+  </script>
+
+</body>
+</html>
