@@ -16,3 +16,6 @@ class Config:
 
     # Disables a feature not needed (saves resources)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+     # ✅ REQUIRED for session-based features like flash()
+    SECRET_KEY = os.getenv("SECRET_KEY", "default-secret-key")

@@ -1,3 +1,4 @@
+<!-- templates/registration.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,13 +15,13 @@
       <img src="{{ url_for('static', filename='images/moffat_logo-clean.png') }}" alt="Moffat Bay Lodge Logo" />
     </div>
 
-   <nav class="navbar">
-      <a href="index.html">Home</a>
-      <a href="attraction.html">Attraction</a>
-      <a href="lodge_reservation.html">Lodge Reservation</a>
-      <a href="reservation_lookup.html">Reservation Lookup</a>
-      <a href="reservation_summary.html">Reservation Summary</a>
-      <a href="about.html">About Us</a>
+    <nav class="navbar">
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="{{ url_for('attraction') }}">Attraction</a>
+      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
+      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
+      <a href="{{ url_for('reservation_summary') }}">Reservation Summary</a>
+      <a href="{{ url_for('about') }}">About Us</a>
       <button class="btn-brown">Login / Register</button>
     </nav>
   </header>
@@ -28,65 +29,94 @@
   <main class="page-content">
     <section class="basic-section">
       <h1>Create Your Account</h1>
-      <p>This is a placeholder for the Registration page. Add a form here for users to create a new account.</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-messages">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('registration') }}" method="POST" class="form-container">
+        <label for="first_name">First Name</label>
+        <input type="text" name="first_name" id="first_name" required>
+
+        <label for="last_name">Last Name</label>
+        <input type="text" name="last_name" id="last_name" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" name="phone" id="phone">
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit" class="btn-green">Register</button>
+      </form>
+
     </section>
   </main>
 
-<footer class="site-footer">
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="attraction.html">Attraction</a>
-    <a href="lodge_reservation.html">Lodge Reservation</a>
-    <a href="reservation_lookup.html">Reservation Lookup</a>
-    <a href="reservation_summary.html">Reservation Summary</a>
-    <a href="about.html">About Us</a>
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="{{ url_for('attraction') }}">Attraction</a>
+      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
+      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
+      <a href="{{ url_for('reservation_summary') }}">Reservation Summary</a>
+      <a href="{{ url_for('about') }}">About Us</a>
+    </div>
+    <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal" id="loginModal">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
+      <h2 id="loginTitle">Welcome back</h2>
+      
+      <form class="login-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+        <button type="submit" class="btn-green">Log In</button>
+        <p class="alt-option">Don't have an account? <a href="{{ url_for('registration') }}">Register here</a></p>
+      </form>
+    </div>
   </div>
-  <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
-</footer>
 
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-  <div class="modal-backdrop" data-close-modal></div>
-  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
-    <h2 id="loginTitle">Welcome back</h2>
-    
-    <form class="login-form">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="you@example.com" required />
+  <script>
+    const loginModal = document.getElementById('loginModal');
+    const loginButtons = document.querySelectorAll('.btn-brown');
+    const closeTriggers = document.querySelectorAll('[data-close-modal]');
 
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="••••••••" required />
-
-      <button type="submit" class="btn-green">Log In</button>
-      <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
-    </form>
-  </div>
-</div>
-
-<script>
-  const loginModal = document.getElementById('loginModal');
-  const loginButtons = document.querySelectorAll('.btn-brown');
-  const closeTriggers = document.querySelectorAll('[data-close-modal]');
-
-  loginButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      loginModal.classList.add('show');
+    loginButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
     });
-  });
 
-  closeTriggers.forEach(el => {
-    el.addEventListener('click', () => {
-      loginModal.classList.remove('show');
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
     });
-  });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      loginModal.classList.remove('show');
-    }
-  });
-</script>
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+  </script>
 
 </body>
 </html>

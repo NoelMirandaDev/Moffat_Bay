@@ -1,5 +1,6 @@
-from flask import render_template, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from sqlalchemy import text
+from werkzeug.security import generate_password_hash
 from extensions import db
 
 def register_routes(app):
@@ -44,16 +45,76 @@ def register_routes(app):
     def reservation_summary():
         return render_template("reservation_summary.html")
 
-    # Registration page
-    @app.route("/registration.html")
-    def registration():
-        return render_template("registration.html")
-
     # Contact page
     @app.route("/contact.html")
     def contact():
         return render_template("contact.html")
 
+    # Registration page - GET + POST
+    @app.route("/registration.html", methods=["GET", "POST"])
+    def registration():
+        if request.method == "POST":
+            
+            print("✅ DEBUG: Received form submission.")
+            print("First:", request.form.get("first_name"))
+            print("Last:", request.form.get("last_name"))
+            print("Email:", request.form.get("email"))
+            print("Phone:", request.form.get("phone"))
+            print("Password:", request.form.get("password"))
+            
+            # Retrieve form data
+            first_name = request.form.get("first_name")
+            last_name = request.form.get("last_name")
+            email = request.form.get("email")
+            phone = request.form.get("phone")
+            password = request.form.get("password")
+
+            # Basic validation
+            if not all([first_name, last_name, email, password]):
+                flash("Please fill in all required fields.", "error")
+                return render_template("registration.html")
+
+            # Hash the password
+            password_hash = generate_password_hash(password)
+
+            # Insert into database
+            insert_query = text("""
+                INSERT INTO customer (FirstName, LastName, Email, Phone, PasswordHash)
+                VALUES (:first_name, :last_name, :email, :phone, :password_hash)
+            """)
+
+            try:
+                with db.engine.begin() as conn:
+                    conn.execute(insert_query, {
+                        "first_name": first_name,
+                        "last_name": last_name,
+                        "email": email,
+                        "phone": phone,
+                        "password_hash": password_hash
+                    })
+
+                flash("Registration successful! You can now log in.", "success")
+                return redirect(url_for("landing"))
+
+            except Exception as e:
+                flash(f"Registration failed: {e}", "error")
+                return render_template("registration.html")
+
+        return render_template("registration.html")
+
+
+    @app.route("/test-insert")
+    def test_insert():
+        try:
+            with db.engine.begin() as conn:
+                conn.execute(text("""
+                    INSERT INTO customer (FirstName, LastName, Email, Phone, PasswordHash)
+                    VALUES ('Test', 'User', 'test@example.com', '123-456-7890', 'hashedpassword123')
+                """))
+            return "✅ Insert worked!"
+        except Exception as e:
+            return f"❌ Insert failed: {e}"
+        
     # Database health check
     @app.route("/db-health")
     def db_health():
@@ -63,3 +124,5 @@ def register_routes(app):
             return "Database connection OK"
         except Exception as e:
             return f"Database connection FAILED: {e}", 500
+
+    

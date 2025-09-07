@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moffat Bay Lodge</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Include Header/Nav -->
+  {% include 'partials/header.html' %}
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Discover Moffat Bay Lodge</h1>
+      <p>Escape to pristine wilderness where comfort meets adventure. Enjoy breathtaking waterfront views, world-class amenities, and unforgettable experiences surrounded by nature's beauty.</p>
+      <div class="hero-buttons">
+        <button class="btn-green">Book Your Stay</button>
+        <button class="btn-light">Learn More</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Links -->
+  <section class="feature-grid">
+    <a href="{{ url_for('attractions') }}" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Island.jpg') }}" alt="Aerial view of the island coastline">
+      <div class="card-text">
+        <h3>Explore the Island</h3>
+        <p>Discover hiking trails, kayaking routes, and breathtaking wildlife around Moffat Bay.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('lodge_reservation') }}" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Reservation.jpg') }}" alt="Interior of a lodge room with fireplace">
+      <div class="card-text">
+        <h3>Book Your Stay</h3>
+        <p>Reserve your lodge room online with real-time availability and seasonal pricing.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('reservation_lookup') }}" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Booking.jpg') }}" alt="Laptop showing a reservation lookup form">
+      <div class="card-text">
+        <h3>Find Your Booking</h3>
+        <p>Already booked? Look up your reservation with your email or confirmation ID.</p>
+      </div>
+    </a>
+
+    <a href="{{ url_for('reservation_summary') }}" class="feature-card">
+      <img src="{{ url_for('static', filename='images/Summary.jpg') }}" alt="Group of guests reviewing their itinerary at a table">
+      <div class="card-text">
+        <h3>Trip Summary</h3>
+        <p>View, confirm, or cancel your upcoming reservation in just a few clicks.</p>
+      </div>
+    </a>
+  </section>
+
+  <!-- Include Footer -->
+  {% include 'partials/footer.html' %}
+
+  <!-- Include Login Modal -->
+  {% include 'partials/login_modal.html' %}
+
+  <!-- Modal JS -->
+  <script>
+    const loginModal = document.getElementById('loginModal');
+    const loginButtons = document.querySelectorAll('.btn-brown');
+    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+
+    loginButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
+    });
+
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>
