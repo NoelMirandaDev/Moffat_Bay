@@ -68,13 +68,23 @@ INSERT INTO roomamenity (RoomID, AmenityID) VALUES
 -- =========================
 -- Customers
 -- =========================
--- NOTE: PasswordHash uses a placeholder value for dev. Should be replacedda with hashed values in production.
+-- Note: The PasswordHash data is hashed (use Password123 for testing)
 INSERT INTO customer (CustomerID, FirstName, LastName, Email, Phone, PasswordHash, RegistrationDate) VALUES
-(1, 'Amit',  'Rizal',    'amit@example.com',  '555-1000', 'Password', NOW()),
-(2, 'Noel',  'Miranda',  'noel@example.com',  '555-1001', 'Password', NOW()),
-(3, 'Kyle',  'McCarthy', 'kyle@example.com',  '555-1002', 'Password', NOW()),
-(4, 'Steve', 'Stylin',   'steve@example.com', '555-1003', 'Password', NOW()),
-(5, 'Riese', 'Bohnak',   'riese@example.com', '555-1004', 'Password', NOW());
+(1, 'Amit', 'Rizal', 'amit@example.com', '555-1000',
+'scrypt:32768:8:1$qf39ADPITLzbzecX$57a22d2620dbf5dd3ee8e93e9b0a4dc6bfacb18152e7d6048596849e0aba97078796a84d736317983992c38212a5f12e7b86c83770242041da112160ab63b6ae',
+NOW()),
+(2, 'Noel', 'Miranda', 'noel@example.com', '555-1001',
+'scrypt:32768:8:1$H7Q2OgjMdZZ9Tcdj$dc94b8678b5a1cc7b98b32311d5c8ac9b01caf1810d767566db9d36ebd0a0afd40c6f96ef1cca11ba98c631dfccbebd23d1ba040ef317026995ae1d7bd03bf08',
+NOW()),
+(3, 'Kyle', 'McCarthy', 'kyle@example.com', '555-1002',
+'scrypt:32768:8:1$NTfSLirCkDBcUAfL$0e7cfadfee241137a205c52231b81812346ab729fe23157eb0586b245592bea741ede17edc7c28e4b98042364368ba5115e1685af95540c397f75a3f1e9cb741',
+NOW()),
+(4, 'Steve', 'Stylin', 'steve@example.com', '555-1003',
+'scrypt:32768:8:1$0ihRndprtPUGeWmJ$722f006e4b0e229318f5704e46b82e71afd5073efca789fc01786969dd5afc21ca7dba0039fe6a93a5050a0bb5e67529c3e3b8e6f5bfd018b975494a34f3ac47',
+NOW()),
+(5, 'Riese', 'Bohnak', 'riese@example.com', '555-1004',
+'scrypt:32768:8:1$Qy6h6ICLkhLk2L8e$d289243739d17306d3ff3e817be2e4512480e4223abbedf6eee80fbf2026a1cf6eea2488bb7e62c19c2b80fdfd68b1cc89f02e7bb35587f90eb32561b4560693',
+NOW());
 
 -- =========================
 -- Reservations
