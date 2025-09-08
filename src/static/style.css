@@ -145,6 +145,21 @@ body {
     background-color: #F3E9DC;
 }
 
+.btn-register{
+    background-color: #2E5339;
+    color: #FFFFFF;
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+.btn-register:hover {
+    background-color: #3D7040;
+}
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Force 2x2 layout */
@@ -310,4 +325,36 @@ body {
   font-size: 0.9rem;
   margin-top: 0.5rem;
   text-align: center;
+}
+
+.register-form{
+  display: flex;
+  flex-direction: column;
+}
+
+.register-input{
+ padding: 0.75rem;
+ width: 100%;
+ margin-bottom: 20px;
+}
+
+.name-input{
+  padding: 0.75rem;
+  width: 50%;
+}
+.name-grouping{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Flash styling */
+.flash { 
+  padding: 8px 10px; margin: 10px 0; border-radius: 6px; 
+}
+.flash.error { 
+  background: #ffe6e6; color: #7a0000; border: 1px solid #ffcccc; 
+}
+.flash.success { 
+  background: #e9ffea; color: #0b5; border: 1px solid #bff0c6; 
 }

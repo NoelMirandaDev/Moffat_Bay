@@ -47,9 +47,9 @@ def register_routes(app):
         return render_template("reservation_summary.html")
 
     # Registration page
-    @app.route("/registration.html")
-    def registration():
-        return render_template("registration.html")
+    #@app.route("/registration.html")
+    #def registration():
+    #    return render_template("registration.html")
 
     # Contact page
     @app.route("/contact.html")
@@ -57,10 +57,10 @@ def register_routes(app):
         return render_template("contact.html")
 
     # ---------------------
-    # Register Page route
+    # Registration Page route
     # ---------------------
-    @app.route("/register", methods=["GET", "POST"])
-    def register():
+    @app.route("/registration", methods=["GET", "POST"])
+    def registration():
         if request.method == "POST" and "first" in request.form and "last" in request.form and "email" in request.form and "password" in request.form and "phone" in request.form:
             first = request.form["first"]
             last = request.form["last"]
@@ -91,14 +91,13 @@ def register_routes(app):
                             )
                             db.session.commit()
                             flash("You have successfully registered.", "success")
-                            return redirect(url_for("login"))
                         except Exception as e:
                             db.session.rollback()
                             print(f"Error: {e}")
             except Exception:
                 flash("Something went wrong, please try again.", "error")
         
-        return render_template("register.html")
+        return render_template("registration.html")
 
     # -------------------------------
     # Database Connection Test Page
