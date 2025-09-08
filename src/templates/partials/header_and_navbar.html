@@ -1,0 +1,19 @@
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <a href="{{ url_for('landing') }}">
+        <img src="{{ url_for('static', filename='images/moffat_logo-clean.png') }}" alt="Moffat Bay Lodge Logo">
+      </a>
+    </div>
+    
+    <nav class="navbar">
+      <a href="{{ url_for('landing') }}">Home</a>
+      <a href="{{ url_for('attraction') }}">Attraction</a>
+      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
+      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
+      <a href="{{ url_for('reservation_summary') }}">Reservation Summary</a>
+      <a href="{{ url_for('about') }}">About Us</a>
+      <button class="btn-brown">Login / Register</button>
+    </nav>
+  </div>
+</header>

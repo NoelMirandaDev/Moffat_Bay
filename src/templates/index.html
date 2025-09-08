@@ -75,22 +75,10 @@
 <body>
 
   <!-- HEADER + NAVIGATION BAR -->
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo">
-        <img src="{{ url_for('static', filename='images/moffat_logo-clean.png') }}" alt="Moffat Bay Lodge Logo">
-      </div>
-      <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="attraction.html">Attraction</a>
-        <a href="lodge_reservation.html">Lodge Reservation</a>
-        <a href="reservation_lookup.html">Reservation Lookup</a>
-        <a href="reservation_summary.html">Reservation Summary</a>
-        <a href="about.html">About Us</a>
-        <button class="btn-brown">Login / Register</button>
-      </nav>
-    </div>
-  </header>
+  {% include "partials/header_and_navbar.html" %}
+ 
+  <!-- Flash Messages -->
+  {% include "partials/success_flash_messages.html" %}
 
   <!-- VIDEO HERO SECTION WITH TYPEWRITER TEXT -->
   <section class="video-hero">
@@ -137,34 +125,10 @@
   </section>
 
   <!-- FOOTER WITH PAGE LINKS -->
-  <footer class="site-footer">
-    <div class="footer-links">
-      <a href="index.html">Home</a>
-      <a href="attraction.html">Attraction</a>
-      <a href="lodge_reservation.html">Lodge Reservation</a>
-      <a href="reservation_lookup.html">Reservation Lookup</a>
-      <a href="reservation_summary.html">Reservation Summary</a>
-      <a href="about.html">About Us</a>
-    </div>
-    <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
-  </footer>
+  {% include "partials/footer.html" %}
 
   <!-- LOGIN MODAL (Pop-up Overlay) -->
-  <div class="modal" id="loginModal">
-    <div class="modal-backdrop" data-close-modal></div>
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-      <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
-      <h2 id="loginTitle">Welcome back</h2>
-      <form class="login-form">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="your@email.com" required />
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="••••••••" required />
-        <button type="submit" class="btn-green">Log In</button>
-        <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
-      </form>
-    </div>
-  </div>
+  {% include "partials/login_modal.html" %}
 
   <script>
     // Modal functionality (unchanged)
@@ -205,6 +169,15 @@
     }
     window.onload = typeWriter;
   </script>
+
+  {% if show_login %}
+  <script>
+    window.onload = () => {
+      const modal = document.getElementById('loginModal');
+      if (modal) modal.classList.add('show');
+    };
+  </script>
+  {% endif %}
 
 </body>
 </html>
