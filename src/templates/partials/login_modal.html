@@ -1,0 +1,30 @@
+<div class="modal" id="loginModal">
+  <div class="modal-backdrop" data-close-modal></div>
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
+    <h2 id="loginTitle">Welcome back</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+    <form class="login-form" method="POST" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="your@email.com" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" required />
+
+      <button type="submit" class="btn-green">Log In</button>
+      <p class="alt-option">Don't have an account? <a href="{{ url_for('registration') }}">Register here</a></p>
+    </form>
+  </div>
+</div>

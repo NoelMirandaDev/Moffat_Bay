@@ -10,50 +10,51 @@ def register_routes(app):
     Add new routes here (login, register, reservation, etc.).
     """
 
-    # Landing page (shows backend connection message)
+    # --------------
+    # Landing Page
+    # --------------
     @app.route("/")
     def landing():
-        backend_message = "✅ Backend connection is running."
-        return render_template("index.html", backend_message=backend_message)
+        return render_template("index.html")
 
-    # Redirect for /index.html to /
-    @app.route("/index.html")
-    def index_html_redirect():
-        return redirect(url_for("landing"))
-
-    # Attraction page
+    # -----------------
+    # Attraction Page
+    # -----------------
     @app.route("/attraction.html")
     def attraction():
         return render_template("attraction.html")
 
-    # About Us page
+    # ---------------
+    # About Us Page
+    # ---------------
     @app.route("/about.html")
     def about():
         return render_template("about.html")
 
-    # Lodge Reservation page
+    # ------------------------
+    # Lodge Reservation Page
+    # ------------------------
     @app.route("/lodge_reservation.html")
     def lodge_reservation():
         return render_template("lodge_reservation.html")
 
-    # Reservation Lookup page
+    # -------------------------
+    # Reservation Lookup Page
+    # -------------------------
     @app.route("/reservation_lookup.html")
     def reservation_lookup():
         return render_template("reservation_lookup.html")
 
-    # Reservation Summary page
+    # --------------------------
+    # Reservation Summary Page
+    # --------------------------
     @app.route("/reservation_summary.html")
     def reservation_summary():
         return render_template("reservation_summary.html")
 
-    # Contact page
-    @app.route("/contact.html")
-    def contact():
-        return render_template("contact.html")
-
-    # ---------------------
-    # Registration Page route
-    # ---------------------
+    # -------------------
+    # Registration Page
+    # -------------------
     @app.route("/registration", methods=["GET", "POST"])
     def registration():
         if request.method == "POST" and "first" in request.form and "last" in request.form and "email" in request.form and "password" in request.form and "phone" in request.form:
@@ -93,22 +94,10 @@ def register_routes(app):
                 flash("Something went wrong, please try again.", "error")
         
         return render_template("registration.html")
-
-    # -------------------------------
-    # Database Connection Test Page
-    # -------------------------------
-    @app.route("/db-health")
-    def db_health():
-        try:
-            with db.engine.connect() as conn:
-                conn.execute(text("SELECT 1"))
-            return "Database connection OK"
-        except Exception as e:
-            return f"Database connection FAILED: {e}", 500
         
-    # ------------------
-    # Login Page route
-    # ------------------
+    # ------------
+    # Login Page
+    # ------------
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
@@ -122,7 +111,7 @@ def register_routes(app):
 
             if not customer or not check_password_hash(customer.PasswordHash, password):
                 flash("Invalid email or password.", "error")
-                return redirect(url_for("login"))
+                return render_template("index.html", show_login=True)
             
             session["customer_id"] = customer.CustomerID
             session["customer_email"] = customer.Email
@@ -131,7 +120,7 @@ def register_routes(app):
             flash(f"Welcome back, {customer.FirstName}!", "success")
             return redirect(url_for("landing"))
 
-        return render_template("login.html")
+        return redirect(url_for("landing"))
     
     # -----------------------------------
     # Logout route (clears the session)
@@ -139,5 +128,6 @@ def register_routes(app):
     @app.route("/logout")
     def logout():
         session.clear()
-        flash("You have been logged out.", "success")
+        flash("You have been successfully logged out.", "success")
         return redirect(url_for("landing"))
+    
