@@ -9,21 +9,8 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <div class="logo">
-      <img src="{{ url_for('static', filename='images/moffat_logo-clean.png') }}" alt="Moffat Bay Lodge Logo" />
-    </div>
-
-    <nav class="navbar">
-      <a href="index.html">Home</a>
-      <a href="attraction.html">Attraction</a>
-      <a href="lodge_reservation.html">Lodge Reservation</a>
-      <a href="reservation_lookup.html">Reservation Lookup</a>
-      <a href="reservation_summary.html">Reservation Summary</a>
-      <a href="about.html">About Us</a>
-      <button class="btn-brown">Login / Register</button>
-    </nav>
-  </header>
+  <!-- HEADER + NAVIGATION BAR -->
+  {% include "partials/header_and_navbar.html" %}
 
   <main class="page-content">
     <section class="basic-section">
@@ -32,37 +19,11 @@
     </section>
   </main>
 
-<footer class="site-footer">
-  <div class="footer-links">
-    <a href="index.html">Home</a>
-    <a href="attraction.html">Attraction</a>
-    <a href="lodge_reservation.html">Lodge Reservation</a>
-    <a href="reservation_lookup.html">Reservation Lookup</a>
-    <a href="reservation_summary.html">Reservation Summary</a>
-    <a href="about.html">About Us</a>
-  </div>
-  <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
-</footer>
+<!-- FOOTER WITH PAGE LINKS -->
+{% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL -->
-<div class="modal" id="loginModal">
-  <div class="modal-backdrop" data-close-modal></div>
-  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
-    <h2 id="loginTitle">Welcome back</h2>
-    
-    <form class="login-form">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" placeholder="you@example.com" required />
-
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="••••••••" required />
-
-      <button type="submit" class="btn-green">Log In</button>
-      <p class="alt-option">Don't have an account? <a href="registration.html">Register here</a></p>
-    </form>
-  </div>
-</div>
+<!-- LOGIN MODAL (Pop-up Overlay) -->
+{% include "partials/login_modal.html" %}
 
 <script>
   const loginModal = document.getElementById('loginModal');
