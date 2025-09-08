@@ -28,7 +28,34 @@
   <main class="page-content">
     <section class="basic-section">
       <h1>Create Your Account</h1>
-      <p>This is a placeholder for the Registration page. Add a form here for users to create a new account.</p>
+      <div class="register-form">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% endwith %}
+
+        <form action="{{ url_for('registration') }}" method ="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            
+            <div class ="name-grouping">
+              <input name="first" type="text" class="name-input" placeholder="First Name" required/>
+              <input name="last" type="text" class="name-input" placeholder="Last Name" required/>
+            </div>
+
+            <input name="email" type="email" class="register-input" placeholder="Email" required/>
+            
+            <input name="password" type="password" class="register-input" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Password must be at least 8 characters, contain an uppercase and lowercase letter, and a number."/>
+            
+            <input name="phone" type="tel" class="register-input" placeholder="Phone Number" required/>
+        
+            <button type="submit" class="btn-register">Register</button>
+        </form>
+    </div>
     </section>
   </main>
 
