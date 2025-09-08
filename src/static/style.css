@@ -336,11 +336,23 @@ body {
  padding: 0.75rem;
  width: 100%;
  margin-bottom: 20px;
+ border:2px solid #2E5339;
+ border-radius: 6px;
+ outline: none;
+}
+.register-input:focus{
+  border:2px solid #3D7040;
 }
 
 .name-input{
   padding: 0.75rem;
   width: 50%;
+  border:2px solid #2E5339;
+  border-radius: 6px;
+  outline: none;
+}
+.name-input:focus{
+  border:2px solid #3D7040
 }
 .name-grouping{
   display: flex;

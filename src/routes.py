@@ -46,11 +46,6 @@ def register_routes(app):
     def reservation_summary():
         return render_template("reservation_summary.html")
 
-    # Registration page
-    #@app.route("/registration.html")
-    #def registration():
-    #    return render_template("registration.html")
-
     # Contact page
     @app.route("/contact.html")
     def contact():
