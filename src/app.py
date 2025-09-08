@@ -29,7 +29,7 @@ def create_app():
     # Enables CSRF for all POST/PUT/DELETE
     csrf.init_app(app)
 
-    # Registers all the routes (including landing page)
+    # Registers all the routes
     from routes import register_routes
     register_routes(app)
 
