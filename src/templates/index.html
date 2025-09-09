@@ -152,22 +152,7 @@
       }
     });
 
-    // Typewriter effect for the message
-    const text = `Welcome to the Moffat Bay Lodge.\n\nExperience the perfect escape into pristine wilderness, where comfort meets adventure. Enjoy breathtaking waterfront views, world-class amenities, and unforgettable moments surrounded by nature's beauty.`;
-    const speed = 32; // typing speed in ms
-    let i = 0;
-    function typeWriter() {
-      const typewriterElem = document.getElementById("typewriter");
-      if (i < text.length) {
-        typewriterElem.innerHTML += text.charAt(i) === '\n' ? '<br>' : text.charAt(i);
-        i++;
-        setTimeout(typeWriter, speed);
-      } else {
-        // Remove blinking caret after typing finishes
-        typewriterElem.classList.add('nocaret');
-      }
-    }
-    window.onload = typeWriter;
+    
   </script>
 
   {% if show_login %}
