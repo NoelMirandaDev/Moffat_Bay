@@ -29,45 +29,14 @@
       height: 100%;
       object-fit: cover;
       opacity: 0.9;
+      display: block;
     }
     .video-overlay {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 2;
-      background: rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      text-shadow: 0 2px 8px #222;
-    }
-    .video-overlay h1 {
-      font-size: 2.7rem;
-      font-weight: 800;
-      margin-bottom: 22px;
-      letter-spacing: 1.2px;
-    }
-    .typewriter {
-      font-size: 1.25rem;
-      font-weight: 500;
-      width: 80vw;
-      max-width: 700px;
-      text-align: center;
-      margin: 0 auto;
-      border-right: 3px solid #fff;
-      white-space: pre-line;
-      overflow: hidden;
-      min-height: 3.2em;
-      animation: blink-caret 1s step-end infinite;
-    }
-    .typewriter.nocaret {
-      border-right: none;
-      animation: none;
-    }
-    @keyframes blink-caret {
-      0%, 100% { border-color: #fff; }
-      50% { border-color: transparent; }
+      /* No content, but keep for structure if later needed */
+      pointer-events: none;
     }
   </style>
 </head>
@@ -79,17 +48,15 @@
  
   <!-- Flash Messages -->
   {% include "partials/success_flash_messages.html" %}
-<!-- HERO VIDEO SECTION -->
-<section class="video-hero">
-  <video autoplay loop playsinline muted controls>
-    <source src="{{ url_for('static', filename='images/Moffat_video.mp4') }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-  <div class="video-overlay">
-   
-  </div>
-</section>
 
+  <!-- HERO VIDEO SECTION (no overlay text) -->
+  <section class="video-hero">
+    <video autoplay loop playsinline muted controls>
+      <source src="{{ url_for('static', filename='images/Moffat_video.mp4') }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+  </section>
 
   <!-- FEATURED LINKS SECTION (Photo Cards linking to main pages) -->
   <section class="feature-grid">
@@ -150,8 +117,6 @@
         loginModal.classList.remove('show');
       }
     });
-
-    
   </script>
 
   {% if show_login %}
