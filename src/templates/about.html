@@ -1,53 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us - Moffat Bay Lodge</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Moffat Bay Lodge</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .team-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .team-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .team-header h1 {
+      font-size: 2.6rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      color: #2E5339;
+      margin-bottom: 0.7rem;
+    }
+    .team-header p {
+      font-size: 1.15rem;
+      color: #555;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+      position: relative;
+      cursor: pointer;
+      min-height: 245px;
+    }
+    .profile-card:hover {
+      box-shadow: 0 12px 32px rgba(46,83,57,0.13);
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+      border: 3px solid #2E5339;
+      margin-bottom: 0.8rem;
+    }
+    .profile-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2E5339;
+      margin-bottom: 0.3rem;
+    }
+    .profile-bio-full {
+      display: none;
+      margin-top: 1.2rem;
+      background: #f8f8f8;
+      border-radius: 8px;
+      padding: 1rem 0.8rem;
+      font-size: 0.97rem;
+      color: #333;
+      box-shadow: 0 2px 8px rgba(46,83,57,0.08);
+      z-index: 2;
+    }
+    .profile-card.active .profile-bio-full {
+      display: block;
+      animation: fadeIn 0.35s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
 <body>
 
-  <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
-  <main class="page-content">
-    <section class="basic-section">
-      <h1>About Moffat Bay Lodge</h1>
-      <p>This is a placeholder for the About Us page. Share your story, values, and connection to the Pacific Northwest.</p>
-    </section>
-  </main>
+  <section class="team-section">
+    <div class="team-header">
+      <h1>Meet the Team</h1>
+      <p>
+        We are a passionate group of developers, designers, and builders behind the Moffat Bay Lodge web application. Our diverse backgrounds and collaborative spirit allowed us to create a seamless digital experience for guests, staff, and administrators alike.
+      </p>
+    </div>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+    <div class="team-grid">
+      <!-- Steve Stylin -->
+      <div class="profile-card" onclick="toggleBio(this)">
+        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img">
+        <div class="profile-name">Steve Stylin</div>
+        <div class="profile-bio-full">
+          <strong>Database Administrator & Backend Developer</strong><br>
+          Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.
+          <br><br>
+          <strong>Key Contributions:</strong>
+          <ul>
+            <li>Designed the Test-Driven Development (TDD) approach for the project</li>
+            <li>Created the Entity Relationship Diagram (ERD) for the application database</li>
+            <li>Developed the backend of the landing page</li>
+            <li>Leading the development of the About Us page (frontend and backend)</li>
+          </ul>
+          <strong>Fun Fact:</strong> Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks.
+        </div>
+      </div>
+      <!-- Member 2 -->
+      <div class="profile-card" onclick="toggleBio(this)">
+        <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Member 2" class="profile-img">
+        <div class="profile-name">Noel Miranda</div>
+        <div class="profile-bio-full">
+          <!-- Fill out bio, role, contributions, and fun fact for Member 2 here -->
+        </div>
+      </div>
+      <!-- Member 3 -->
+      <div class="profile-card" onclick="toggleBio(this)">
+        <img src="{{ url_for('static', filename='images/Member3_profile.jpg') }}" alt="Member 3" class="profile-img">
+        <div class="profile-name">[Member 3 Name]</div>
+        <div class="profile-bio-full">
+          <!-- Fill out bio, role, contributions, and fun fact for Member 3 here -->
+        </div>
+      </div>
+      <!-- Member 4 -->
+      <div class="profile-card" onclick="toggleBio(this)">
+        <img src="{{ url_for('static', filename='images/Member4_profile.jpg') }}" alt="Member 4" class="profile-img">
+        <div class="profile-name">[Member 4 Name]</div>
+        <div class="profile-bio-full">
+          <!-- Fill out bio, role, contributions, and fun fact for Member 4 here -->
+        </div>
+      </div>
+      <!-- Member 5 -->
+      <div class="profile-card" onclick="toggleBio(this)">
+        <img src="{{ url_for('static', filename='images/Member5_profile.jpg') }}" alt="Member 5" class="profile-img">
+        <div class="profile-name">[Member 5 Name]</div>
+        <div class="profile-bio-full">
+          <!-- Fill out bio, role, contributions, and fun fact for Member 5 here -->
+        </div>
+      </div>
+    </div>
+  </section>
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
-
-<script>
-  const loginModal = document.getElementById('loginModal');
-  const loginButtons = document.querySelectorAll('.btn-brown');
-  const closeTriggers = document.querySelectorAll('[data-close-modal]');
-
-  loginButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      loginModal.classList.add('show');
-    });
-  });
-
-  closeTriggers.forEach(el => {
-    el.addEventListener('click', () => {
-      loginModal.classList.remove('show');
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      loginModal.classList.remove('show');
+  {% include "partials/footer.html" %}
+  <script>
+    function toggleBio(card) {
+      // Remove 'active' from all cards except the one clicked
+      document.querySelectorAll('.profile-card').forEach(function(el){
+        if(el !== card) el.classList.remove('active');
+      });
+      // Toggle bio for this card
+      card.classList.toggle('active');
     }
-  });
-</script>
-
+  </script>
 </body>
 </html>

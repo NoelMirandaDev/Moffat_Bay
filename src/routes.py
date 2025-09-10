@@ -71,7 +71,7 @@ def register_routes(app):
                 elif not re.match(r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone):
                     flash("Must be a valid US phone number.", "error")
                 elif not re.match(r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}", password):
-                    flash("Password must be at least 8 characters, contain uppercase, lowercase, and a number.", "error")
+                    flash("Password must contain at least 8 characters, contain uppercase, lowercase, and a number.", "error")
                 else:
                     result = db.session.execute(
                         text("SELECT * FROM customer WHERE email = :email"), {"email": email}
@@ -90,19 +90,13 @@ def register_routes(app):
                         except Exception as e:
                             db.session.rollback()
                             print(f"Error: {e}")
-                            flash("Database error. Please try again.", "error")
+                            flash("Database error. Please try again later.", "error")
             except Exception:
                 flash("Something went wrong, please try again.", "error")
         return render_template("registration.html")
 
-    # ------------
-    # Contact Page
-    # ------------
-    @app.route("/contact.html")
-    def contact():
-        return render_template("contact.html")
+    
 
-    # ------------
     # Login Page
     # ------------
     @app.route("/login", methods=["GET", "POST"])
