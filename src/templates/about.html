@@ -44,7 +44,7 @@
       align-items: center;
       transition: box-shadow 0.2s;
       position: relative;
-      min-height: 245px;
+      min-height: 265px;
     }
     .profile-card:hover {
       box-shadow: 0 12px 32px rgba(46,83,57,0.13);
@@ -63,8 +63,14 @@
       font-size: 1.15rem;
       font-weight: 700;
       color: #2E5339;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.15rem;
       cursor: pointer;
+    }
+    .profile-role {
+      font-size: 1.02rem;
+      color: #8B5E3C;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
     }
     /* Modal styles */
     .modal {
@@ -180,30 +186,35 @@
     </div>
 
     <div class="team-grid">
-      <!-- Steve Stylin -->
-      <div class="profile-card">
-        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img" onclick="showModal('steve')">
-        <div class="profile-name" onclick="showModal('steve')">Steve Stylin</div>
-      </div>
       <!-- Noel Yobani Miranda -->
       <div class="profile-card">
         <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Noel Yobani Miranda" class="profile-img" onclick="showModal('noel')">
         <div class="profile-name" onclick="showModal('noel')">Noel Yobani Miranda</div>
+        <div class="profile-role">Project Manager and Full Stack Developer</div>
       </div>
-      <!-- Member 3 -->
+      <!-- Kyle Marlia-Conner -->
       <div class="profile-card">
-        <img src="{{ url_for('static', filename='images/Member3_profile.jpg') }}" alt="Member 3" class="profile-img" onclick="showModal('member3')">
-        <div class="profile-name" onclick="showModal('member3')">[Member 3 Name]</div>
+        <img src="{{ url_for('static', filename='images/Kyle_profile.jpg') }}" alt="Kyle Marlia-Conner" class="profile-img" onclick="showModal('kyle')">
+        <div class="profile-name" onclick="showModal('kyle')">Kyle Marlia-Conner</div>
+        <div class="profile-role">Developer</div>
       </div>
-      <!-- Member 4 -->
+      <!-- Steve Stylin -->
       <div class="profile-card">
-        <img src="{{ url_for('static', filename='images/Member4_profile.jpg') }}" alt="Member 4" class="profile-img" onclick="showModal('member4')">
-        <div class="profile-name" onclick="showModal('member4')">[Member 4 Name]</div>
+        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img" onclick="showModal('steve')">
+        <div class="profile-name" onclick="showModal('steve')">Steve Stylin</div>
+        <div class="profile-role">Database Designer, Frontend & Backend Developer</div>
       </div>
-      <!-- Member 5 -->
+      <!-- Riese Bohnak -->
       <div class="profile-card">
-        <img src="{{ url_for('static', filename='images/Member5_profile.jpg') }}" alt="Member 5" class="profile-img" onclick="showModal('member5')">
-        <div class="profile-name" onclick="showModal('member5')">[Member 5 Name]</div>
+        <img src="{{ url_for('static', filename='images/Riese_profile.jpg') }}" alt="Riese Bohnak" class="profile-img" onclick="showModal('riese')">
+        <div class="profile-name" onclick="showModal('riese')">Riese Bohnak</div>
+        <div class="profile-role">Developer</div>
+      </div>
+      <!-- Amit Rizal -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Amit_profile.jpg') }}" alt="Amit Rizal" class="profile-img" onclick="showModal('amit')">
+        <div class="profile-name" onclick="showModal('amit')">Amit Rizal</div>
+        <div class="profile-role">Developer</div>
       </div>
     </div>
   </section>
@@ -221,25 +232,6 @@
   <script>
     // Profiles data
     const profiles = {
-      steve: {
-        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
-        name: "Steve Stylin",
-        role: "Database Designer, Frontend & Backend Developer",
-        bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
-        contributions: [
-          "Designed the Test-Driven Development (TDD) approach for the project",
-          "Created the Entity Relationship Diagram (ERD) for the application database",
-          "Developed the backend of the landing page",
-          "Leading the development of the About Us page (frontend and backend)"
-        ],
-        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
-        contact: `
-          <div class="modal-profile-contact">
-            <strong>Contact:</strong><br>
-            <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        `
-      },
       noel: {
         img: "{{ url_for('static', filename='images/Noel_profile.jpg') }}",
         name: "Noel Yobani Miranda",
@@ -247,7 +239,7 @@
         bio: `With a passion for continuous growth, I am currently completing my third bachelor’s degree in Software Development at Bellevue University, graduating in October 2025. I also hold bachelor’s degrees in Sociology and Criminal Justice and recently served as a backend software engineering intern at SuperFile. My expertise is in web development with a strong focus on security, and within this project my role as project manager and full stack developer centers on backend development while guiding the team’s progress. I am committed to lifelong learning, seeking challenges that strengthen my technical abilities and collaborative skills.`,
         contributions: [
           "Implemented user Login system",
-          "Initialized the Moffat bay GitHub repository and project structure",
+          "Initialized the Moffat Bay GitHub repository and project structure",
           "Implemented the room reservation system"
         ],
         funfact: "Outside of coding, I enjoy exploring the wilderness with my fiancé, where we find inspiration and balance through hiking and connecting with nature.",
@@ -260,29 +252,63 @@
           </div>
         `
       },
-      member3: {
-        img: "{{ url_for('static', filename='images/Member3_profile.jpg') }}",
-        name: "[Member 3 Name]",
-        role: "[Member 3 Role]",
-        bio: `[Member 3 bio goes here]`,
-        contributions: [],
-        funfact: "[Fun fact for Member 3]"
+      kyle: {
+        img: "{{ url_for('static', filename='images/Kyle_profile.jpg') }}",
+        name: "Kyle Marlia-Conner",
+        role: "Developer",
+        bio: `Kyle is a dedicated developer with a strong background in full stack web development. He brings attention to detail and a collaborative spirit to the team, ensuring project components are robust, scalable, and user-friendly.`,
+        contributions: [
+          "Contributed to backend API development",
+          "Implemented front-end UI enhancements",
+          "Reviewed and improved code for scalability"
+        ],
+        funfact: "Kyle is an amateur chef who loves experimenting with new recipes and enjoys mountain biking on weekends.",
+        contact: ''
       },
-      member4: {
-        img: "{{ url_for('static', filename='images/Member4_profile.jpg') }}",
-        name: "[Member 4 Name]",
-        role: "[Member 4 Role]",
-        bio: `[Member 4 bio goes here]`,
-        contributions: [],
-        funfact: "[Fun fact for Member 4]"
+      steve: {
+        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
+        name: "Steve Stylin",
+        role: "Database Designer, Frontend & Backend Developer",
+        bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
+        contributions: [
+          "Created the Technical Design Document (TDD) for the project",
+          "Created the Entity Relationship Diagram (ERD) for the application database",
+          "Developed the backend of the landing page",
+          "Leading the development of the About Us page (frontend and backend)"
+        ],
+        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
+        contact: `
+          <div class="modal-profile-contact">
+            <strong>Contact:</strong><br>
+            <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        `
       },
-      member5: {
-        img: "{{ url_for('static', filename='images/Member5_profile.jpg') }}",
-        name: "[Member 5 Name]",
-        role: "[Member 5 Role]",
-        bio: `[Member 5 bio goes here]`,
-        contributions: [],
-        funfact: "[Fun fact for Member 5]"
+      riese: {
+        img: "{{ url_for('static', filename='images/Riese_profile.jpg') }}",
+        name: "Riese Bohnak",
+        role: "Developer",
+        bio: `Riese is an innovative developer who excels at solving complex technical problems and bringing creative solutions to the team. Their adaptability and dedication help ensure project milestones are met.`,
+        contributions: [
+          "Developed automated testing scripts",
+          "Optimized database queries",
+          "Assisted with deployment strategies"
+        ],
+        funfact: "Riese is a passionate rock climber and enjoys composing electronic music in his spare time.",
+        contact: ''
+      },
+      amit: {
+        img: "{{ url_for('static', filename='images/Amit_profile.jpg') }}",
+        name: "Amit Rizal",
+        role: "Developer",
+        bio: `Amit is a meticulous software developer with a keen interest in both backend and frontend technologies. He is known for his problem-solving skills and strong teamwork.`,
+        contributions: [
+          "Implemented responsive web layouts",
+          "Contributed bug fixes and performance improvements",
+          "Enhanced accessibility features"
+        ],
+        funfact: "Amit is an avid traveler who has visited more than 15 countries and loves photography.",
+        contact: ''
       }
     };
 
