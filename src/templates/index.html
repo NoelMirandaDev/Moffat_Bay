@@ -15,8 +15,8 @@
     }
     .video-hero {
     width: 100vw;
-    min-height: 40vw;  /* Responsive: keeps aspect ratio, adjust as needed */
-    max-height: 90vh;
+    max-width: 100%;
+    height: 340px;           /* Fixed, elegant height */
     background: #111;
     display: flex;
     align-items: center;
@@ -26,19 +26,22 @@
     position: relative;
   }
   .video-hero video {
-    width: 100vw;
+    width: 100%;
     height: 100%;
-    object-fit: contain;   /* Ensures whole video is visible, not cropped */
+    object-fit: contain;    /* Show full video, no crop */
     background: #111;
     display: block;
-    max-height: 90vh;
+    max-width: 100vw;
+    max-height: 100%;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     .video-hero {
-      min-height: 56vw; /* Taller on mobile for better fit */
+      height: 220px;        /* Smaller on tablets/phones */
     }
-    .video-hero video {
-      max-height: 60vw;
+  }
+  @media (max-width: 500px) {
+    .video-hero {
+      height: 140px;        /* Very compact on mobile */
     }
   }
   </style>
