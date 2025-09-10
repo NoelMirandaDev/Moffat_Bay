@@ -44,7 +44,6 @@
       align-items: center;
       transition: box-shadow 0.2s;
       position: relative;
-      cursor: pointer;
       min-height: 245px;
     }
     .profile-card:hover {
@@ -58,31 +57,104 @@
       border-radius: 50%;
       border: 3px solid #2E5339;
       margin-bottom: 0.8rem;
+      cursor: pointer;
     }
     .profile-name {
       font-size: 1.15rem;
       font-weight: 700;
       color: #2E5339;
       margin-bottom: 0.3rem;
+      cursor: pointer;
     }
-    .profile-bio-full {
+    /* Modal styles */
+    .modal {
       display: none;
-      margin-top: 1.2rem;
-      background: #f8f8f8;
-      border-radius: 8px;
-      padding: 1rem 0.8rem;
-      font-size: 0.97rem;
-      color: #333;
-      box-shadow: 0 2px 8px rgba(46,83,57,0.08);
-      z-index: 2;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(30,50,40,0.18);
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
     }
-    .profile-card.active .profile-bio-full {
-      display: block;
-      animation: fadeIn 0.35s;
+    .modal.active {
+      display: flex;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-8px);}
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 90vw;
+      box-shadow: 0 8px 40px rgba(46,83,57,0.25);
+      padding: 2.5rem 2rem;
+      position: relative;
+      animation: fadeInModal 0.3s;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: translateY(-32px);}
       to { opacity: 1; transform: translateY(0);}
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      background: #eee;
+      color: #2E5339;
+      border: none;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .modal-close:hover {
+      background: #d8d8d8;
+    }
+    .modal-profile-img {
+      width: 128px;
+      height: 128px;
+      margin-bottom: 1.2rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #2E5339;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .modal-profile-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2E5339;
+      text-align: center;
+      margin-bottom: 0.6rem;
+    }
+    .modal-profile-role {
+      text-align: center;
+      font-size: 1.08rem;
+      color: #8B5E3C;
+      margin-bottom: 1.2rem;
+    }
+    .modal-profile-bio {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .modal-profile-contributions {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    .modal-profile-contributions ul {
+      padding-left: 1.2em;
+    }
+    .modal-profile-funfact {
+      font-size: 0.98rem;
+      color: #3f621a;
+      font-style: italic;
+      margin-bottom: 0.7rem;
+      text-align: left;
     }
   </style>
 </head>
@@ -100,68 +172,148 @@
 
     <div class="team-grid">
       <!-- Steve Stylin -->
-      <div class="profile-card" onclick="toggleBio(this)">
-        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img">
-        <div class="profile-name">Steve Stylin</div>
-        <div class="profile-bio-full">
-          <strong>Database Administrator & Backend Developer</strong><br>
-          Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.
-          <br><br>
-          <strong>Key Contributions:</strong>
-          <ul>
-            <li>Designed the Test-Driven Development (TDD) approach for the project</li>
-            <li>Created the Entity Relationship Diagram (ERD) for the application database</li>
-            <li>Developed the backend of the landing page</li>
-            <li>Leading the development of the About Us page (frontend and backend)</li>
-          </ul>
-          <strong>Fun Fact:</strong> Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks.
-        </div>
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img" onclick="showModal('steve')">
+        <div class="profile-name" onclick="showModal('steve')">Steve Stylin</div>
       </div>
       <!-- Member 2 -->
-      <div class="profile-card" onclick="toggleBio(this)">
-        <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Member 2" class="profile-img">
-        <div class="profile-name">Noel Miranda</div>
-        <div class="profile-bio-full">
-          <!-- Fill out bio, role, contributions, and fun fact for Member 2 here -->
-        </div>
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Member2_profile.jpg') }}" alt="Member 2" class="profile-img" onclick="showModal('member2')">
+        <div class="profile-name" onclick="showModal('member2')">[Member 2 Name]</div>
       </div>
       <!-- Member 3 -->
-      <div class="profile-card" onclick="toggleBio(this)">
-        <img src="{{ url_for('static', filename='images/Member3_profile.jpg') }}" alt="Member 3" class="profile-img">
-        <div class="profile-name">[Member 3 Name]</div>
-        <div class="profile-bio-full">
-          <!-- Fill out bio, role, contributions, and fun fact for Member 3 here -->
-        </div>
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Member3_profile.jpg') }}" alt="Member 3" class="profile-img" onclick="showModal('member3')">
+        <div class="profile-name" onclick="showModal('member3')">[Member 3 Name]</div>
       </div>
       <!-- Member 4 -->
-      <div class="profile-card" onclick="toggleBio(this)">
-        <img src="{{ url_for('static', filename='images/Member4_profile.jpg') }}" alt="Member 4" class="profile-img">
-        <div class="profile-name">[Member 4 Name]</div>
-        <div class="profile-bio-full">
-          <!-- Fill out bio, role, contributions, and fun fact for Member 4 here -->
-        </div>
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Member4_profile.jpg') }}" alt="Member 4" class="profile-img" onclick="showModal('member4')">
+        <div class="profile-name" onclick="showModal('member4')">[Member 4 Name]</div>
       </div>
       <!-- Member 5 -->
-      <div class="profile-card" onclick="toggleBio(this)">
-        <img src="{{ url_for('static', filename='images/Member5_profile.jpg') }}" alt="Member 5" class="profile-img">
-        <div class="profile-name">[Member 5 Name]</div>
-        <div class="profile-bio-full">
-          <!-- Fill out bio, role, contributions, and fun fact for Member 5 here -->
-        </div>
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Member5_profile.jpg') }}" alt="Member 5" class="profile-img" onclick="showModal('member5')">
+        <div class="profile-name" onclick="showModal('member5')">[Member 5 Name]</div>
       </div>
     </div>
   </section>
 
+  <!-- Modal Structure -->
+  <div class="modal" id="profile-modal">
+    <div class="modal-content" id="modal-content">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <!-- Modal content will be injected here by JS -->
+    </div>
+  </div>
+
   {% include "partials/footer.html" %}
+
   <script>
-    function toggleBio(card) {
-      // Remove 'active' from all cards except the one clicked
-      document.querySelectorAll('.profile-card').forEach(function(el){
-        if(el !== card) el.classList.remove('active');
-      });
-      // Toggle bio for this card
-      card.classList.toggle('active');
+    // Profiles data
+    const profiles = {
+      steve: {
+        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
+        name: "Steve Stylin",
+        role: "Database Administrator & Backend Developer",
+        bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
+        contributions: [
+          "Designed the Test-Driven Development (TDD) approach for the project",
+          "Created the Entity Relationship Diagram (ERD) for the application database",
+          "Developed the backend of the landing page",
+          "Leading the development of the About Us page (frontend and backend)"
+        ],
+        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks."
+      },
+      member2: {
+        img: "{{ url_for('static', filename='images/Member2_profile.jpg') }}",
+        name: "[Member 2 Name]",
+        role: "[Member 2 Role]",
+        bio: `[Member 2 bio goes here]`,
+        contributions: [
+          // "[Contribution 1]",
+          // "[Contribution 2]"
+        ],
+        funfact: "[Fun fact for Member 2]"
+      },
+      member3: {
+        img: "{{ url_for('static', filename='images/Member3_profile.jpg') }}",
+        name: "[Member 3 Name]",
+        role: "[Member 3 Role]",
+        bio: `[Member 3 bio goes here]`,
+        contributions: [
+          // "[Contribution 1]",
+          // "[Contribution 2]"
+        ],
+        funfact: "[Fun fact for Member 3]"
+      },
+      member4: {
+        img: "{{ url_for('static', filename='images/Member4_profile.jpg') }}",
+        name: "[Member 4 Name]",
+        role: "[Member 4 Role]",
+        bio: `[Member 4 bio goes here]`,
+        contributions: [
+          // "[Contribution 1]",
+          // "[Contribution 2]"
+        ],
+        funfact: "[Fun fact for Member 4]"
+      },
+      member5: {
+        img: "{{ url_for('static', filename='images/Member5_profile.jpg') }}",
+        name: "[Member 5 Name]",
+        role: "[Member 5 Role]",
+        bio: `[Member 5 bio goes here]`,
+        contributions: [
+          // "[Contribution 1]",
+          // "[Contribution 2]"
+        ],
+        funfact: "[Fun fact for Member 5]"
+      }
+    };
+
+    function showModal(memberKey) {
+      const modal = document.getElementById('profile-modal');
+      const content = document.getElementById('modal-content');
+      const profile = profiles[memberKey];
+
+      // Compose contributions HTML if available
+      let contributionsHTML = '';
+      if (profile.contributions && profile.contributions.length > 0) {
+        contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
+        profile.contributions.forEach(function(item){
+          contributionsHTML += `<li>${item}</li>`;
+        });
+        contributionsHTML += `</ul></div>`;
+      }
+
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        <img src="${profile.img}" alt="${profile.name}" class="modal-profile-img">
+        <div class="modal-profile-name">${profile.name}</div>
+        <div class="modal-profile-role">${profile.role}</div>
+        <div class="modal-profile-bio">${profile.bio}</div>
+        ${contributionsHTML}
+        <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
+      `;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
     }
+
+    function closeModal() {
+      document.getElementById('profile-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal if click outside content
+    document.getElementById('profile-modal').addEventListener('click', function(e){
+      if(e.target === this) closeModal();
+    });
+
+    // Optional: Close modal on ESC key
+    document.addEventListener('keydown', function(e){
+      if(e.key === "Escape") closeModal();
+    });
   </script>
 </body>
 </html>
