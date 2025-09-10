@@ -113,25 +113,24 @@
       background: #d8d8d8;
     }
     .modal-profile-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    max-width: 370px;
-    max-height: 320px;
-    height: auto;
-    border-radius: 0; /* Remove circle for modal! */
-    object-fit: contain; /* Show entire image, no crop */
-    border: none;
-    background: #e6e6e6;
-    margin-bottom: 1.2rem;
-  }
-  @media (max-width: 500px) {
-    .modal-profile-img {
-      max-width: 90vw;
-      max-height: 40vw;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 370px;
+      max-height: 320px;
+      height: auto;
+      border-radius: 0;
+      object-fit: contain;
+      border: none;
+      background: #e6e6e6;
+      margin-bottom: 1.2rem;
     }
-  }
+    @media (max-width: 500px) {
+      .modal-profile-img {
+        max-width: 90vw;
+        max-height: 40vw;
+      }
     }
     .modal-profile-name {
       font-size: 1.5rem;
@@ -188,7 +187,7 @@
       </div>
       <!-- Noel Yobani Miranda -->
       <div class="profile-card">
-        <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Member 2" class="profile-img" onclick="showModal('noel')">
+        <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Noel Yobani Miranda" class="profile-img" onclick="showModal('noel')">
         <div class="profile-name" onclick="showModal('noel')">Noel Yobani Miranda</div>
       </div>
       <!-- Member 3 -->
@@ -222,90 +221,51 @@
   <script>
     // Profiles data
     const profiles = {
-	  noel: {
-    img: "{{ url_for('static', filename='images/Noel_profile.jpg') }}",
-    name: "Noel Yobani Miranda",
-    role: "Project Manager and Full Stack Developer",
-    bio: `With a passion for continuous growth, I am currently completing my third bachelor’s degree in Software Development at Bellevue University, graduating in October 2025. I also hold bachelor’s degrees in Sociology and Criminal Justice and recently served as a backend software engineering intern at SuperFile. My expertise is in web development with a strong focus on security, and within this project my role as project manager and full stack developer centers on backend development while guiding the team’s progress. I am committed to lifelong learning, seeking challenges that strengthen my technical abilities and collaborative skills.`,
-    contributions: [
-      "Implemented user Login system",
-      "Initialized the Moffat bay GitHub repository and project structure",
-      "Implemented the room reservation system"
-    ],
-    funfact: "Outside of coding, I enjoy exploring the wilderness with my fiancé, where we find inspiration and balance through hiking and connecting with nature.",
-    contact: `
-      <div class="modal-profile-contact">
-        <strong>Contact:</strong><br>
-        <a href="www.linkedin.com/in/nymirandadev" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;
-        <a href="https://github.com/NoelMirandaDev" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;
-        <a href="mailto:nymiranda.dev@gmail.com">Email</a>
-      </div>
-    `
-  },
-
-  steve: {
-    img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
-    name: "Steve Stylin",
-    role: "Database Designer, Frontend & Backend Developer",
-    bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
-    contributions: [
-      "Designed the Test-Driven Development (TDD) approach for the project",
-      "Created the Entity Relationship Diagram (ERD) for the application database",
-      "Developed the backend of the landing page",
-      "Leading the development of the About Us page (frontend and backend)"
-    ],
-    funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
-    contact: `
-      <div class="modal-profile-contact">
-        <strong>Contact:</strong><br>
-        <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    `
-  },
-
-  member3: {
-    img: "{{ url_for('static', filename='images/Member3_profile.jpg') }}",
-    name: "[Member 3 Name]",
-    role: "[Member 3 Role]",
-    bio: `[Member 3 bio goes here]`,
-    contributions: [
-      // "[Contribution 1]",
-      // "[Contribution 2]"
-    ],
-    funfact: "[Fun fact for Member 3]"
-  },
-  member4: {
-    img: "{{ url_for('static', filename='images/Member4_profile.jpg') }}",
-    name: "[Member 4 Name]",
-    role: "[Member 4 Role]",
-    bio: `[Member 4 bio goes here]`,
-    contributions: [
-      // "[Contribution 1]",
-      // "[Contribution 2]"
-    ],
-    funfact: "[Fun fact for Member 4]"
-  },
-  member5: {
-    img: "{{ url_for('static', filename='images/Member5_profile.jpg') }}",
-    name: "[Member 5 Name]",
-    role: "[Member 5 Role]",
-    bio: `[Member 5 bio goes here]`,
-    contributions: [
-      // "[Contribution 1]",
-      // "[Contribution 2]"
-    ],
-    funfact: "[Fun fact for Member 5]"
-  }
-};
+      steve: {
+        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
+        name: "Steve Stylin",
+        role: "Database Designer, Frontend & Backend Developer",
+        bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
+        contributions: [
+          "Designed the Test-Driven Development (TDD) approach for the project",
+          "Created the Entity Relationship Diagram (ERD) for the application database",
+          "Developed the backend of the landing page",
+          "Leading the development of the About Us page (frontend and backend)"
+        ],
+        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
+        contact: `
+          <div class="modal-profile-contact">
+            <strong>Contact:</strong><br>
+            <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        `
+      },
+      noel: {
+        img: "{{ url_for('static', filename='images/Noel_profile.jpg') }}",
+        name: "Noel Yobani Miranda",
+        role: "Project Manager and Full Stack Developer",
+        bio: `With a passion for continuous growth, I am currently completing my third bachelor’s degree in Software Development at Bellevue University, graduating in October 2025. I also hold bachelor’s degrees in Sociology and Criminal Justice and recently served as a backend software engineering intern at SuperFile. My expertise is in web development with a strong focus on security, and within this project my role as project manager and full stack developer centers on backend development while guiding the team’s progress. I am committed to lifelong learning, seeking challenges that strengthen my technical abilities and collaborative skills.`,
+        contributions: [
+          "Implemented user Login system",
+          "Initialized the Moffat bay GitHub repository and project structure",
+          "Implemented the room reservation system"
+        ],
+        funfact: "Outside of coding, I enjoy exploring the wilderness with my fiancé, where we find inspiration and balance through hiking and connecting with nature.",
+        contact: `
+          <div class="modal-profile-contact">
+            <strong>Contact:</strong><br>
+            <a href="www.linkedin.com/in/nymirandadev" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;
+            <a href="https://github.com/NoelMirandaDev" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;
+            <a href="mailto:nymiranda.dev@gmail.com">Email</a>
+          </div>
+        `
+      },
       member3: {
         img: "{{ url_for('static', filename='images/Member3_profile.jpg') }}",
         name: "[Member 3 Name]",
         role: "[Member 3 Role]",
         bio: `[Member 3 bio goes here]`,
-        contributions: [
-          // "[Contribution 1]",
-          // "[Contribution 2]"
-        ],
+        contributions: [],
         funfact: "[Fun fact for Member 3]"
       },
       member4: {
@@ -313,10 +273,7 @@
         name: "[Member 4 Name]",
         role: "[Member 4 Role]",
         bio: `[Member 4 bio goes here]`,
-        contributions: [
-          // "[Contribution 1]",
-          // "[Contribution 2]"
-        ],
+        contributions: [],
         funfact: "[Fun fact for Member 4]"
       },
       member5: {
@@ -324,50 +281,45 @@
         name: "[Member 5 Name]",
         role: "[Member 5 Role]",
         bio: `[Member 5 bio goes here]`,
-        contributions: [
-          // "[Contribution 1]",
-          // "[Contribution 2]"
-        ],
+        contributions: [],
         funfact: "[Fun fact for Member 5]"
       }
     };
 
     function showModal(memberKey) {
-  const modal = document.getElementById('profile-modal');
-  const content = document.getElementById('modal-content');
-  const profile = profiles[memberKey];
+      const modal = document.getElementById('profile-modal');
+      const content = document.getElementById('modal-content');
+      const profile = profiles[memberKey];
 
-  // --- COPY AND PASTE THIS BLOCK RIGHT HERE ---
-  if (!profile) {
-    alert('Profile not found!');
-    return;
-  }
-  // --------------------------------------------
+      if (!profile) {
+        alert('Profile not found!');
+        return;
+      }
 
-  // Compose contributions HTML if available
-  let contributionsHTML = '';
-  if (profile.contributions && profile.contributions.length > 0) {
-    contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
-    profile.contributions.forEach(function(item){
-      contributionsHTML += `<li>${item}</li>`;
-    });
-    contributionsHTML += `</ul></div>`;
-  }
+      // Compose contributions HTML if available
+      let contributionsHTML = '';
+      if (profile.contributions && profile.contributions.length > 0) {
+        contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
+        profile.contributions.forEach(function(item){
+          contributionsHTML += `<li>${item}</li>`;
+        });
+        contributionsHTML += `</ul></div>`;
+      }
 
-  content.innerHTML = `
-  <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-  <img src="${profile.img}" alt="${profile.name}" class="modal-profile-img">
-  <div class="modal-profile-name">${profile.name}</div>
-  <div class="modal-profile-role">${profile.role}</div>
-  <div class="modal-profile-bio">${profile.bio}</div>
-  ${contributionsHTML}
-  <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
-  ${profile.contact ? profile.contact : ""}
-`;
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        <img src="${profile.img}" alt="${profile.name}" class="modal-profile-img">
+        <div class="modal-profile-name">${profile.name}</div>
+        <div class="modal-profile-role">${profile.role}</div>
+        <div class="modal-profile-bio">${profile.bio}</div>
+        ${contributionsHTML}
+        <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
+        ${profile.contact ? profile.contact : ""}
+      `;
 
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden'; // Prevent background scroll
-}
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
 
     function closeModal() {
       document.getElementById('profile-modal').classList.remove('active');
