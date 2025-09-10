@@ -285,20 +285,40 @@
     };
 
     function showModal(memberKey) {
-      const modal = document.getElementById('profile-modal');
-      const content = document.getElementById('modal-content');
-      const profile = profiles[memberKey];
-	  // look for profile, if not found, error message
-	  if (!profile) {
+  const modal = document.getElementById('profile-modal');
+  const content = document.getElementById('modal-content');
+  const profile = profiles[memberKey];
+
+  // --- COPY AND PASTE THIS BLOCK RIGHT HERE ---
+  if (!profile) {
     alert('Profile not found!');
     return;
   }
-        <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
-      `;
+  // --------------------------------------------
 
-      modal.classList.add('active');
-      document.body.style.overflow = 'hidden'; // Prevent background scroll
-    }
+  // Compose contributions HTML if available
+  let contributionsHTML = '';
+  if (profile.contributions && profile.contributions.length > 0) {
+    contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
+    profile.contributions.forEach(function(item){
+      contributionsHTML += `<li>${item}</li>`;
+    });
+    contributionsHTML += `</ul></div>`;
+  }
+
+  content.innerHTML = `
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <img src="${profile.img}" alt="${profile.name}" class="modal-profile-img">
+    <div class="modal-profile-name">${profile.name}</div>
+    <div class="modal-profile-role">${profile.role}</div>
+    <div class="modal-profile-bio">${profile.bio}</div>
+    ${contributionsHTML}
+    <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
+  `;
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
 
     function closeModal() {
       document.getElementById('profile-modal').classList.remove('active');
