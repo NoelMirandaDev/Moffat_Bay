@@ -63,19 +63,19 @@ def register_routes(app):
             email = request.form["email"]
             password = request.form["password"]
             phone = request.form["phone"]
-            
             try:
-                # Check if email address is valid
                 if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
                     flash("Invalid email address", "error")
                 elif not re.match(r"[A-Za-z]+$", first) or not re.match(r"[A-Za-z]+$", last):
                     flash("Name must only contain letters.", "error")
                 elif not re.match(r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone):
-                    flash("Must be a valid US phone number.")
+                    flash("Must be a valid US phone number.", "error")
                 elif not re.match(r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}", password):
-                    flash("Password must be at least 8 characters, contain 1 uppercase and lowercase letter and a number.", "error")
+                    flash("Password must contain at least 8 characters, contain uppercase, lowercase, and a number.", "error")
                 else:
-                    result = db.session.execute(text("SELECT * FROM customer WHERE email = :email"), {"email": email}).fetchone()
+                    result = db.session.execute(
+                        text("SELECT * FROM customer WHERE email = :email"), {"email": email}
+                    ).fetchone()
                     if result:
                         flash("Email is already registered.", "error")
                     else:
@@ -90,12 +90,13 @@ def register_routes(app):
                         except Exception as e:
                             db.session.rollback()
                             print(f"Error: {e}")
+                            flash("Database error. Please try again later.", "error")
             except Exception:
                 flash("Something went wrong, please try again.", "error")
-        
         return render_template("registration.html")
-        
-    # ------------
+
+    
+
     # Login Page
     # ------------
     @app.route("/login", methods=["GET", "POST"])
@@ -112,7 +113,7 @@ def register_routes(app):
             if not customer or not check_password_hash(customer.PasswordHash, password):
                 flash("Invalid email or password.", "error")
                 return render_template("index.html", show_login=True)
-            
+
             session["customer_id"] = customer.CustomerID
             session["customer_email"] = customer.Email
             session["customer_name"] = customer.FirstName
@@ -121,13 +122,12 @@ def register_routes(app):
             return redirect(url_for("landing"))
 
         return redirect(url_for("landing"))
-    
-    # -----------------------------------
-    # Logout route (clears the session)
-    # -----------------------------------
+
+    # ------------
+    # Logout Route
+    # ------------
     @app.route("/logout")
     def logout():
         session.clear()
         flash("You have been successfully logged out.", "success")
         return redirect(url_for("landing"))
-    

@@ -1,53 +1,366 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us - Moffat Bay Lodge</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Moffat Bay Lodge</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .team-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+    }
+    .team-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .team-header h1 {
+      font-size: 2.6rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      color: #2E5339;
+      margin-bottom: 0.7rem;
+    }
+    .team-header p {
+      font-size: 1.15rem;
+      color: #555;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2.5rem;
+    }
+    .profile-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      padding: 2rem 1.5rem 1.5rem 1.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: box-shadow 0.2s;
+      position: relative;
+      min-height: 265px;
+    }
+    .profile-card:hover {
+      box-shadow: 0 12px 32px rgba(46,83,57,0.13);
+    }
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 50%;
+      border: 3px solid #2E5339;
+      margin-bottom: 0.8rem;
+      cursor: pointer;
+    }
+    .profile-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2E5339;
+      margin-bottom: 0.15rem;
+      cursor: pointer;
+    }
+    .profile-role {
+      font-size: 1.02rem;
+      color: #8B5E3C;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(30,50,40,0.18);
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 16px;
+      max-width: 520px;
+      width: 90vw;
+      box-shadow: 0 8px 40px rgba(46,83,57,0.25);
+      padding: 2.5rem 2rem;
+      position: relative;
+      animation: fadeInModal 0.3s;
+    }
+    @keyframes fadeInModal {
+      from { opacity: 0; transform: translateY(-32px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .modal-close {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      background: #eee;
+      color: #2E5339;
+      border: none;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .modal-close:hover {
+      background: #d8d8d8;
+    }
+    .modal-profile-img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      max-width: 370px;
+      max-height: 320px;
+      height: auto;
+      border-radius: 0;
+      object-fit: contain;
+      border: none;
+      background: #e6e6e6;
+      margin-bottom: 1.2rem;
+    }
+    @media (max-width: 500px) {
+      .modal-profile-img {
+        max-width: 90vw;
+        max-height: 40vw;
+      }
+    }
+    .modal-profile-name {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #2E5339;
+      text-align: center;
+      margin-bottom: 0.6rem;
+    }
+    .modal-profile-role {
+      text-align: center;
+      font-size: 1.08rem;
+      color: #8B5E3C;
+      margin-bottom: 1.2rem;
+    }
+    .modal-profile-bio {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+    .modal-profile-contributions {
+      text-align: left;
+      margin-bottom: 1rem;
+    }
+    .modal-profile-contributions ul {
+      padding-left: 1.2em;
+    }
+    .modal-profile-funfact {
+      font-size: 0.98rem;
+      color: #3f621a;
+      font-style: italic;
+      margin-bottom: 0.7rem;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
-  <main class="page-content">
-    <section class="basic-section">
-      <h1>About Moffat Bay Lodge</h1>
-      <p>This is a placeholder for the About Us page. Share your story, values, and connection to the Pacific Northwest.</p>
-    </section>
-  </main>
+  <section class="team-section">
+    <div class="team-header">
+      <h1>Meet the Team</h1>
+      <p>
+        The Moffat Bay Lodge team brings together a unique blend of technical expertise, leadership, and real-world experience. Guided by <strong>Noel Yobani Miranda</strong>, an accomplished project manager and full stack developer with a strong focus on security and a proven record in backend engineering, our team ensures that innovation and reliability are at the core of everything we build. <strong>Steve Stylin</strong>, our database architect and backend specialist, leverages years of professional experience in software development and data management to engineer robust, scalable systems and seamless user experiences. Together, we are committed to delivering a modern, user-focused web application for hospitality, combining advanced software engineering, thoughtful UI/UX design, and agile project management. Our collaborative approach means that every feature, from secure user registration to dynamic room reservations, is built with precision, usability, and long-term value in mind.
+      </p>
+    </div>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+    <div class="team-grid">
+      <!-- Noel Yobani Miranda -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Noel Yobani Miranda" class="profile-img" onclick="showModal('noel')">
+        <div class="profile-name" onclick="showModal('noel')">Noel Yobani Miranda</div>
+        <div class="profile-role">Project Manager and Full Stack Developer</div>
+      </div>
+      <!-- Kyle Marlia-Conner -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Kyle_profile.jpg') }}" alt="Kyle Marlia-Conner" class="profile-img" onclick="showModal('kyle')">
+        <div class="profile-name" onclick="showModal('kyle')">Kyle Marlia-Conner</div>
+        <div class="profile-role">Developer</div>
+      </div>
+      <!-- Steve Stylin -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img" onclick="showModal('steve')">
+        <div class="profile-name" onclick="showModal('steve')">Steve Stylin</div>
+        <div class="profile-role">Database Designer, Frontend & Backend Developer</div>
+      </div>
+      <!-- Riese Bohnak -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Riese_profile.jpg') }}" alt="Riese Bohnak" class="profile-img" onclick="showModal('riese')">
+        <div class="profile-name" onclick="showModal('riese')">Riese Bohnak</div>
+        <div class="profile-role">Developer</div>
+      </div>
+      <!-- Amit Rizal -->
+      <div class="profile-card">
+        <img src="{{ url_for('static', filename='images/Amit_profile.jpg') }}" alt="Amit Rizal" class="profile-img" onclick="showModal('amit')">
+        <div class="profile-name" onclick="showModal('amit')">Amit Rizal</div>
+        <div class="profile-role">Developer</div>
+      </div>
+    </div>
+  </section>
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- Modal Structure -->
+  <div class="modal" id="profile-modal">
+    <div class="modal-content" id="modal-content">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+      <!-- Modal content will be injected here by JS -->
+    </div>
+  </div>
 
-<script>
-  const loginModal = document.getElementById('loginModal');
-  const loginButtons = document.querySelectorAll('.btn-brown');
-  const closeTriggers = document.querySelectorAll('[data-close-modal]');
+  {% include "partials/footer.html" %}
 
-  loginButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      loginModal.classList.add('show');
-    });
-  });
+  <script>
+    // Profiles data
+    const profiles = {
+      noel: {
+        img: "{{ url_for('static', filename='images/Noel_profile.jpg') }}",
+        name: "Noel Yobani Miranda",
+        role: "Project Manager and Full Stack Developer",
+        bio: `With a passion for continuous growth, I am currently completing my third bachelor’s degree in Software Development at Bellevue University, graduating in October 2025. I also hold bachelor’s degrees in Sociology and Criminal Justice and recently served as a backend software engineering intern at SuperFile. My expertise is in web development with a strong focus on security, and within this project my role as project manager and full stack developer centers on backend development while guiding the team’s progress. I am committed to lifelong learning, seeking challenges that strengthen my technical abilities and collaborative skills.`,
+        contributions: [
+          "Implemented user Login system",
+          "Initialized the Moffat Bay GitHub repository and project structure",
+          "Implemented the room reservation system"
+        ],
+        funfact: "Outside of coding, I enjoy exploring the wilderness with my fiancé, where we find inspiration and balance through hiking and connecting with nature.",
+        contact: `
+          <div class="modal-profile-contact">
+            <strong>Contact:</strong><br>
+            <a href="www.linkedin.com/in/nymirandadev" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;
+            <a href="https://github.com/NoelMirandaDev" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;
+            <a href="mailto:nymiranda.dev@gmail.com">Email</a>
+          </div>
+        `
+      },
+      kyle: {
+        img: "{{ url_for('static', filename='images/Kyle_profile.jpg') }}",
+        name: "Kyle Marlia-Conner",
+        role: "Developer",
+        bio: `Kyle is a dedicated developer with a strong background in full stack web development. He brings attention to detail and a collaborative spirit to the team, ensuring project components are robust, scalable, and user-friendly.`,
+        contributions: [
+          "Contributed to backend API development",
+          "Implemented front-end UI enhancements",
+          "Reviewed and improved code for scalability"
+        ],
+        funfact: "Kyle is an amateur chef who loves experimenting with new recipes and enjoys mountain biking on weekends.",
+        contact: ''
+      },
+      steve: {
+        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
+        name: "Steve Stylin",
+        role: "Database Designer, Frontend & Backend Developer",
+        bio: `Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti. Currently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.`,
+        contributions: [
+          "Created the Technical Design Document (TDD) for the project",
+          "Created the Entity Relationship Diagram (ERD) for the application database",
+          "Developed the backend of the landing page",
+          "Leading the development of the About Us page (frontend and backend)"
+        ],
+        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
+        contact: `
+          <div class="modal-profile-contact">
+            <strong>Contact:</strong><br>
+            <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        `
+      },
+      riese: {
+        img: "{{ url_for('static', filename='images/Riese_profile.jpg') }}",
+        name: "Riese Bohnak",
+        role: "Developer",
+        bio: `Riese is an innovative developer who excels at solving complex technical problems and bringing creative solutions to the team. Their adaptability and dedication help ensure project milestones are met.`,
+        contributions: [
+          "Developed automated testing scripts",
+          "Optimized database queries",
+          "Assisted with deployment strategies"
+        ],
+        funfact: "Riese is a passionate rock climber and enjoys composing electronic music in his spare time.",
+        contact: ''
+      },
+      amit: {
+        img: "{{ url_for('static', filename='images/Amit_profile.jpg') }}",
+        name: "Amit Rizal",
+        role: "Developer",
+        bio: `Amit is a meticulous software developer with a keen interest in both backend and frontend technologies. He is known for his problem-solving skills and strong teamwork.`,
+        contributions: [
+          "Implemented responsive web layouts",
+          "Contributed bug fixes and performance improvements",
+          "Enhanced accessibility features"
+        ],
+        funfact: "Amit is an avid traveler who has visited more than 15 countries and loves photography.",
+        contact: ''
+      }
+    };
 
-  closeTriggers.forEach(el => {
-    el.addEventListener('click', () => {
-      loginModal.classList.remove('show');
-    });
-  });
+    function showModal(memberKey) {
+      const modal = document.getElementById('profile-modal');
+      const content = document.getElementById('modal-content');
+      const profile = profiles[memberKey];
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      loginModal.classList.remove('show');
+      if (!profile) {
+        alert('Profile not found!');
+        return;
+      }
+
+      // Compose contributions HTML if available
+      let contributionsHTML = '';
+      if (profile.contributions && profile.contributions.length > 0) {
+        contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
+        profile.contributions.forEach(function(item){
+          contributionsHTML += `<li>${item}</li>`;
+        });
+        contributionsHTML += `</ul></div>`;
+      }
+
+      content.innerHTML = `
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        <img src="${profile.img}" alt="${profile.name}" class="modal-profile-img">
+        <div class="modal-profile-name">${profile.name}</div>
+        <div class="modal-profile-role">${profile.role}</div>
+        <div class="modal-profile-bio">${profile.bio}</div>
+        ${contributionsHTML}
+        <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
+        ${profile.contact ? profile.contact : ""}
+      `;
+
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
     }
-  });
-</script>
 
+    function closeModal() {
+      document.getElementById('profile-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal if click outside content
+    document.getElementById('profile-modal').addEventListener('click', function(e){
+      if(e.target === this) closeModal();
+    });
+
+    // Optional: Close modal on ESC key
+    document.addEventListener('keydown', function(e){
+      if(e.key === "Escape") closeModal();
+    });
+  </script>
 </body>
 </html>
