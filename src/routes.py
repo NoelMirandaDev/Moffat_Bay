@@ -2,7 +2,11 @@ from flask import render_template, request, redirect, url_for, flash, session
 from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 from extensions import db
+from datetime import datetime
 import re
+
+# html <input type="date"> format
+DATE_FMT = "%Y-%m-%d"
 
 def register_routes(app):
     """
@@ -36,7 +40,123 @@ def register_routes(app):
     # ------------------------
     @app.route("/lodge_reservation.html")
     def lodge_reservation():
-        return render_template("lodge_reservation.html")
+        # Gets the page value from the URL (default = 1)
+        try:
+            page = int(request.args.get("page", 1))
+        except ValueError:
+            page = 1
+
+        per_page = 4   # 4 rooms per page
+        offset = (page - 1) * per_page
+
+        # Counts total rooms
+        total = db.session.execute(text("SELECT COUNT(*) FROM room")).scalar() or 0
+        total_pages = max((total + per_page - 1) // per_page, 1)
+
+        # Fetches rooms with their type info
+        rows = db.session.execute(text("""
+            SELECT 
+                r.RoomID,
+                r.ADAAccessible,
+                r.ImagePath,
+                rt.TypeName,
+                rt.PricePerNight,
+                rt.MaxOccupancy
+            FROM room r
+            JOIN roomtype rt ON r.RoomTypeID = rt.RoomTypeID
+            ORDER BY r.RoomNumber
+            LIMIT :limit OFFSET :offset
+        """), {"limit": per_page, "offset": offset}).mappings().all()
+
+        return render_template(
+            "lodge_reservation.html",
+            rooms=rows,
+            page=page,
+            total_pages=total_pages
+        )
+    
+    # ---------------------------------
+    # Room details Page + booking step
+    # ---------------------------------
+    @app.route("/rooms/<int:room_id>", methods=["GET", "POST"])
+    def room_details(room_id):
+        # Fetches the room and its type info
+        room = db.session.execute(text("""
+            SELECT
+                r.RoomID,
+                r.RoomNumber,
+                r.ADAAccessible,
+                r.Description,
+                r.ImagePath,
+                rt.TypeName,
+                rt.PricePerNight,
+                rt.MaxOccupancy,
+                rt.BedConfiguration
+            FROM room r
+            JOIN roomtype rt ON r.RoomTypeID = rt.RoomTypeID
+            WHERE r.RoomID = :r_id
+        """), {"r_id": room_id}).mappings().first()
+
+        if not room:
+            flash("Room not found.", "error")
+            return redirect(url_for("lodge_reservation"))
+        
+        if request.method == "POST":
+            # Reads form fields
+            check_in_str = request.form.get("check_in", "").strip()
+            check_out_str = request.form.get("check_out", "").strip()
+            guests_str = request.form.get("guests", "").strip()
+
+            # server-side validation
+            try:
+                check_in = datetime.strptime(check_in_str, DATE_FMT).date()
+                check_out = datetime.strptime(check_out_str, DATE_FMT).date()
+            except ValueError:
+                flash("Please provide valid check-in and check-out dates.", "error")
+                return render_template("room_details.html", room=room, amenities=_load_amenities(room_id))
+            
+            if check_in >= check_out:
+                flash("Check-out must be after check-in.", "error")
+                return render_template("room_details.html", room=room, amenities=_load_amenities(room_id))
+            
+            try:
+                guests = int(guests_str)
+            except ValueError:
+                flash("Guests must be a whole number.", "error")
+                return render_template("room_details.html", room=room, amenities=_load_amenities(room_id))
+
+            if guests < 1 or guests > room.MaxOccupancy:
+                flash(f"Guests must be between 1 and {room.MaxOccupancy}.", "error")
+                return render_template("room_details.html", room=room, amenities=_load_amenities(room_id))
+            
+            # Computes nights and cost
+            nights = (check_out - check_in).days
+            nightly_rate = float(room.PricePerNight)
+            subtotal = nightly_rate * nights
+
+            # Saves pending reservation in session
+            session["pending_reservation"] = {
+                "room_id": room.RoomID,
+                "room_type": room.TypeName,
+                "price_per_night": nightly_rate,
+                "max_occupancy": int(room.MaxOccupancy),
+                "check_in": check_in_str,
+                "check_out": check_out_str,
+                "nights": nights,
+                "guests": guests,
+                "room_number": room.RoomNumber
+            }
+
+            # If not logged in, ask user to log in or register; else go to reservation summary page
+            if not session.get("customer_id"):
+                flash("Please log in to continue your reservation.", "error")
+                return render_template("room_details.html", room=room, amenities=_load_amenities(room_id), show_login=True)
+
+            return redirect(url_for("reservation_summary"))
+        
+        # GET request: render page
+        amenities = _load_amenities(room_id)
+        return render_template("room_details.html", room=room, amenities=amenities)
 
     # -------------------------
     # Reservation Lookup Page
@@ -48,9 +168,93 @@ def register_routes(app):
     # --------------------------
     # Reservation Summary Page
     # --------------------------
-    @app.route("/reservation_summary.html")
+    @app.route("/reservation_summary.html", methods=["GET", "POST"])
     def reservation_summary():
-        return render_template("reservation_summary.html")
+        pending = session.get("pending_reservation")
+        if not pending:
+            flash("No reservation in progress.", "error")
+            return redirect(url_for("lodge_reservation"))
+
+        # Must be logged in to confirm
+        if not session.get("customer_id"):
+            flash("Please log in to continue.", "error")
+            return redirect(url_for("landing", show_login=True))
+
+        # Recompute totals on server
+        try:
+            check_in = datetime.strptime(pending["check_in"], DATE_FMT).date()
+            check_out = datetime.strptime(pending["check_out"], DATE_FMT).date()
+        except Exception:
+            flash("Your reservation data is invalid. Please try again.", "error")
+            session.pop("pending_reservation", None)
+            return redirect(url_for("lodge_reservation"))
+
+        nights = (check_out - check_in).days
+        price_per_night = float(pending["price_per_night"])
+        subtotal = price_per_night * nights
+
+        if request.method == "POST":
+            action = request.form.get("action")
+
+            if action == "cancel":
+                session.pop("pending_reservation", None)
+                flash("Reservation canceled.", "success")
+                return redirect(url_for("room_details", room_id=pending["room_id"]))
+
+            if action == "confirm":
+                # Availability check before database insert
+                if not _room_is_available(pending["room_id"], pending["check_in"], pending["check_out"]):
+                    flash("Sorry, this room is no longer available for those dates.", "error")
+                    return redirect(url_for("room_details", room_id=pending["room_id"]))
+
+                try:
+                    db.session.execute(text("""
+                        INSERT INTO reservation
+                            (CustomerID, RoomID, CheckInDate, CheckOutDate, NumberOfGuests, ReservationStatus)
+                        VALUES
+                            (:cust, :room, :in_date, :out_date, :guests, 'Confirmed')
+                    """), {
+                        "cust": session["customer_id"],
+                        "room": pending["room_id"],
+                        "in_date": pending["check_in"],
+                        "out_date": pending["check_out"],
+                        "guests": pending["guests"]
+                    })
+                    db.session.commit()
+
+                    # Audit log
+                    try:
+                        db.session.execute(text("""
+                            INSERT INTO auditlog (CustomerID, Action, Description)
+                            VALUES (:cust, 'Reservation Created',
+                                    CONCAT('Reservation for room ', :roomnum,
+                                        ' from ', :in_date, ' to ', :out_date))
+                        """), {
+                            "cust": session["customer_id"],
+                            "roomnum": pending.get("room_number"),
+                            "in_date": pending["check_in"],
+                            "out_date": pending["check_out"],
+                        })
+                        db.session.commit()
+                    except Exception:
+                        db.session.rollback()  # doesn't fail the booking if audit fails silently
+
+                    session.pop("pending_reservation", None)
+                    flash("Your reservation has been confirmed! Enjoy the available attractions.", "success")
+                    return redirect(url_for("attraction"))
+
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Failed to save reservation: {e}", "error")
+                    return redirect(url_for("reservation_summary"))
+
+        # GET: show summary
+        return render_template(
+            "reservation_summary.html",
+            reservation=pending,
+            nights=nights,
+            subtotal=subtotal
+        )
 
     # -------------------
     # Registration Page
@@ -95,8 +299,7 @@ def register_routes(app):
                 flash("Something went wrong, please try again.", "error")
         return render_template("registration.html")
 
-    
-
+    # ------------
     # Login Page
     # ------------
     @app.route("/login", methods=["GET", "POST"])
@@ -116,10 +319,14 @@ def register_routes(app):
 
             session["customer_id"] = customer.CustomerID
             session["customer_email"] = customer.Email
-            session["customer_name"] = customer.FirstName
+            session["customer_phone"] = customer.Phone
+            session["customer_firstName"] = customer.FirstName
+            session["customer_lastName"] = customer.LastName
+
+            if session.get("pending_reservation"):
+                return redirect(url_for("reservation_summary"))
 
             flash(f"Welcome back, {customer.FirstName}!", "success")
-            return redirect(url_for("landing"))
 
         return redirect(url_for("landing"))
 
@@ -131,3 +338,41 @@ def register_routes(app):
         session.clear()
         flash("You have been successfully logged out.", "success")
         return redirect(url_for("landing"))
+    
+    # -------------- Helper Functions Below -------------------
+
+    # ---------------
+    # Load Amenities
+    # ---------------
+    def _load_amenities(room_id: int):
+        return db.session.execute(text("""
+            SELECT a.AmenityID, a.Name
+            FROM roomamenity ra
+            JOIN amenity a ON a.AmenityID = ra.AmenityID
+            WHERE ra.RoomID = :r_id
+            ORDER BY a.Name
+        """), {"r_id": room_id}).mappings().all()
+    
+    # ------------------------
+    # Room Availability Check
+    # ------------------------
+    def _room_is_available(room_id: int, check_in: str, check_out: str) -> bool:
+        """
+        Returns True if the room has NO overlapping confirmed reservations
+        for the requested range [check_in, check_out).
+        Overlap rule: (existing.CheckIn < new.CheckOut) AND (existing.CheckOut > new.CheckIn)
+        """
+        row = db.session.execute(text("""
+            SELECT COUNT(*) AS cnt
+            FROM reservation
+            WHERE RoomID = :room_id
+            AND ReservationStatus = 'Confirmed'
+            AND CheckInDate < :new_out
+            AND CheckOutDate > :new_in
+        """), {
+            "room_id": room_id,
+            "new_in": check_in,
+            "new_out": check_out
+        }).mappings().first()
+
+        return (row and int(row.cnt) == 0)
