@@ -52,6 +52,7 @@ CREATE TABLE `room` (
   `RoomTypeID` int(11) NOT NULL,
   `ADAAccessible` tinyint(1) DEFAULT 0,
   `Description` text DEFAULT NULL,
+  `ImagePath` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`RoomID`),
   KEY `RoomTypeID` (`RoomTypeID`),
   CONSTRAINT `room_ibfk_1` FOREIGN KEY (`RoomTypeID`) REFERENCES `roomtype` (`RoomTypeID`)

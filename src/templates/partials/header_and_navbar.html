@@ -11,9 +11,17 @@
       <a href="{{ url_for('attraction') }}">Attraction</a>
       <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
       <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
-      <a href="{{ url_for('reservation_summary') }}">Reservation Summary</a>
       <a href="{{ url_for('about') }}">About Us</a>
-      <button class="btn-brown">Login / Register</button>
+      
+      {% if session.get("customer_id") %}
+        <!-- Logout button -->
+        <form method="GET" action="{{ url_for('logout') }}" style="display:inline;">
+          <button type="submit" class="btn-brown">Logout</button>
+        </form>
+      {% else %}
+        <!-- Login button -->
+        <button class="btn-brown" id="loginBtn">Login</button>
+      {% endif %}
     </nav>
   </div>
 </header>

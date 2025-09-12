@@ -12,12 +12,42 @@
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
+  <!-- Flash Messages -->
+  {% include "partials/success_flash_messages.html" %}
+
   <main class="page-content">
     <section class="basic-section">
       <h1>Book Your Stay</h1>
-      <p>This is a placeholder for the Lodge Reservation page. Allow guests to select dates, room types, and confirm their stay.</p>
+
+      <div class="rooms-grid">
+        {% for room in rooms %}
+          <article class="room-card">
+            <img src="{{ url_for('static', filename=room.ImagePath) }}" alt="Room {{ room.RoomNumber }}">
+            <h3>{{ room.TypeName }}</h3>
+            <p>Max Guests: {{ room.MaxOccupancy }}</p>
+            <p>Price: ${{ room.PricePerNight }}</p>
+            <p>{% if room.ADAAccessible %}ADA Accessible{% endif %}</p>
+            <a href="{{ url_for('room_details', room_id=room.RoomID) }}" class="btn">Book Now</a>
+          </article>
+        {% else %}
+          <p>No rooms available.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination controls -->
+      <nav class="pagination">
+        {% if page > 1 %}
+          <a href="{{ url_for('lodge_reservation', page=page-1) }}">&laquo; Previous</a>
+        {% endif %}
+
+        <span>Page {{ page }} of {{ total_pages }}</span>
+
+        {% if page < total_pages %}
+          <a href="{{ url_for('lodge_reservation', page=page+1) }}">Next &raquo;</a>
+        {% endif %}
+      </nav>
     </section>
-  </main>
+</main>
 
 <!-- FOOTER WITH PAGE LINKS -->
 {% include "partials/footer.html" %}
@@ -26,28 +56,29 @@
 {% include "partials/login_modal.html" %}
 
 <script>
-  const loginModal = document.getElementById('loginModal');
-  const loginButtons = document.querySelectorAll('.btn-brown');
-  const closeTriggers = document.querySelectorAll('[data-close-modal]');
+    // Login Modal functionality
+    const loginModal = document.getElementById('loginModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const closeTriggers = document.querySelectorAll('[data-close-modal]');
 
-  loginButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      loginModal.classList.add('show');
-    });
-  });
-
-  closeTriggers.forEach(el => {
-    el.addEventListener('click', () => {
-      loginModal.classList.remove('show');
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      loginModal.classList.remove('show');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
     }
-  });
-</script>
+
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+  </script>
 
 </body>
 </html>

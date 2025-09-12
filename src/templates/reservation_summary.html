@@ -12,10 +12,18 @@
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
+  <!-- Flash Messages -->
+  {% include "partials/error_flash_messages.html" %}
+
   <main class="page-content">
     <section class="basic-section">
       <h1>Your Reservation Summary</h1>
       <p>This is a placeholder for the Reservation Summary page. Users will see confirmation details here after booking.</p>
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" name="action" value="confirm" class="btn-brown">Confirm Reservation</button>
+        <button type="submit" name="action" value="cancel" class="btn">Cancel</button>
+    </form>
     </section>
   </main>
 
@@ -26,28 +34,29 @@
 {% include "partials/login_modal.html" %}
 
 <script>
-  const loginModal = document.getElementById('loginModal');
-  const loginButtons = document.querySelectorAll('.btn-brown');
-  const closeTriggers = document.querySelectorAll('[data-close-modal]');
+    // Login Modal functionality
+    const loginModal = document.getElementById('loginModal');
+    const loginBtn = document.getElementById('loginBtn');
+    const closeTriggers = document.querySelectorAll('[data-close-modal]');
 
-  loginButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      loginModal.classList.add('show');
-    });
-  });
-
-  closeTriggers.forEach(el => {
-    el.addEventListener('click', () => {
-      loginModal.classList.remove('show');
-    });
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape") {
-      loginModal.classList.remove('show');
+    if (loginBtn) {
+      loginBtn.addEventListener('click', () => {
+        loginModal.classList.add('show');
+      });
     }
-  });
-</script>
+
+    closeTriggers.forEach(el => {
+      el.addEventListener('click', () => {
+        loginModal.classList.remove('show');
+      });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === "Escape") {
+        loginModal.classList.remove('show');
+      }
+    });
+  </script>
 
 </body>
 </html>
