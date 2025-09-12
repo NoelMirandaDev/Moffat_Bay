@@ -99,6 +99,62 @@ body {
     margin: 0 0.5rem;
 }
 
+.reservation-container{
+  display: flex;
+  gap: 20px;
+}
+
+.reservation-box {
+  flex: 2;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+
+}
+
+.reservation-box h3 {
+  color: #2E5339;
+  margin-bottom: 5px;
+}
+.reservation-confirm-box{
+  background-color: #fff;
+  flex: 1;
+  padding: 20px;
+  border-radius: 8px
+}
+
+.reservation-confirm-box img {
+  border-top: 8px;
+  margin: -20px -20px 5px -20px;
+  width: calc(100% + 40px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.reservation-confirm-box h3 {
+  color: #2E5339;
+  margin-bottom: 5px;
+}
+
+.reservation-segment {
+  background-color: #D3D3D3;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.reservation-segment p {
+  display: flex;
+  justify-content: space-between;
+}
+
+.label {
+  font-weight: bold;
+}
+.value {
+  margin-left: 20px;
+}
+
+
+
 /* Button Styles */
 .btn-green {
     background-color: #2E5339;
@@ -127,6 +183,21 @@ body {
 }
 
 .btn-brown:hover {
+    background-color: #A97148;
+}
+
+.res-btn-brown {
+  background-color: #8B5E3C;
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.res-btn-brown:hover {
     background-color: #A97148;
 }
 
@@ -369,4 +440,14 @@ body {
 }
 .flash.success { 
   background: #e9ffea; color: #0b5; border: 1px solid #bff0c6; 
+}
+.modal-profile-contact {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1rem;
+  word-break: break-all;
+}
+.modal-profile-contact a {
+  color: #2E5339;
+  text-decoration: underline;
 }

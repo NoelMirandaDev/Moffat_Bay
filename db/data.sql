@@ -46,13 +46,13 @@ INSERT INTO amenity (AmenityID, Name, Description) VALUES
 -- Rooms
 -- =========================
 -- Note: ADAAccessible uses 0/1 (false/true)
-INSERT INTO room (RoomID, RoomNumber, RoomTypeID, ADAAccessible, Description) VALUES
-(101, '101', 1, 0, 'Cozy queen, garden side'),
-(102, '102', 2, 0, 'Two full beds, courtyard'),
-(103, '103', 2, 1, 'ADA room with two full beds'),
-(201, '201', 3, 0, 'King room, partial bay view'),
-(202, '202', 3, 0, 'King room, near elevator'),
-(301, '301', 4, 0, 'Top-floor suite, full bay view');
+INSERT INTO room (RoomID, RoomNumber, RoomTypeID, ADAAccessible, Description, ImagePath) VALUES
+(101, '101', 1, 0, 'Cozy queen, garden side', 'images/room101.jpeg'),
+(102, '102', 2, 0, 'Two full beds, courtyard', 'images/room102.jpeg'),
+(103, '103', 2, 1, 'ADA room with two full beds', 'images/room103.jpeg'),
+(201, '201', 3, 0, 'King room, partial bay view', 'images/room201.jpeg'),
+(202, '202', 3, 0, 'King room, near elevator', 'images/room202.jpeg'),
+(301, '301', 4, 0, 'Top-floor suite, full bay view', 'images/room301.jpeg');
 
 -- =========================
 -- Room ↔ Amenity (many-to-many)
