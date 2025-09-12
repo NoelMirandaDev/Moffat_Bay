@@ -13,9 +13,41 @@
   {% include "partials/header_and_navbar.html" %}
 
   <main class="page-content">
-    <section class="basic-section">
-      <h1>Your Reservation Summary</h1>
-      <p>This is a placeholder for the Reservation Summary page. Users will see confirmation details here after booking.</p>
+    <div class="reservation-container">
+
+      <div class="reservation-box">
+        <h3>Reservation Details</h3>
+        <div class="reservation-segment">
+          <p><span class="label">Reservation ID:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Room #:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Room description:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Check-in:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Check-out:</span><span class="value">placeholder</span></p>
+        </div>
+  
+        <h3>Customer Information</h3>
+        <div class="reservation-segment">
+          <p><span class="label">Name:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Email:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Phone:</span><span class="value">placeholder</span></p>
+        </div>
+
+        <h3>Pricing</h3>
+        <div class="reservation-segment">
+          <p><span class="label">Room price:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Total:</span><span class="value">placeholder</span></p>
+        </div>
+      </div>
+
+      <div class="reservation-confirm-box">
+        <img src="{{ url_for('static', filename='images/bay_lodge2.png') }}" alt="Placeholder"><br>
+        <h3>Room #404</h3>
+        <p>room description text</p>
+
+
+        <button class="res-btn-brown">Cancel</button>
+        <button class="btn-green">Book Now</button>
+      </div>
     </section>
   </main>
 
