@@ -17,57 +17,81 @@
   {% include "partials/error_flash_messages.html" %}
 
   <main class="page-content">
-    <img src="{{ url_for('static', filename=room.ImagePath) }}" alt="Room {{ room.RoomNumber }}" class="room-detail-img">
-    <h1>{{ room.TypeName }}</h1>
-    <ul class="room-meta">
-      <li><strong>Beds:</strong> {{ room.BedConfiguration }}</li>
-      <li><strong>Price per Night:</strong> ${{ '%.2f'|format(room.PricePerNight) }}</li>
-      <li><strong>Max Occupancy:</strong> {{ room.MaxOccupancy }}</li>
-      <li><strong>Accessible:</strong> {{ 'Yes' if room.ADAAccessible else 'No' }}</li>
-    </ul>
+    <section class="room-detail">
+      <!-- Hero Image -->
+      <div class="detail-hero">
+        <img src="{{ url_for('static', filename=room.ImagePath) }}" alt="Room {{ room.RoomNumber }} – {{ room.TypeName }}">
+        {% if room.ADAAccessible %}
+          <span class="badge-ada">ADA</span>
+        {% endif %}
+      </div>
 
-    {% if room.Description %}
-      <p>{{ room.Description }}</p>
-    {% endif %}
+      <!-- Content columns -->
+      <div class="detail-grid">
+        <!-- Left column: info -->
+        <article class="detail-info card">
+          <h1 class="detail-title">{{ room.TypeName }}</h1>
 
-    {% if amenities and amenities|length %}
-      <h3>Amenities</h3>
-      <ul>
-        {% for a in amenities %}
-          <li>{{ a.Name }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
+          <ul class="detail-meta">
+            <li><strong>Beds:</strong> {{ room.BedConfiguration }}</li>
+            <li><strong>Price per Night:</strong> <span class="price">${{ '%.2f'|format(room.PricePerNight) }}</span></li>
+            <li><strong>Max Occupancy:</strong> {{ room.MaxOccupancy }}</li>
+            <li><strong>Accessible:</strong> {{ 'Yes' if room.ADAAccessible else 'No' }}</li>
+          </ul>
 
-    <form method="POST" action="{{ url_for('room_details', room_id=room.RoomID) }}">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% if room.Description %}
+            <p class="detail-desc">{{ room.Description }}</p>
+          {% endif %}
 
-        <label>
-            Check-in:
-            <input type="date" name="check_in" required>
-        </label>
+          {% if amenities and amenities|length %}
+            <h3>Amenities</h3>
+            <ul class="amenities-list">
+              {% for a in amenities %}
+                <li>{{ a.Name }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </article>
 
-        <label>
-            Check-out:
-            <input type="date" name="check_out" required>
-        </label>
+        <!-- Right column: booking box -->
+        <aside class="detail-book card">
+          <h2>Book this room</h2>
+          <form method="POST" action="{{ url_for('room_details', room_id=room.RoomID) }}" class="booking-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <label>
-            Guests (max {{ room.MaxOccupancy }}):
-            <input type="number" name="guests" min="1" max="{{ room.MaxOccupancy }}" required>
-        </label>
+            <label class="form-row">
+              <span>Check-in</span>
+              <input type="date" name="check_in" required>
+            </label>
 
-        <button type="submit" class="btn-brown">Book Now</button>
-    </form>
+            <label class="form-row">
+              <span>Check-out</span>
+              <input type="date" name="check_out" required>
+            </label>
+
+            <label class="form-row">
+              <span>Guests (max {{ room.MaxOccupancy }})</span>
+              <input type="number" name="guests" min="1" max="{{ room.MaxOccupancy }}" required>
+            </label>
+
+            <button type="submit" class="btn-brown full">Book Now</button>
+
+            <p class="rate-note">
+              <small>Rate: <strong>${{ '%.2f'|format(room.PricePerNight) }}</strong> per night</small>
+            </p>
+          </form>
+        </aside>
+      </div>
+    </section>
   </main>
 
   <!-- FOOTER WITH PAGE LINKS -->
   {% include "partials/footer.html" %}
 
   <!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  {% include "partials/login_modal.html" %}
 
-<script>
+  <script>
     // Login Modal functionality
     const loginModal = document.getElementById('loginModal');
     const loginBtn = document.getElementById('loginBtn');
@@ -92,7 +116,7 @@
     });
   </script>
 
-{% if show_login %}
+  {% if show_login %}
   <script>
     window.onload = () => {
       const modal = document.getElementById('loginModal');
