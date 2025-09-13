@@ -451,3 +451,288 @@ body {
   color: #2E5339;
   text-decoration: underline;
 }
+
+/* Reservation page layout */
+.reservation-section {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.reservation-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #2E5339;
+  margin-bottom: 0.25rem;
+}
+
+.reservation-subtitle {
+  color: #555;
+  font-size: 1rem;
+}
+
+/* Rooms grid */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+/* 3 cards on desktop, 2 on tablet, 1 on mobile */
+@media (min-width: 1024px) {
+  .room-card { grid-column: span 4; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .room-card { grid-column: span 6; }
+}
+@media (max-width: 639px) {
+  .room-card { grid-column: span 12; }
+}
+
+/* Room card */
+.room-card {
+  background: #fff;
+  border: 1px solid #E2DED5;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.room-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  border-color: #D3CBBB;
+}
+
+/* Media (image + ADA badge) */
+.room-media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3; /* keeps image consistent */
+  background: #f2f2f2;
+}
+
+.room-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.badge-ada {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #2E5339;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+/* Body */
+.room-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  flex: 1;
+}
+
+.room-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: #2E5339;
+  margin-bottom: .25rem;
+}
+
+.room-meta {
+  list-style: none;
+  color: #555;
+  display: grid;
+  gap: .25rem;
+}
+
+.room-meta li strong {
+  color: #2E5339;
+}
+
+.price {
+  font-weight: 700;
+  color: #2E5339;
+}
+
+/* CTA */
+.room-cta {
+  align-self: flex-start;
+  margin-top: .35rem;
+  text-decoration: none;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination ul {
+  list-style: none;
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  padding: 0;
+}
+
+.pagination .page-status {
+  color: #2E5339;
+  font-weight: 600;
+  padding: .4rem .75rem;
+}
+
+.pagination .page-link {
+  display: inline-block;
+  padding: .5rem .85rem;
+  border: 1px solid #D3CBBB;
+  border-radius: 6px;
+  color: #2E5339;
+  text-decoration: none;
+  background: #fff;
+  transition: background .18s ease, border-color .18s ease;
+  font-weight: 600;
+}
+
+.pagination .page-link:hover {
+  background: #F5EFE2;
+  border-color: #C8BEAC;
+}
+
+.pagination .page-link.disabled {
+  pointer-events: none;
+  opacity: .5;
+}
+
+/* ---------- Room details layout ---------- */
+.room-detail {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.detail-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  background: #f2f2f2;
+  aspect-ratio: 16 / 9;
+}
+
+.detail-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Reusable card */
+.card {
+  background: #fff;
+  border: 1px solid #E2DED5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: #2E5339;
+  margin-bottom: .75rem;
+}
+
+.detail-meta {
+  list-style: none;
+  display: grid;
+  gap: .35rem;
+  margin-bottom: .75rem;
+  color: #555;
+}
+.detail-meta strong { color: #2E5339; }
+
+.detail-desc {
+  margin-top: .5rem;
+  color: #444;
+}
+
+/* Amenities list */
+.amenities-list {
+  list-style: disc inside;
+  margin-top: .35rem;
+  color: #444;
+}
+
+/* Booking card */
+.detail-book h2 {
+  font-size: 1.25rem;
+  color: #2E5339;
+  margin-bottom: .75rem;
+}
+
+.booking-form {
+  display: grid;
+  gap: .75rem;
+}
+
+.form-row {
+  display: grid;
+  gap: .35rem;
+}
+
+.form-row span {
+  font-weight: 600;
+  color: #2E5339;
+}
+
+.booking-form input[type="date"],
+.booking-form input[type="number"] {
+  padding: .65rem .75rem;
+  border: 1.5px solid #C8BEAC;
+  border-radius: 8px;
+  font: inherit;
+  outline: none;
+}
+
+.booking-form input[type="date"]:focus,
+.booking-form input[type="number"]:focus {
+  border-color: #3D7040;
+}
+
+.btn-brown.full {
+   width: 100%; margin-top: .25rem;
+}
+
+.rate-note {
+  margin-top: .25rem; color: #555;
+}

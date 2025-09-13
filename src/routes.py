@@ -46,7 +46,7 @@ def register_routes(app):
         except ValueError:
             page = 1
 
-        per_page = 4   # 4 rooms per page
+        per_page = 3   # 3 rooms per page
         offset = (page - 1) * per_page
 
         # Counts total rooms
