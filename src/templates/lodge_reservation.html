@@ -16,18 +16,35 @@
   {% include "partials/success_flash_messages.html" %}
 
   <main class="page-content">
-    <section class="basic-section">
-      <h1>Book Your Stay</h1>
+    <section class="reservation-section">
+      <header class="reservation-header">
+        <h1>Book Your Stay</h1>
+        <p class="reservation-subtitle">Browse available rooms and pick the perfect fit for your trip.</p>
+      </header>
 
+      <!-- Rooms grid -->
       <div class="rooms-grid">
         {% for room in rooms %}
           <article class="room-card">
-            <img src="{{ url_for('static', filename=room.ImagePath) }}" alt="Room {{ room.RoomNumber }}">
-            <h3>{{ room.TypeName }}</h3>
-            <p>Max Guests: {{ room.MaxOccupancy }}</p>
-            <p>Price: ${{ room.PricePerNight }}</p>
-            <p>{% if room.ADAAccessible %}ADA Accessible{% endif %}</p>
-            <a href="{{ url_for('room_details', room_id=room.RoomID) }}" class="btn">Book Now</a>
+            <div class="room-media">
+              <img src="{{ url_for('static', filename=room.ImagePath) }}" alt="Room {{ room.RoomNumber }} – {{ room.TypeName }}">
+              {% if room.ADAAccessible %}
+                <span class="badge-ada" title="Accessible room">ADA</span>
+              {% endif %}
+            </div>
+
+            <div class="room-body">
+              <h3 class="room-title">{{ room.TypeName }}</h3>
+              <ul class="room-meta">
+                <li><strong>Max Guests:</strong> {{ room.MaxOccupancy }}</li>
+                <li>
+                  <strong>Price:</strong>
+                  <span class="price">${{ '%.2f'|format(room.PricePerNight) }}/night</span>
+                </li>
+              </ul>
+              
+              <a href="{{ url_for('room_details', room_id=room.RoomID) }}" class="btn-brown room-cta">Book Now</a>
+            </div>
           </article>
         {% else %}
           <p>No rooms available.</p>
@@ -35,50 +52,57 @@
       </div>
 
       <!-- Pagination controls -->
-      <nav class="pagination">
-        {% if page > 1 %}
-          <a href="{{ url_for('lodge_reservation', page=page-1) }}">&laquo; Previous</a>
-        {% endif %}
+      {% if total_pages > 1 %}
+      <nav class="pagination" aria-label="Rooms pages">
+        <ul>
+          <li>
+            <a class="page-link {% if page <= 1 %}disabled{% endif %}"
+              href="{% if page > 1 %}{{ url_for('lodge_reservation', page=page-1) }}{% else %}#{% endif %}"
+              aria-disabled="{{ 'true' if page <= 1 else 'false' }}">&laquo; Previous</a>
+          </li>
 
-        <span>Page {{ page }} of {{ total_pages }}</span>
+          <li class="page-status">Page {{ page }} of {{ total_pages }}</li>
 
-        {% if page < total_pages %}
-          <a href="{{ url_for('lodge_reservation', page=page+1) }}">Next &raquo;</a>
-        {% endif %}
+          <li>
+            <a class="page-link {% if page >= total_pages %}disabled{% endif %}"
+              href="{% if page < total_pages %}{{ url_for('lodge_reservation', page=page+1) }}{% else %}#{% endif %}"
+              aria-disabled="{{ 'true' if page >= total_pages else 'false' }}">Next &raquo;</a>
+          </li>
+        </ul>
       </nav>
+      {% endif %}
     </section>
-</main>
+  </main>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+  <!-- FOOTER WITH PAGE LINKS -->
+  {% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
 
-<script>
-    // Login Modal functionality
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+  <script>
+      // Login Modal functionality
+      const loginModal = document.getElementById('loginModal');
+      const loginBtn = document.getElementById('loginBtn');
+      const closeTriggers = document.querySelectorAll('[data-close-modal]');
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
-    }
-
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
+      if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+          loginModal.classList.add('show');
+        });
       }
-    });
-  </script>
 
+      closeTriggers.forEach(el => {
+        el.addEventListener('click', () => {
+          loginModal.classList.remove('show');
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === "Escape") {
+          loginModal.classList.remove('show');
+        }
+      });
+    </script>
 </body>
 </html>
