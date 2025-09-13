@@ -21,31 +21,45 @@
       <div class="reservation-box">
         <h3>Reservation Details</h3>
         <div class="reservation-segment">
-          <p><span class="label">Reservation ID:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Room #:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Room description:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Check-in:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Check-out:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Reservation Status:</span>
+             <span class="value">Pending Confirmation</span></p>
+          <p><span class="label">Room #:</span>
+             <span class="value">{{ reservation.room_number }}</span></p>
+          <p><span class="label">Room type:</span>
+             <span class="value">{{ reservation.room_type }}</span></p>
+          <p><span class="label">Check-in:</span>
+             <span class="value">{{ reservation.check_in }}</span></p>
+          <p><span class="label">Check-out:</span>
+             <span class="value">{{ reservation.check_out }}</span></p>
+          <p><span class="label">Nights:</span>
+             <span class="value">{{ nights }}</span></p>
+          <p><span class="label">Guests:</span>
+             <span class="value">{{ reservation.guests }}</span></p>
         </div>
   
         <h3>Customer Information</h3>
         <div class="reservation-segment">
-          <p><span class="label">Name:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Email:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Phone:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Name:</span>
+             <span class="value">{{ session['customer_firstName'] }} {{ session['customer_lastName'] }}</span></p>
+          <p><span class="label">Email:</span>
+             <span class="value">{{ session['customer_email'] }}</span></p>
+          <p><span class="label">Phone:</span>
+             <span class="value">{{ session['customer_phone'] }}</span></p>
         </div>
 
         <h3>Pricing</h3>
         <div class="reservation-segment">
-          <p><span class="label">Room price:</span><span class="value">placeholder</span></p>
-          <p><span class="label">Total:</span><span class="value">placeholder</span></p>
+          <p><span class="label">Price per Night:</span>
+             <span class="value">${{ "%.2f"|format(reservation.price_per_night) }}</span></p>
+          <p><span class="label">Subtotal:</span>
+             <span class="value">${{ "%.2f"|format(subtotal) }}</span></p>
         </div>
       </div>
 
       <div class="reservation-confirm-box">
-        <img src="{{ url_for('static', filename='images/bay_lodge2.png') }}" alt="Placeholder"><br>
-        <h3>Room #404</h3>
-        <p>room description text</p>
+        <img src="{{ url_for('static', filename=reservation.image_path) }}" alt="Room image"><br>
+        <h3>Room #{{ reservation.room_number }}</h3>
+        <p>{{ reservation.room_type }} - {{ reservation.nights if reservation.nights else nights }} night(s)</p>
 
         <form method="POST">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -56,13 +70,13 @@
     </div>
   </main>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+  <!-- FOOTER WITH PAGE LINKS -->
+  {% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
 
-<script>
+  <script>
     // Login Modal functionality
     const loginModal = document.getElementById('loginModal');
     const loginBtn = document.getElementById('loginBtn');
