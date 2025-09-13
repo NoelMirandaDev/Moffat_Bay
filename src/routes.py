@@ -144,7 +144,9 @@ def register_routes(app):
                 "check_out": check_out_str,
                 "nights": nights,
                 "guests": guests,
-                "room_number": room.RoomNumber
+                "room_number": room.RoomNumber,
+                "description": room.Description,
+                "image_path": room.ImagePath
             }
 
             # If not logged in, ask user to log in or register; else go to reservation summary page
