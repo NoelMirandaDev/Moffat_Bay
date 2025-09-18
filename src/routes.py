@@ -163,9 +163,108 @@ def register_routes(app):
     # -------------------------
     # Reservation Lookup Page
     # -------------------------
-    @app.route("/reservation_lookup.html")
+    @app.route("/reservation_lookup.html", methods=["GET"])
     def reservation_lookup():
-        return render_template("reservation_lookup.html")
+        # Searches query (?q=). If empty and user is logged in, it shows their reservations.
+        q = (request.args.get("q") or "").strip()
+
+        # Page number (?page=). Sanitizes to a positive int; default = 1
+        page_param = request.args.get("page", "1")
+        try:
+            page = max(int(page_param), 1)
+        except ValueError:
+            page = 1
+
+        per_page = 3
+        offset = (page - 1) * per_page
+
+        # Reservation summary
+        base_select = """
+            SELECT
+                r.ReservationID,
+                r.CheckInDate,
+                r.CheckOutDate,
+                r.ReservationStatus,
+                r.NumberOfGuests,
+                r.DateReserved,
+                rm.RoomNumber,
+                rt.TypeName,
+                c.FirstName,
+                c.LastName,
+                c.Email
+            FROM reservation r
+            JOIN room rm     ON rm.RoomID = r.RoomID
+            JOIN roomtype rt ON rt.RoomTypeID = rm.RoomTypeID
+            JOIN customer c  ON c.CustomerID = r.CustomerID
+        """
+
+        # Number or reservations
+        base_count = """
+            SELECT COUNT(*) AS cnt
+            FROM reservation r
+            JOIN room rm     ON rm.RoomID = r.RoomID
+            JOIN roomtype rt ON rt.RoomTypeID = rm.RoomTypeID
+            JOIN customer c  ON c.CustomerID = r.CustomerID
+        """
+
+        # Dynamic WHERE depending on login state and query
+        where_clauses = []
+        params = {}
+
+        if session.get("customer_id") and not q:
+            # If user is logged in & there is no query, it shows only logged in user's reservations
+            where_clauses.append("r.CustomerID = :cust")
+            params["cust"] = session["customer_id"]
+        elif q:
+            # If q is digits, it is treated as a ReservationID. Otherwise, it treats it as an Email (case-insensitive exact)
+            if q.isdigit():
+                where_clauses.append("r.ReservationID = :rid")
+                params["rid"] = int(q)
+            else:
+                where_clauses.append("LOWER(c.Email) = LOWER(:email)")
+                params["email"] = q
+        else:
+            # If user not logged in and no query, it shows an empty page with a prompt to search
+            return render_template(
+                "reservation_lookup.html",
+                q="",
+                reservations=[],
+                page=1,
+                total_pages=1,
+                total=0
+            )
+        
+        where_sql = (" WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
+        order_sql = " ORDER BY r.DateReserved DESC"
+        limit_sql = " LIMIT :limit OFFSET :offset"
+
+        # Total count (for pagination)
+        count_row = db.session.execute(
+            text(base_count + where_sql),
+            params
+        ).mappings().first()
+        total = int(count_row.cnt) if count_row else 0
+
+        # Total pages
+        total_pages = max((total + per_page - 1) // per_page, 1)
+
+        # Page data
+        params_for_page = dict(params)
+        params_for_page.update({"limit": per_page, "offset": offset})
+
+        rows = db.session.execute(
+            text(base_select + where_sql + order_sql + limit_sql),
+            params_for_page
+        ).mappings().all()
+
+        return render_template(
+            "reservation_lookup.html",
+            q=q,
+            reservations=rows,
+            page=page,
+            total_pages=total_pages,
+            total=total
+        )
 
     # --------------------------
     # Reservation Summary Page

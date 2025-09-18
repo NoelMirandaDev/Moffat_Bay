@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lookup Reservation - Moffat Bay Lodge</title>
+  <title>Reservation Lookup - Moffat Bay Lodge</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
 </head>
@@ -12,10 +12,82 @@
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
+    <!-- Flash Messages -->
+  {% include "partials/success_flash_messages.html" %}
+  {% include "partials/error_flash_messages.html" %}
+
   <main class="page-content">
     <section class="basic-section">
-      <h1>Find Your Reservation</h1>
-      <p>This is a placeholder for the Reservation Lookup page. Guests can enter email or reservation ID to view details.</p>
+      <header>
+        <h1>Find Your Reservation</h1>
+        <p>Look up your reservation by entering your email or reservation ID below.</p>
+      </header>
+
+      <form method="GET" action="{{ url_for('reservation_lookup') }}">
+        <label for="lookupId">Email or Reservation ID</label>
+        <input type="text" id="lookupId" name="q" value="{{ request.args.get('q', '') }}" required>
+        <button type="submit">Search</button>
+      </form>
+
+      {% if reservations is defined %}
+        {% if reservations %}
+          <table>
+            <thead>
+              <tr>
+                <th>Reservation ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for reservation in reservations %}
+                <tr>
+                  <td>{{ reservation.ReservationID }}</td>
+                  <td>{{ reservation.FirstName }} {{ reservation.LastName }}</td>
+                  <td>{{ reservation.Email }}</td>
+                  <td>{{ reservation.CheckInDate.strftime('%Y-%m-%d') }}</td>
+                  <td>{{ reservation.CheckOutDate.strftime('%Y-%m-%d') }}</td>
+                  <td>{{ reservation.ReservationStatus }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          {% if total_pages > 1 %}
+          <nav class="pagination" aria-label="Reservations pages">
+            <ul>
+              <li>
+                <a class="page-link {% if page <= 1 %}disabled{% endif %}"
+                  href="{% if page > 1 %}{{ url_for('reservation_lookup', q=q, page=page-1) }}{% else %}#{% endif %}"
+                  aria-disabled="{{ 'true' if page <= 1 else 'false' }}">&laquo; Previous</a>
+              </li>
+
+              <li class="page-status">Page {{ page }} of {{ total_pages }}</li>
+
+              <li>
+                <a class="page-link {% if page >= total_pages %}disabled{% endif %}"
+                  href="{% if page < total_pages %}{{ url_for('reservation_lookup', q=q, page=page+1) }}{% else %}#{% endif %}"
+                  aria-disabled="{{ 'true' if page >= total_pages else 'false' }}">Next &raquo;</a>
+              </li>
+            </ul>
+          </nav>
+          {% endif %}
+
+        {% else %}
+          {% if request.args.get('q') %}
+            <p>No reservations found for your search.</p>
+          {% elif session["customer_id"] %}
+            <p>You have no reservations.</p>
+          {% else %}
+            <p>Please enter your email or reservation ID to look up your reservation.</p>
+          {% endif %}
+        {% endif %}
+      {% else %}
+        <p>Please enter your email or reservation ID to look up your reservation.</p>
+      {% endif %}
     </section>
   </main>
 

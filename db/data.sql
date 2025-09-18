@@ -26,10 +26,10 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- Room Types
 -- =========================
 INSERT INTO roomtype (RoomTypeID, TypeName, BedConfiguration, PricePerNight, MaxOccupancy) VALUES
-(1, 'Standard Queen',   '1 Queen',              129.00, 2),
-(2, 'Standard Double',  '2 Full',               149.00, 4),
-(3, 'Deluxe King',      '1 King',               179.00, 2),
-(4, 'Bay View Suite',   '1 King + Sofa Bed',    229.00, 4);
+(1, 'Standard Queen',  '1 Queen', 141.75, 2),
+(2, 'Standard Double', '2 Full',  126.00, 4),
+(3, 'Deluxe King',     '1 King',  168.00, 2),
+(4, 'Bay View Suite',  '2 Queen', 157.50, 4);
 
 -- =========================
 -- Amenities
@@ -47,12 +47,12 @@ INSERT INTO amenity (AmenityID, Name, Description) VALUES
 -- =========================
 -- Note: ADAAccessible uses 0/1 (false/true)
 INSERT INTO room (RoomID, RoomNumber, RoomTypeID, ADAAccessible, Description, ImagePath) VALUES
-(101, '101', 1, 0, 'Cozy queen, garden side', 'images/room101.jpeg'),
-(102, '102', 2, 0, 'Two full beds, courtyard', 'images/room102.jpeg'),
-(103, '103', 2, 1, 'ADA room with two full beds', 'images/room103.jpeg'),
-(201, '201', 3, 0, 'King room, partial bay view', 'images/room201.jpeg'),
-(202, '202', 3, 0, 'King room, near elevator', 'images/room202.jpeg'),
-(301, '301', 4, 0, 'Top-floor suite, full bay view', 'images/room301.jpeg');
+(101, '101', 1, 0, 'Cozy queen, garden side',                                   'images/room101.jpeg'),
+(102, '102', 2, 0, 'Two full beds, courtyard',                                  'images/room102.jpeg'),
+(103, '103', 2, 1, 'ADA room with two full beds',                               'images/room103.jpeg'),
+(201, '201', 3, 0, 'King room, partial bay view',                               'images/room201.jpeg'),
+(202, '202', 3, 0, 'King room, near elevator',                                  'images/room202.jpeg'),
+(301, '301', 4, 0, 'Top-floor suite with two identical full bay view bedrooms', 'images/room301.jpeg');
 
 -- =========================
 -- Room ↔ Amenity (many-to-many)
@@ -91,7 +91,7 @@ NOW());
 -- =========================
 INSERT INTO reservation (ReservationID, CustomerID, RoomID, CheckInDate, CheckOutDate, NumberOfGuests, ReservationStatus, DateReserved) VALUES
 (1001, 1, 201, '2025-09-06', '2025-09-09', 2, 'Confirmed', NOW()),
-(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Pending',   NOW()),
+(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Confirmed',   NOW()),
 (1003, 3, 301, '2025-09-29', '2025-10-02', 3, 'Confirmed', NOW()),
 (1004, 1, 103, '2025-10-14', '2025-10-16', 2, 'Cancelled', NOW());
 
@@ -99,11 +99,11 @@ INSERT INTO reservation (ReservationID, CustomerID, RoomID, CheckInDate, CheckOu
 -- Audit Log
 -- =========================
 INSERT INTO auditlog (AuditLogID, CustomerID, Action, Description, Timestamp) VALUES
-(5001, 1, 'Login',               'Customer logged in',                                  NOW()),
-(5002, 1, 'Reservation Created', 'Reservation 1001 created for Room 201',               NOW()),
-(5003, 2, 'Reservation Created', 'Reservation 1002 created for Room 101',               NOW()),
-(5004, 3, 'Reservation Created', 'Reservation 1003 created for Room 301',               NOW()),
-(5005, NULL, 'System',           'Nightly job: availability refresh completed',         NOW());
+(5001, 1, 'Login',               'Customer logged in',                          NOW()),
+(5002, 1, 'Reservation Created', 'Reservation 1001 created for Room 201',       NOW()),
+(5003, 2, 'Reservation Created', 'Reservation 1002 created for Room 101',       NOW()),
+(5004, 3, 'Reservation Created', 'Reservation 1003 created for Room 301',       NOW()),
+(5005, NULL, 'System',           'Nightly job: availability refresh completed', NOW());
 
 -- =========================
 -- Auto-increment adjustments (for nicer ID ranges)
