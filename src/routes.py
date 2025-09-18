@@ -189,6 +189,7 @@ def register_routes(app):
                 r.DateReserved,
                 rm.RoomNumber,
                 rt.TypeName,
+                rt.BedConfiguration,
                 c.FirstName,
                 c.LastName,
                 c.Email

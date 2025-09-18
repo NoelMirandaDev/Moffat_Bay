@@ -35,6 +35,10 @@
             <thead>
               <tr>
                 <th>Reservation ID</th>
+                <th>Room #</th>
+                <th>Room Type</th>
+                <th>Bed Configuration</th>
+                <th>Guests</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Check-In</th>
@@ -46,6 +50,10 @@
               {% for reservation in reservations %}
                 <tr>
                   <td>{{ reservation.ReservationID }}</td>
+                  <td>{{ reservation.RoomNumber }}</td>
+                  <td>{{ reservation.TypeName }}</td>
+                  <td>{{ reservation.BedConfiguration }}</td>
+                  <td>{{ reservation.NumberOfGuests }}</td>
                   <td>{{ reservation.FirstName }} {{ reservation.LastName }}</td>
                   <td>{{ reservation.Email }}</td>
                   <td>{{ reservation.CheckInDate.strftime('%Y-%m-%d') }}</td>
