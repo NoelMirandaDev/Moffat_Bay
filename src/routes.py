@@ -5,26 +5,34 @@ from extensions import db, csrf
 from datetime import datetime
 import re
 
+# html <input type="date"> format
 DATE_FMT = "%Y-%m-%d"
 
-
 def register_routes(app):
+    # --------------
     # Landing Page
+    # --------------
     @app.route("/")
     def landing():
         return render_template("index.html")
 
+    # -----------------
     # Attraction Page
+    # -----------------
     @app.route("/attraction.html")
     def attraction():
         return render_template("attraction.html")
 
+    # ---------------
     # About Us Page
+    # ---------------
     @app.route("/about.html")
     def about():
         return render_template("about.html")
 
+    # ------------------------
     # Lodge Reservation Page
+    # ------------------------
     @app.route("/lodge_reservation.html")
     def lodge_reservation():
         try:
@@ -32,10 +40,16 @@ def register_routes(app):
         except ValueError:
             page = 1
 
-        per_page = 3
+        per_page = 3 # rooms per page
         offset = (page - 1) * per_page
 
-        total = db.session.execute(text("SELECT COUNT(*) FROM room")).scalar() or 0
+        # Total rooms
+        total = db.session.execute(
+            text(
+                "SELECT COUNT(*) FROM room"
+            )
+        ).scalar() or 0
+
         total_pages = max((total + per_page - 1) // per_page, 1)
 
         rows = db.session.execute(
@@ -64,7 +78,9 @@ def register_routes(app):
             total_pages=total_pages,
         )
 
+    # ---------------------------------
     # Room details Page + booking step
+    # ---------------------------------
     @app.route("/rooms/<int:room_id>", methods=["GET", "POST"])
     def room_details(room_id):
         room = db.session.execute(
@@ -97,6 +113,7 @@ def register_routes(app):
             check_out_str = request.form.get("check_out", "").strip()
             guests_str = request.form.get("guests", "").strip()
 
+            # server-side date format validation
             try:
                 check_in = datetime.strptime(check_in_str, DATE_FMT).date()
                 check_out = datetime.strptime(check_out_str, DATE_FMT).date()
@@ -126,10 +143,12 @@ def register_routes(app):
                     "room_details.html", room=room, amenities=_load_amenities(room_id)
                 )
 
+            # Computes nights and cost
             nights = (check_out - check_in).days
             nightly_rate = float(room.PricePerNight)
             subtotal = nightly_rate * nights
 
+            # Saves pending reservation in session
             session["pending_reservation"] = {
                 "room_id": room.RoomID,
                 "room_type": room.TypeName,
@@ -144,6 +163,7 @@ def register_routes(app):
                 "image_path": room.ImagePath,
             }
 
+            # If not logged in, prompts user to log in or register; else redirected to reservation summary page
             if not session.get("customer_id"):
                 flash("Please log in to continue your reservation.", "error")
                 return render_template(
@@ -155,14 +175,14 @@ def register_routes(app):
 
             return redirect(url_for("reservation_summary"))
 
+        # GET request: render page
         amenities = _load_amenities(room_id)
         return render_template("room_details.html", room=room, amenities=amenities)
 
+    # -------------------------
     # Reservation Lookup Page
-
     # -------------------------
     @app.route("/reservation_lookup.html", methods=["GET"])
- main
     def reservation_lookup():
         # Searches query (?q=). If empty and user is logged in, it shows their reservations.
         q = (request.args.get("q") or "").strip()
@@ -266,7 +286,9 @@ def register_routes(app):
             total=total
         )
 
+    # --------------------------
     # Reservation Summary Page
+    # --------------------------
     @app.route("/reservation_summary.html", methods=["GET", "POST"])
     def reservation_summary():
         pending = session.get("pending_reservation")
@@ -274,10 +296,12 @@ def register_routes(app):
             flash("No reservation in progress.", "error")
             return redirect(url_for("lodge_reservation"))
 
+        # Must be logged in to confirm
         if not session.get("customer_id"):
             flash("Please log in to continue.", "error")
             return redirect(url_for("landing", show_login=True))
 
+        # Recompute totals on server
         try:
             check_in = datetime.strptime(pending["check_in"], DATE_FMT).date()
             check_out = datetime.strptime(pending["check_out"], DATE_FMT).date()
@@ -328,26 +352,27 @@ def register_routes(app):
                     )
                     db.session.commit()
 
+                    # Audit log
                     try:
                         db.session.execute(
                             text(
                                 """
                                 INSERT INTO auditlog (CustomerID, Action, Description)
                                 VALUES (:cust, 'Reservation Created',
-                                        CONCAT('Reservation for room ', :roomnum,
+                                        CONCAT('Reservation for room ', :room_id,
                                             ' from ', :in_date, ' to ', :out_date))
                             """
                             ),
                             {
                                 "cust": session["customer_id"],
-                                "roomnum": pending.get("room_number"),
+                                "room_id": pending("room_id"),
                                 "in_date": pending["check_in"],
                                 "out_date": pending["check_out"],
                             },
                         )
                         db.session.commit()
                     except Exception:
-                        db.session.rollback()
+                        db.session.rollback() # prevents failing the booking if audit fails silently
 
                     session.pop("pending_reservation", None)
                     flash(
@@ -361,6 +386,7 @@ def register_routes(app):
                     flash(f"Failed to save reservation: {e}", "error")
                     return redirect(url_for("reservation_summary"))
 
+        # GET: show summary
         return render_template(
             "reservation_summary.html",
             reservation=pending,
@@ -368,7 +394,9 @@ def register_routes(app):
             subtotal=subtotal,
         )
 
+    # -------------------
     # Registration Page
+    # -------------------
     @app.route("/registration", methods=["GET", "POST"])
     def registration():
         if request.method == "POST" and all(
@@ -428,7 +456,9 @@ def register_routes(app):
                 flash("Something went wrong, please try again.", "error")
         return render_template("registration.html")
 
+    # ------------
     # Login Page
+    # ------------
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
@@ -456,7 +486,9 @@ def register_routes(app):
 
         return redirect(url_for("landing"))
 
+    # ------------
     # Logout Route
+    # ------------
     @app.route("/logout")
     def logout():
         session.clear()
@@ -584,7 +616,7 @@ def register_routes(app):
         })
 
     # ----------------------------
-    # HELPERS
+    # HELPER Functions Below
     # ----------------------------
     def _load_amenities(room_id: int):
         return db.session.execute(
