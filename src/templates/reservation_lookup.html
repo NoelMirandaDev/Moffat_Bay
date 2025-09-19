@@ -17,16 +17,20 @@
   {% include "partials/error_flash_messages.html" %}
 
   <main class="page-content">
-    <section class="basic-section">
+    <section class="lookup-section">
+      
       <header>
-        <h1>Find Your Reservation</h1>
+        <h1>Reservation Lookup</h1>
         <p>Look up your reservation by entering your email or reservation ID below.</p>
       </header>
 
+      <div class="lookup-container">
+
+        <h2>Find Your Reservation</h2>
+
       <form method="GET" action="{{ url_for('reservation_lookup') }}">
-        <label for="lookupId">Email or Reservation ID</label>
-        <input type="text" id="lookupId" name="q" value="{{ request.args.get('q', '') }}" required>
-        <button type="submit">Search</button>
+        <input type="text" id="lookupId" class="lookup-input" placeholder="Email or Reservation ID" name="q" value="{{ request.args.get('q', '') }}" required>
+        <button type="submit" class="btn-brown">Lookup Reservation</button>
       </form>
 
       {% if reservations is defined %}
@@ -96,6 +100,7 @@
       {% else %}
         <p>Please enter your email or reservation ID to look up your reservation.</p>
       {% endif %}
+      </div>
     </section>
   </main>
 
