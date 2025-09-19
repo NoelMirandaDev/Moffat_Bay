@@ -360,9 +360,9 @@ def register_routes(app):
         flash("You have been successfully logged out.", "success")
         return redirect(url_for("landing"))
 
-    # ----------------------------
-    # TEAM FEATURES (your request)
-    # ----------------------------
+    # ---------------------------------------
+    # TEAM FEATURES OF ABOUT US / CONTACT US
+    # ---------------------------------------
 
     # API: Send Team Message (CSRF exempt for JSON POST)
     @csrf.exempt

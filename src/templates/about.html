@@ -112,8 +112,7 @@ body {
       .profile-name { font-size: 0.88rem; }
       .profile-role { font-size: 0.79rem; }
     }
-    /* ... rest of your CSS ... */
-    /* Modal styles (unchanged) */
+   
     .modal { display: none;
       position: fixed;
       z-index: 1000;
@@ -270,7 +269,7 @@ body {
     // Adjust the order/ids if you want a specific arrangement!
     const pentagonPositions = ['noel', 'kyle', 'steve', 'riese', 'amit'];
 
-    // Map to assign pentagon positions by ID (assuming IDs 1-5 for your 5 members)
+    // Map to assign pentagon positions by ID (assuming IDs 1-5 for 5 members)
     function getPentagonClass(idx) {
       return pentagonPositions[idx] || '';
     }
@@ -346,7 +345,7 @@ body {
       document.getElementById('profile-modal').classList.remove('active');
       document.body.style.overflow = '';
     }
-    // Message Modal open/close (Unchanged, use your logic)
+    // Message Modal open/close 
     function openMessageModal(memberName, memberId) {
       document.getElementById('send-message-modal').classList.add('active');
       document.body.style.overflow = 'hidden';
