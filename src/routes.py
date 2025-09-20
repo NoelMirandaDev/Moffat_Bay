@@ -9,6 +9,9 @@ import re
 DATE_FMT = "%Y-%m-%d"
 
 def register_routes(app):
+    # Enable CSRF tokens in headers (important for fetch/AJAX)
+    app.config['WTF_CSRF_HEADERS'] = ['X-CSRFToken', 'X-CSRF-Token']
+
     # --------------
     # Landing Page
     # --------------
@@ -499,8 +502,7 @@ def register_routes(app):
     # TEAM FEATURES OF ABOUT US / CONTACT US
     # ---------------------------------------
 
-    # API: Send Team Message (CSRF exempt for JSON POST)
-    @csrf.exempt
+    # API: Send Team Message (CSRF Protected)
     @app.route("/api/send-team-message", methods=["POST"])
     def send_team_message():
         data = request.get_json()
