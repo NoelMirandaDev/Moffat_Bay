@@ -115,7 +115,6 @@ ALTER TABLE customer    AUTO_INCREMENT = 1000;
 ALTER TABLE reservation AUTO_INCREMENT = 2000;
 ALTER TABLE auditlog    AUTO_INCREMENT = 6000;
 
-
 --=================================================
 -- DEVELOPMENT SEED SCRIPT
 -- WARNING: This script will ERASE ALL data in
@@ -130,7 +129,6 @@ SET FOREIGN_KEY_CHECKS = 1;
 -- ===========================
 -- Team Member TABLE
 -- ===========================
-
 INSERT INTO team_member (first_name, middle_name, last_name, role, bio, fun_fact, linkedin_url, github_url, email, profile_image) VALUES
 -- Noel (1)
 ('Noel', 'Yobani', 'Miranda', 'Project Manager and Full Stack Developer',
