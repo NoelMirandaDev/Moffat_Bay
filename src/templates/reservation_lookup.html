@@ -53,16 +53,16 @@
             <tbody>
               {% for reservation in reservations %}
                 <tr>
-                  <td>{{ reservation.ReservationID }}</td>
-                  <td>{{ reservation.RoomNumber }}</td>
-                  <td>{{ reservation.TypeName }}</td>
-                  <td>{{ reservation.BedConfiguration }}</td>
-                  <td>{{ reservation.NumberOfGuests }}</td>
-                  <td>{{ reservation.FirstName }} {{ reservation.LastName }}</td>
-                  <td>{{ reservation.Email }}</td>
-                  <td>{{ reservation.CheckInDate.strftime('%Y-%m-%d') }}</td>
-                  <td>{{ reservation.CheckOutDate.strftime('%Y-%m-%d') }}</td>
-                  <td>{{ reservation.ReservationStatus }}</td>
+                  <td data-label="Reservation ID">{{ reservation.ReservationID }}</td>
+                  <td data-label="Room #">{{ reservation.RoomNumber }}</td>
+                  <td data-label="Room Type">{{ reservation.TypeName }}</td>
+                  <td data-label="Bed Configuration">{{ reservation.BedConfiguration }}</td>
+                  <td data-label="Guests">{{ reservation.NumberOfGuests }}</td>
+                  <td data-label="Name">{{ reservation.FirstName }} {{ reservation.LastName }}</td>
+                  <td data-label="Email">{{ reservation.Email }}</td>
+                  <td data-label="Check-In">{{ reservation.CheckInDate.strftime('%Y-%m-%d') }}</td>
+                  <td data-label="Check-Out">{{ reservation.CheckOutDate.strftime('%Y-%m-%d') }}</td>
+                  <td data-label="Status">{{ reservation.ReservationStatus }}</td>
                 </tr>
               {% endfor %}
             </tbody>

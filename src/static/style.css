@@ -130,35 +130,43 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
+/* Lookup page styling */
 .lookup-container {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
+
 .lookup-container table {
   background-color: #D3D3D3;
   padding: 10px;
   border-radius: 8px;
   border-spacing: 0;
 }
+
 .lookup-container th {
   color: #2E5339;
   padding: 12px;
 }
+
 .lookup-container td {
   padding: 12px;
 }
+
 .lookup-container tbody tr:hover {
-  background-color: #555;
+  background-color: #A3C293 ;
 }
+
 .lookup-section header {
   text-align: center;
   margin-bottom: 25px;
 }
+
 .lookup-container h2 {
   margin-bottom: 10px;
 }
+
 .lookup-input {
   border:2px solid #2E5339;
   padding: 10px;
@@ -166,8 +174,52 @@ body {
   outline: none;
   margin-bottom: 15px;
 }
+
 .lookup-input:focus{
-  border: 2px solid #3D7040;
+  border: 2px solid #A3C293;
+}
+
+/* Mobile layout for lookup page */
+@media (max-width: 1050px) {
+
+  .lookup-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .lookup-container table, tbody, th, td, tr {
+    display: block;
+    width: 100%;
+  }
+
+  .lookup-container thead {
+    display: none;
+  }
+
+  .lookup-container tr{
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    padding: 10px;
+  }
+
+  .lookup-container td {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px ;
+    border: none;
+    text-align: right;
+  }
+
+  .lookup-container td::before {
+    content: attr(data-label);
+    color: #2E5339;
+    font-weight: bold;
+    width: 50%;
+    text-align: left;
+  }
 }
 .reservation-confirm-box h3 {
   color: #2E5339;
