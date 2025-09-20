@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us | Moffat Bay Lodge</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!--  CSRF token for protection -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <style>
-    body {
+    
+body {
       font-family: 'Open Sans', sans-serif;
-    line-height: 1.6;
-    background-color: #F5EFE2; /* WHITE */
-    color: #333;
+      line-height: 1.6;
+      background-color: #F5EFE2;
+      color: #333;
     }
     .about-flex {
       display: flex;
@@ -70,16 +73,22 @@
       transition: box-shadow 0.2s;
       z-index: 1;
     }
-    .profile-pentagon:hover {
-      box-shadow: 0 12px 32px rgba(46,83,57,0.13);
+    .profile-pentagon:hover .profile-img{
+      transform: scale(1.08);
     }
     .profile-img {
       width: 76px;
       height: 76px;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 55%;
       border: 2.5px solid #2E5339;
       margin-bottom: 0.7rem;
+      transition: transform 0.25s ease;
+    }
+    /*  Pop effect only on main profile images */
+    .profile-pentagon:hover .profile-img {
+      transform: scale(1.08);
+      box-shadow: 0 0 10px rgba(46, 83, 57, 0.4);
     }
     .profile-name {
       font-size: 1.04rem;
@@ -111,9 +120,8 @@
       .profile-name { font-size: 0.88rem; }
       .profile-role { font-size: 0.79rem; }
     }
-    /* Modal styles */
-    .modal {
-      display: none;
+   
+    .modal { display: none;
       position: fixed;
       z-index: 1000;
       left: 0; top: 0;
@@ -121,8 +129,7 @@
       background: rgba(30,50,40,0.18);
       align-items: center;
       justify-content: center;
-      overflow-y: auto;
-    }
+      overflow-y: auto; }
     .modal.active { display: flex; }
     .modal-content {
       background: #fff;
@@ -208,6 +215,7 @@
       text-align: left;
       margin-bottom: 0.5rem;
     }
+
   </style>
 </head>
 <body>
@@ -220,41 +228,12 @@
       </p>
     </div>
     <div class="pentagon-wrap">
-      <div class="pentagon-layout">
-        <!-- Noel (top) -->
-        <article class="profile-pentagon noel" tabindex="0" role="button" aria-label="Open profile for Noel Yobani Miranda" onclick="showModal('noel')" onkeydown="if(event.key==='Enter'||event.key===' '){showModal('noel');}">
-          <img src="{{ url_for('static', filename='images/Noel_profile.jpg') }}" alt="Noel Yobani Miranda" class="profile-img">
-          <div class="profile-name">Noel Yobani Miranda</div>
-          <div class="profile-role">Project Manager<br>Full Stack Developer</div>
-        </article>
-        <!-- Kyle (upper right) -->
-        <article class="profile-pentagon kyle" tabindex="0" role="button" aria-label="Open profile for Kyle Marlia-Conner" onclick="showModal('kyle')" onkeydown="if(event.key==='Enter'||event.key===' '){showModal('kyle');}">
-          <img src="{{ url_for('static', filename='images/Kyle_profile.jpg') }}" alt="Kyle Marlia-Conner" class="profile-img">
-          <div class="profile-name">Kyle Marlia-Conner</div>
-          <div class="profile-role">Developer</div>
-        </article>
-        <!-- Steve (bottom right) -->
-        <article class="profile-pentagon steve" tabindex="0" role="button" aria-label="Open profile for Steve Stylin" onclick="showModal('steve')" onkeydown="if(event.key==='Enter'||event.key===' '){showModal('steve');}">
-          <img src="{{ url_for('static', filename='images/Steve_profile.JPG') }}" alt="Steve Stylin" class="profile-img">
-          <div class="profile-name">Steve Stylin</div>
-          <div class="profile-role">Database Designer<br>Frontend & Backend</div>
-        </article>
-        <!-- Riese (bottom left) -->
-        <article class="profile-pentagon riese" tabindex="0" role="button" aria-label="Open profile for Riese Bohnak" onclick="showModal('riese')" onkeydown="if(event.key==='Enter'||event.key===' '){showModal('riese');}">
-          <img src="{{ url_for('static', filename='images/Riese_profile.jpg') }}" alt="Riese Bohnak" class="profile-img">
-          <div class="profile-name">Riese Bohnak</div>
-          <div class="profile-role">Developer</div>
-        </article>
-        <!-- Amit (upper left) -->
-        <article class="profile-pentagon amit" tabindex="0" role="button" aria-label="Open profile for Amit Rizal" onclick="showModal('amit')" onkeydown="if(event.key==='Enter'||event.key===' '){showModal('amit');}">
-          <img src="{{ url_for('static', filename='images/Amit_profile.jpg') }}" alt="Amit Rizal" class="profile-img">
-          <div class="profile-name">Amit Rizal</div>
-          <div class="profile-role">Developer</div>
-        </article>
+      <div class="pentagon-layout" id="pentagon-layout">
+        <!-- Team member cards will be dynamically inserted here -->
       </div>
     </div>
   </section>
-  <!-- Modal Structure -->
+  <!-- Profile Modal -->
   <div class="modal" id="profile-modal" aria-modal="true" role="dialog" aria-labelledby="modal-profile-name" aria-describedby="modal-profile-bio">
     <div class="modal-content" id="modal-content">
       <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
@@ -262,166 +241,223 @@
     </div>
   </div>
 
-
   <!-- FOOTER WITH PAGE LINKS -->
   {% include "partials/footer.html" %}
 
- 
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
+
+  <!-- Message Modal -->
+  <div class="modal" id="send-message-modal" aria-modal="true" role="dialog">
+    <div class="modal-content message-modal-content">
+      <button class="modal-close" onclick="closeMessageModal()" aria-label="Close">&times;</button>
+      <h2 id="messageModalTitle" style="text-align: center; color: #2E5339; margin-bottom: 0.5em;">Send a Message</h2>
+      <div id="messageToName" style="text-align:center; margin-bottom:1em; font-weight:bold;"></div>
+      <form id="sendMessageForm" autocomplete="off">
+        <label style="display:block; margin-bottom:1em;">
+          Your Name:<br>
+          <input type="text" name="senderName" required style="width:100%; padding:0.6em; border-radius:5px; border:1px solid #ccc; font-size:1em;">
+        </label>
+        <label style="display:block; margin-bottom:1em;">
+          Your Email:<br>
+          <input type="email" name="senderEmail" required style="width:100%; padding:0.6em; border-radius:5px; border:1px solid #ccc; font-size:1em;">
+        </label>
+        <label style="display:block; margin-bottom:1em;">
+          Your Message: <span style="font-size:0.97em; color:#888;">(max 500 words)</span><br>
+          <textarea name="message" id="messageTextarea" rows="8" maxlength="6000" required style="width:100%; padding:0.7em; border-radius:7px; border:1.2px solid #bbb; font-size:1.08em; resize:vertical; min-height:110px; background:#FAFAF6;"></textarea>
+          <div style="margin-top:0.3em; font-size:0.97em; color:#555;">
+            <span id="wordCount">0</span>/500 words
+            <span id="wordLimitWarning" style="color:#b91c1c; margin-left:1em; display:none;">Word limit exceeded!</span>
+          </div>
+        </label>
+        <input type="hidden" name="memberId" id="messageMemberId">
+        <button type="submit" id="sendMessageBtnFinal" style="margin-top:0.7em; background:#2E5339; color:#fff; font-weight:bold; border:none; border-radius:5px; padding:0.7em 1.8em; font-size:1.13em; cursor:pointer; transition:background 0.15s;">Send Message</button>
+      </form>
+      <div id="sendMessageStatus" style="margin-top:0.8em; min-height:1.2em; text-align:center;"></div>
+    </div>
+  </div>
+
   <script>
-    // Profiles data
-    const profiles = {
-      noel: {
-        img: "{{ url_for('static', filename='images/Noel_profile.jpg') }}",
-        name: "Noel Yobani Miranda",
-        role: "Project Manager and Full Stack Developer",
-        bio: "With a passion for continuous growth, I am currently completing my third bachelor’s degree in Software Development at Bellevue University, graduating in October 2025. I also hold bachelor’s degrees in Sociology and Criminal Justice and recently served as a backend software engineering intern at SuperFile.\n\nMy expertise is in web development with a strong focus on security, and within this project my role as project manager and full stack developer centers on backend development while guiding the team’s progress.\n\nI am committed to lifelong learning, seeking challenges that strengthen my technical abilities and collaborative skills.",
-        contributions: [
-          "Implemented user Login system",
-          "Initialized the Moffat Bay GitHub repository and project structure",
-          "Implemented the room reservation system"
-        ],
-        funfact: "Outside of coding, I enjoy exploring the wilderness with my fiancé, where we find inspiration and balance through hiking and connecting with nature.",
-        contact: `
-          <div class="modal-profile-contact">
-            <strong>Contact:</strong><br>
-            <a href="https://www.linkedin.com/in/nymirandadev" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;
-            <a href="https://github.com/NoelMirandaDev" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;
-            <a href="mailto:nymiranda.dev@gmail.com">Email</a>
-          </div>
-        `
-      },
-      kyle: {
-        img: "{{ url_for('static', filename='images/Kyle_profile.jpg') }}",
-        name: "Kyle Marlia-Conner",
-        role: "Developer",
-        bio: "Kyle is a dedicated developer with a strong background in full stack web development.\n\nHe brings attention to detail and a collaborative spirit to the team, ensuring project components are robust, scalable, and user-friendly.",
-        contributions: [
-          "Contributed to backend API development",
-          "Implemented front-end UI enhancements",
-          "Reviewed and improved code for scalability"
-        ],
-        funfact: "Kyle is an amateur chef who loves experimenting with new recipes and enjoys mountain biking on weekends.",
-        contact: ''
-      },
-      steve: {
-        img: "{{ url_for('static', filename='images/Steve_profile.JPG') }}",
-        name: "Steve Stylin",
-        role: "Database Designer, Frontend & Backend Developer",
-        bio: "Steve was born in Haiti and holds a degree in Computer Science. She began her career as an Analyst Programmer for four years before being promoted to Junior Database Administrator, and three years later advancing to Senior DBA in Haiti.\n\nCurrently, Steve is expanding her expertise at Bellevue University, pursuing studies in Software Development to gain a broader perspective in the field.",
-        contributions: [
-          "Created the Technical Design Document (TDD) for the project",
-          "Created the Entity Relationship Diagram (ERD) for the application database",
-          "Developed the backend of the landing page",
-          "Leading the development of the About Us page (frontend and backend)"
-        ],
-        funfact: "Steve loves hiking and camping. Her favorite authors include Eckhart Tolle, Stephen King, Edgar Allan Poe, and Nicholas Sparks. She is also fascinated by Egyptian history.",
-        contact: `
-          <div class="modal-profile-contact">
-            <strong>Contact:</strong><br>
-            <a href="https://github.com/sstylin" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        `
-      },
-      riese: {
-        img: "{{ url_for('static', filename='images/Riese_profile.jpg') }}",
-        name: "Riese Bohnak",
-        role: "Developer",
-        bio: "Riese is an innovative developer who excels at solving complex technical problems and bringing creative solutions to the team.\n\nTheir adaptability and dedication help ensure project milestones are met.",
-        contributions: [
-          "Registration Page Functional Test",
-          "Reservation Summary page Frontend",
-          "Registration Page Frontend & Backend"
-        ],
-        funfact: "Riese enjoys spending time with his family and loves running.",
-        contact: `
-          <div class="modal-profile-contact">
-            <strong>Contact:</strong><br>
-            <a href="https://github.com/Rojo234" target="_blank" rel="noopener">GitHub</a>
-          </div>
-        `
-      },
-      amit: {
-        img: "{{ url_for('static', filename='images/Amit_profile.jpg') }}",
-        name: "Amit Rizal",
-        role: "Developer",
-        bio: "Amit is a meticulous software developer with a keen interest in both backend and frontend technologies.\n\nHe is known for his problem-solving skills and strong teamwork.",
-        contributions: [
-          "Implemented responsive web layouts",
-          "Contributed bug fixes and performance improvements",
-          "Enhanced accessibility features"
-        ],
-        funfact: "Amit is an avid traveler who has visited more than 15 countries and loves photography.",
-        contact: ''
-      }
-    };
+    //  CSRF helper
+    function getCSRFToken() {
+      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
 
-    function showModal(memberKey) {
-      const modal = document.getElementById('profile-modal');
+    // Pentagon position classes
+    const pentagonPositions = ['noel', 'kyle', 'steve', 'riese', 'amit'];
+    function getPentagonClass(idx) {
+      return pentagonPositions[idx] || '';
+    }
+
+    // Fetch team members
+    let profiles = {};
+    fetch('/api/team')
+      .then(response => response.json())
+      .then(members => {
+        const layout = document.getElementById('pentagon-layout');
+        layout.innerHTML = '';
+        members.forEach((member, idx) => {
+          const pentClass = getPentagonClass(idx);
+          profiles[member.id] = member;
+          const imgUrl = "{{ url_for('static', filename='images/') }}" + member.profile_image;
+          const card = document.createElement('article');
+          card.className = `profile-pentagon ${pentClass}`;
+          card.tabIndex = 0;
+          card.setAttribute('role', 'button');
+          card.setAttribute('aria-label', `Open profile for ${member.first_name} ${member.last_name}`);
+          card.onclick = () => showModal(member.id);
+          card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') showModal(member.id); };
+          card.innerHTML = `
+            <img src="${imgUrl}" alt="${member.first_name} ${member.last_name}" class="profile-img">
+            <div class="profile-name">${member.first_name} ${member.last_name}</div>
+            <div class="profile-role">${member.role}</div>
+          `;
+          layout.appendChild(card);
+        });
+      })
+      .catch(err => {
+        document.getElementById('pentagon-layout').innerHTML = '<div style="color:#b91c1c;">Failed to load team data.</div>';
+        console.error(err);
+      });
+
+    // Show modal with member details
+    function showModal(memberId) {
+      const profile = profiles[memberId];
+      if (!profile) return;
       const content = document.getElementById('modal-content');
-      const profile = profiles[memberKey];
-
-      if (!profile) {
-        alert('Profile not found!');
-        return;
-      }
-
+      const imgUrl = "{{ url_for('static', filename='images/') }}" + profile.profile_image;
       let contributionsHTML = '';
       if (profile.contributions && profile.contributions.length > 0) {
         contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
-        profile.contributions.forEach(function(item){
-          contributionsHTML += `<li>${item}</li>`;
-        });
+        profile.contributions.forEach(item => contributionsHTML += `<li>${item}</li>`);
         contributionsHTML += `</ul></div>`;
       }
-
+      let funfactHTML = profile.fun_fact ? `<div class="modal-profile-funfact">${profile.fun_fact}</div>` : '';
+      let contactHTML = '';
+      if (profile.linkedin_url || profile.github_url || profile.email) {
+        contactHTML = `<div class="modal-profile-contact"><strong>Contact:</strong><br>`;
+        if (profile.linkedin_url) contactHTML += `<a href="${profile.linkedin_url}" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;`;
+        if (profile.github_url) contactHTML += `<a href="${profile.github_url}" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;`;
+        if (profile.email) contactHTML += `<a href="mailto:${profile.email}">Email</a>`;
+        contactHTML += `</div>`;
+      }
       content.innerHTML = `
         <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-        <img src="${profile.img}" alt="Profile picture of ${profile.name}" class="modal-profile-img">
-        <div class="modal-profile-name" id="modal-profile-name">${profile.name}</div>
+        <img src="${imgUrl}" alt="${profile.first_name} ${profile.last_name}" class="modal-profile-img">
+        <div id="modal-profile-name" class="modal-profile-name">${profile.first_name} ${profile.middle_name ? profile.middle_name + ' ' : ''}${profile.last_name}</div>
         <div class="modal-profile-role">${profile.role}</div>
-        <div class="modal-profile-bio" id="modal-profile-bio">${profile.bio}</div>
+        <div id="modal-profile-bio" class="modal-profile-bio">${profile.bio}</div>
         ${contributionsHTML}
-        <div class="modal-profile-funfact"><strong>Fun Fact:</strong> ${profile.funfact}</div>
-        ${profile.contact ? profile.contact : ""}
+        ${funfactHTML}
+        ${contactHTML}
+        <button style="margin:1em auto 0 auto;display:block;background:#2E5339;color:#fff;font-weight:bold;border:none;border-radius:5px;padding:0.6em 1.6em;font-size:1.07em;cursor:pointer" onclick="openMessageModal('${profile.first_name} ${profile.last_name}','${profile.id}')">Send Message</button>
       `;
-
-      modal.classList.add('active');
+      document.getElementById('profile-modal').classList.add('active');
       document.body.style.overflow = 'hidden';
-      setTimeout(() => {
-        const closeBtn = document.querySelector('.modal-close');
-        if (closeBtn) closeBtn.focus();
-      }, 100);
     }
-
     function closeModal() {
       document.getElementById('profile-modal').classList.remove('active');
       document.body.style.overflow = '';
     }
 
-    document.getElementById('profile-modal').addEventListener('click', function(e){
-      if(e.target === this) closeModal();
-    });
-    document.addEventListener('keydown', function(e){
-      if(e.key === "Escape") closeModal();
+    // Message Modal open
+    function openMessageModal(memberName, memberId) {
+      document.getElementById('send-message-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('messageToName').textContent = 'To: ' + memberName;
+      document.getElementById('sendMessageStatus').textContent = '';
+      document.getElementById('sendMessageForm').reset();
+      document.getElementById('messageMemberId').value = memberId;
+      updateWordCount();
+    }
+	// Message Modal close
+    function closeMessageModal() {
+      document.getElementById('send-message-modal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // ESC close modals
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeModal();
+        closeMessageModal();
+      }
     });
 
-    // Login Modal functionality
+    // Word count
+    const messageTextarea = document.getElementById('messageTextarea');
+    const wordCount = document.getElementById('wordCount');
+    const wordLimitWarning = document.getElementById('wordLimitWarning');
+    const maxWords = 500;
+    function countWords(str) { return str.trim().split(/\s+/).filter(Boolean).length; }
+    function updateWordCount() {
+      if (!messageTextarea) return;
+      const text = messageTextarea.value;
+      const count = countWords(text);
+      wordCount.textContent = count;
+      if (count > maxWords) {
+        wordLimitWarning.style.display = 'inline';
+        wordCount.style.color = '#b91c1c';
+      } else {
+        wordLimitWarning.style.display = 'none';
+        wordCount.style.color = '';
+      }
+    }
+    if (messageTextarea) {
+      messageTextarea.addEventListener('input', updateWordCount);
+    }
+
+    // Send message with CSRF
+    document.getElementById('sendMessageForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const status = document.getElementById('sendMessageStatus');
+      const form = e.target;
+      const words = countWords(messageTextarea.value);
+      if (words > maxWords) {
+        wordLimitWarning.style.display = 'inline';
+        wordCount.style.color = '#b91c1c';
+        messageTextarea.focus();
+        return;
+      }
+      status.textContent = 'Sending...';
+      const data = {
+        senderName: form.senderName.value,
+        senderEmail: form.senderEmail.value,
+        message: form.message.value,
+        memberId: form.memberId.value
+      };
+      try {
+        const response = await fetch('/api/send-team-message', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
+          },
+          body: JSON.stringify(data)
+        });
+        if (response.ok) {
+          status.textContent = 'Message sent successfully!';
+          form.reset();
+          updateWordCount();
+          setTimeout(function() { closeMessageModal(); }, 1000);
+        } else {
+          status.textContent = 'Failed to send message. Please try again.';
+        }
+      } catch (error) {
+        status.textContent = 'Network error. Please try again.';
+      }
+    });
+
+    // Login modal
     const loginModal = document.getElementById('loginModal');
     const loginBtn = document.getElementById('loginBtn');
     const closeTriggers = document.querySelectorAll('[data-close-modal]');
-
     if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
+      loginBtn.addEventListener('click', () => { loginModal.classList.add('show'); });
     }
-
     closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
+      el.addEventListener('click', () => { loginModal.classList.remove('show'); });
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === "Escape") {
         loginModal.classList.remove('show');
