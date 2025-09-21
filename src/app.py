@@ -1,7 +1,13 @@
 from flask import Flask  # Imports Flask to create the web application
-from config import Config  # Imports configuration settings (e.g., database connection info)
-from dotenv import load_dotenv, find_dotenv  # Imports dotenv tools to load variables from a .env file (for DB credentials, etc.)
+from config import (
+    Config,
+)  # Imports configuration settings (e.g., database connection info)
+from dotenv import (
+    load_dotenv,
+    find_dotenv,
+)  # Imports dotenv tools to load variables from a .env file (for DB credentials, etc.)
 from extensions import db, csrf  # Imports database object and csrf token instance
+
 
 def create_app():
     """
@@ -16,8 +22,8 @@ def create_app():
     # Creates the Flask application
     app = Flask(
         __name__,
-        static_folder="static",      # Serves static files from src/static/
-        template_folder="templates"  # Looks for HTML templates in src/templates/
+        static_folder="static",  # Serves static files from src/static/
+        template_folder="templates",  # Looks for HTML templates in src/templates/
     )
 
     # Load configuration values from our Config class
@@ -31,12 +37,14 @@ def create_app():
 
     # Registers all the routes
     from routes import register_routes
+
     register_routes(app)
 
     return app
 
-# Allows running with: python app.py 
+
+# Allows running with: python app.py
 # debug=True gives detailed error messages and auto-reloads when code changes
 if __name__ == "__main__":
-    app = create_app()  # builds the app 
+    app = create_app()  # builds the app
     app.run(debug=True)  # runs the app

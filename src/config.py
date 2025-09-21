@@ -1,4 +1,5 @@
-import os # Reads environment variables
+import os  # Reads environment variables
+
 
 class Config:
     # These lines pull values from the .env file (or system environment)
