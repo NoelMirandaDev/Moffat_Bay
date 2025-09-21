@@ -103,9 +103,9 @@ CREATE TABLE `auditlog` (
   CONSTRAINT `auditlog_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
----------------------------------------------------------------
+-- ------------------------------------------------------------
 -- Table structure for table 'team_member'
----------------------------------------------------------------
+-- ------------------------------------------------------------
 CREATE TABLE team_member (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
@@ -120,19 +120,19 @@ CREATE TABLE team_member (
     email VARCHAR(100),
     profile_image VARCHAR(255)
 );
---------------------------------------------------------------
+-- -----------------------------------------------------------
 -- For contributions, since MySQL doesn’t have array columns,
 -- For best practice I have a separate contribution table
---------------------------------------------------------------
+-- -----------------------------------------------------------
 CREATE TABLE team_member_contribution (
     id INT AUTO_INCREMENT PRIMARY KEY,
     team_member_id INT NOT NULL,
     contribution TEXT NOT NULL,
     FOREIGN KEY (team_member_id) REFERENCES team_member(id)
 );
------------------------------------------------------------------
+-- --------------------------------------------------------------
 -- Created teable team_member message
----------------------------------------------------------------
+-- ------------------------------------------------------------
 CREATE TABLE team_message (
     id INT AUTO_INCREMENT PRIMARY KEY,
     team_member_id INT NOT NULL,

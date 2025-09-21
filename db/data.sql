@@ -105,32 +105,9 @@ INSERT INTO auditlog (AuditLogID, CustomerID, Action, Description, Timestamp) VA
 (5004, 3, 'Reservation Created', 'Reservation 1003 created for Room 301',       NOW()),
 (5005, NULL, 'System',           'Nightly job: availability refresh completed', NOW());
 
--- =========================
--- Auto-increment adjustments (for nicer ID ranges)
--- =========================
-ALTER TABLE roomtype    AUTO_INCREMENT = 100;
-ALTER TABLE amenity     AUTO_INCREMENT = 100;
-ALTER TABLE room        AUTO_INCREMENT = 500;
-ALTER TABLE customer    AUTO_INCREMENT = 1000;
-ALTER TABLE reservation AUTO_INCREMENT = 2000;
-ALTER TABLE auditlog    AUTO_INCREMENT = 6000;
-
-
---=================================================
--- DEVELOPMENT SEED SCRIPT
--- WARNING: This script will ERASE ALL data in
--- team_member_contribution and team_member; tables.
--- Use ONLY for local development or testing!
---=================================================
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE  team_member_contribution;
-TRUNCATE TABLE team_member;
-SET FOREIGN_KEY_CHECKS = 1;
-
 -- ===========================
 -- Team Member TABLE
 -- ===========================
-
 INSERT INTO team_member (first_name, middle_name, last_name, role, bio, fun_fact, linkedin_url, github_url, email, profile_image) VALUES
 -- Noel (1)
 ('Noel', 'Yobani', 'Miranda', 'Project Manager and Full Stack Developer',
@@ -181,8 +158,6 @@ INSERT INTO team_member (first_name, middle_name, last_name, role, bio, fun_fact
 -- ========================
 -- Team Member_contribution 
 -- ========================
--- Assumes auto-increment IDs start at 1 and match the order above.
-
 INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Noel
 (1, 'Implemented user Login system'),
@@ -203,3 +178,13 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Amit
 (5, 'Registration and reservation pages.'),
 (5, 'Collaborated on user interface design and prototype');
+
+-- =========================
+-- Auto-increment adjustments (for nicer ID ranges)
+-- =========================
+ALTER TABLE roomtype    AUTO_INCREMENT = 100;
+ALTER TABLE amenity     AUTO_INCREMENT = 100;
+ALTER TABLE room        AUTO_INCREMENT = 500;
+ALTER TABLE customer    AUTO_INCREMENT = 1000;
+ALTER TABLE reservation AUTO_INCREMENT = 2000;
+ALTER TABLE auditlog    AUTO_INCREMENT = 6000;
