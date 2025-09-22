@@ -827,3 +827,36 @@ body {
 .rate-note {
   margin-top: .25rem; color: #555;
 }
+#send-message-modal .modal-content {
+  border-top: 6px solid #2E5339;
+}
+/* Enhanced Message Modal Styles */
+.message-modal-content {
+  max-width: 600px;
+  width: 90vw;
+  padding: 2.4rem 2.1rem 2.2rem 2.1rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 700px) {
+  .message-modal-content {
+    max-width: 98vw;
+    padding: 1.1rem 0.7rem 1.1rem 0.7rem;
+  }
+  #send-message-modal input,
+  #send-message-modal textarea {
+    font-size: 1em;
+  }
+}
+
+#send-message-modal input:focus,
+#send-message-modal textarea:focus {
+  outline: 2px solid #2E5339;
+  border-color: #2E5339;
+  background: #f5fef5;
+}
+
+#send-message-modal button[disabled] {
+  background: #b1b1b1 !important;
+  cursor: not-allowed;
+}

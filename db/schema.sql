@@ -102,3 +102,43 @@ CREATE TABLE `auditlog` (
   KEY `CustomerID` (`CustomerID`),
   CONSTRAINT `auditlog_ibfk_1` FOREIGN KEY (`CustomerID`) REFERENCES `customer` (`CustomerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ------------------------------------------------------------
+-- Table structure for table 'team_member'
+-- ------------------------------------------------------------
+CREATE TABLE team_member (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    middle_name VARCHAR(50),  -- For members with two first names
+    last_name VARCHAR(50) NOT NULL,
+    role VARCHAR(100) NOT NULL,
+    bio TEXT,
+    fun_fact TEXT,
+    -- We'll use a separate table for contributions (see below) since MySQL does not support array columns
+    linkedin_url VARCHAR(255),
+    github_url VARCHAR(255),
+    email VARCHAR(100),
+    profile_image VARCHAR(255)
+);
+-- -----------------------------------------------------------
+-- For contributions, since MySQL doesn’t have array columns,
+-- For best practice I have a separate contribution table
+-- -----------------------------------------------------------
+CREATE TABLE team_member_contribution (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    team_member_id INT NOT NULL,
+    contribution TEXT NOT NULL,
+    FOREIGN KEY (team_member_id) REFERENCES team_member(id)
+);
+-- --------------------------------------------------------------
+-- Created teable team_member message
+-- ------------------------------------------------------------
+CREATE TABLE team_message (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    team_member_id INT NOT NULL,
+    sender_name VARCHAR(100) NOT NULL,
+    sender_email VARCHAR(100) NOT NULL,
+    message TEXT NOT NULL,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (team_member_id) REFERENCES team_member(id)
+);
