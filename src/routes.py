@@ -16,7 +16,7 @@ def register_routes(app):
     # --------------
     # Landing Page
     # --------------
-    @app.route("/", endpoint="index")
+    @app.route("/")
     def landing():
         return render_template("index.html")
 

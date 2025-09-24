@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- 
+  <head>
+    <!-- 
     ===========================================================
     File: about.html
     Project: Moffat Bay Lodge
@@ -12,86 +12,194 @@
     Notes:
       - Uses external about.css + about.js for professionalism.
       - Footer is sticky at bottom across all screen sizes.
+      - Accessible modals with focus trap + ESC to close.
     ===========================================================
-  -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us | Moffat Bay Lodge</title>
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About Us | Moffat Bay Lodge</title>
 
-  <!-- Global Styles -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <!-- Page-Specific Styles -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <!-- Global Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <!-- Page-Specific Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/about.css') }}"
+    />
 
-  <!-- CSRF token for protection -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-</head>
-<body>
-  <!-- ---------- Header + Nav ---------- -->
-  {% include "partials/header_and_navbar.html" %}
+    <!-- CSRF token for protection -->
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+  </head>
+  <body>
+    <!-- ---------- Header + Nav ---------- -->
+    {% include "partials/header_and_navbar.html" %}
 
-  <!-- ---------- About Content Section ---------- -->
-  <main class="page-content">
-    <section class="about-flex">
-      <div class="team-header">
-        <h1>Meet the Team</h1>
-        <p>
-          The Moffat Bay Lodge team brings together a unique blend of technical expertise, leadership, and real-world experience. Guided by <strong>Noel Yobani Miranda</strong>, an accomplished project manager and full stack developer with a strong focus on security and a proven record in backend engineering, our team ensures that innovation and reliability are at the core of everything we build. <strong>Steve Stylin</strong>, our database architect and backend specialist, leverages years of professional experience in software development and data management to engineer robust, scalable systems and seamless user experiences. Together, we are committed to delivering a modern, user-focused web application for hospitality, combining advanced software engineering, thoughtful UI/UX design, and agile project management. Our collaborative approach means that every feature, from secure user registration to dynamic room reservations, is built with precision, usability, and long-term value in mind.
-        </p>
-      </div>
-      <div class="pentagon-wrap">
-        <div class="pentagon-layout" id="pentagon-layout">
-          <!-- Team member cards dynamically inserted by JS -->
+    <!-- ---------- About Content Section ---------- -->
+    <main class="page-content" id="main-content">
+      <section class="about-flex">
+        <div class="team-header">
+          <h1>Meet the Team</h1>
+          <p>
+            The Moffat Bay Lodge team brings together a unique blend of
+            technical expertise, leadership, and real-world experience. Guided
+            by <strong>Noel Yobani Miranda</strong>, an accomplished project
+            manager and full stack developer with a strong focus on security and
+            a proven record in backend engineering, our team ensures that
+            innovation and reliability are at the core of everything we build.
+            <strong>Steve Stylin</strong>, our database architect and backend
+            specialist, leverages years of professional experience in software
+            development and data management to engineer robust, scalable systems
+            and seamless user experiences. Together, we are committed to
+            delivering a modern, user-focused web application for hospitality,
+            combining advanced software engineering, thoughtful UI/UX design,
+            and agile project management. Our collaborative approach means that
+            every feature, from secure user registration to dynamic room
+            reservations, is built with precision, usability, and long-term
+            value in mind.
+          </p>
         </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- ---------- Profile Modal ---------- -->
-  <div class="modal" id="profile-modal" aria-modal="true" role="dialog">
-    <div class="modal-content" id="modal-content">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-      <!-- JS injects profile details here -->
-    </div>
-  </div>
-
-  <!-- ---------- Footer Section ---------- -->
-  {% include "partials/footer.html" %}
-
-  <!-- ---------- Login Modal ---------- -->
-  {% include "partials/login_modal.html" %}
-
-  <!-- ---------- Message Modal ---------- -->
-  <div class="modal" id="send-message-modal" aria-modal="true" role="dialog">
-    <div class="modal-content message-modal-content">
-      <button class="modal-close" onclick="closeMessageModal()" aria-label="Close">&times;</button>
-      <h2 id="messageModalTitle">Send a Message</h2>
-      <div id="messageToName" class="message-to-name"></div>
-      <form id="sendMessageForm" autocomplete="off">
-        <label>
-          Your Name:<br>
-          <input type="text" name="senderName" required>
-        </label>
-        <label>
-          Your Email:<br>
-          <input type="email" name="senderEmail" required>
-        </label>
-        <label>
-          Your Message: <span>(max 500 words)</span><br>
-          <textarea name="message" id="messageTextarea" rows="8" maxlength="6000" required></textarea>
-          <div class="word-count">
-            <span id="wordCount">0</span>/500 words
-            <span id="wordLimitWarning">Word limit exceeded!</span>
+        <div class="pentagon-wrap">
+          <div class="pentagon-layout" id="pentagon-layout" aria-live="polite">
+            <!-- Team member cards dynamically inserted by JS -->
           </div>
-        </label>
-        <input type="hidden" name="memberId" id="messageMemberId">
-        <button type="submit" id="sendMessageBtnFinal">Send Message</button>
-      </form>
-      <div id="sendMessageStatus"></div>
-    </div>
-  </div>
+        </div>
+      </section>
+    </main>
 
-  <!-- ---------- Page Scripts ---------- -->
-  <script src="{{ url_for('static', filename='js/about.js') }}"></script>
-</body>
+    <!-- ---------- Profile Modal (Structured) ---------- -->
+    <div
+      class="modal"
+      id="profile-modal"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="profileModalTitle"
+      aria-describedby="profileModalDesc"
+    >
+      <div
+        class="modal-content profile-modal-content"
+        id="profile-modal-content"
+      >
+        <button class="modal-close" data-close-modal aria-label="Close dialog">
+          &times;
+        </button>
+        <!-- JS injects structured profile details here -->
+      </div>
+    </div>
+
+    <!-- ---------- Footer Section ---------- -->
+    {% include "partials/footer.html" %}
+
+    <!-- ---------- Login Modal ---------- -->
+    {% include "partials/login_modal.html" %}
+
+    <!-- ---------- Message Modal (Improved UX) ---------- -->
+    <div
+      class="modal"
+      id="send-message-modal"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="messageModalTitle"
+      aria-describedby="messageModalDesc"
+    >
+      <div class="modal-content message-modal-content">
+        <!-- ❌ Removed top-right close button -->
+
+        <header class="modal-header">
+          <h2 id="messageModalTitle" class="modal-title">Send a Message</h2>
+          <p id="messageModalDesc" class="modal-subtitle">
+            Reach out privately to a team member. We’ll email them your note.
+          </p>
+        </header>
+
+        <div
+          id="messageToName"
+          class="message-to-name"
+          aria-live="polite"
+        ></div>
+
+        <form id="sendMessageForm" autocomplete="off" novalidate>
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Your Name</span>
+              <input
+                type="text"
+                name="senderName"
+                required
+                placeholder="Jane Doe"
+                autocomplete="name"
+              />
+              <span class="field-hint"
+                >So they know who wrote the message.</span
+              >
+            </label>
+
+            <label class="form-field">
+              <span class="form-label">Your Email</span>
+              <input
+                type="email"
+                name="senderEmail"
+                required
+                placeholder="jane@example.com"
+                autocomplete="email"
+              />
+              <span class="field-hint"
+                >We’ll share this with the recipient.</span
+              >
+            </label>
+
+            <label class="form-field form-field-full">
+              <span class="form-label">
+                Your Message <span class="muted">(max 500 words)</span>
+              </span>
+              <textarea
+                name="message"
+                id="messageTextarea"
+                rows="8"
+                maxlength="6000"
+                required
+                placeholder="Write a thoughtful note…"
+              ></textarea>
+
+              <div class="word-count" aria-live="polite">
+                <span id="wordCount">0</span>/500 words
+                <span id="wordLimitWarning" role="alert"
+                  >Word limit exceeded.</span
+                >
+              </div>
+            </label>
+          </div>
+
+          <input type="hidden" name="memberId" id="messageMemberId" />
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              id="sendMessageBtnFinal"
+              class="btn btn-primary"
+            >
+              Send Message
+            </button>
+            <button type="button" class="btn btn-ghost" data-close-modal>
+              Cancel
+            </button>
+          </div>
+
+          <div id="sendMessageStatus" class="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ---------- Page Scripts ---------- -->
+    <script>
+      window.STATIC_IMAGE_BASE = "{{ url_for('static', filename='images/') }}";
+    </script>
+    <script
+      defer
+      src="{{ url_for('static', filename='js/about.js') }}"
+    ></script>
+  </body>
 </html>
