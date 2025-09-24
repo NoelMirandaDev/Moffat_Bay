@@ -45,7 +45,6 @@ body {
     flex-grow: 1;
 }
 
-
 .navbar a {
     text-decoration: none;
     color: #2E5339;
@@ -152,8 +151,6 @@ body {
 .value {
   margin-left: 20px;
 }
-
-
 
 /* Button Styles */
 .btn-green {
@@ -768,4 +765,52 @@ body {
 #send-message-modal button[disabled] {
   background: #b1b1b1 !important;
   cursor: not-allowed;
+}
+
+/* =========================================================
+   ✨ Enhancements (2025-09-23) — Added by Steve
+   - Sticky footer (without removing the team’s original code)
+   - Profile modal (About page) fix for Mac: scrollable content
+     + sticky close button so “X” is always visible.
+   - Kept generic modal styles untouched to avoid regressions.
+   ========================================================= */
+
+/* Sticky footer enhancement (safe, global) */
+html, body { min-height: 100vh; }
+body {
+  display: flex;
+  flex-direction: column;
+}
+.site-footer {
+  margin-top: auto; /* pushes footer to the bottom on short pages */
+}
+
+/* About page: Profile modal overrides (more specific = no conflict) */
+#profile-modal .modal-content {
+  max-height: 90vh;     /* prevent off-screen content */
+  overflow-y: auto;     /* enable scroll inside modal */
+  -webkit-overflow-scrolling: touch; /* smoother iOS scroll */
+  padding-top: 2.4rem;  /* space so sticky close won’t overlap content */
+}
+#profile-modal .modal-close {
+  position: sticky;  /* stays visible while scrolling modal content */
+  top: 10px;
+  float: right;
+  z-index: 2;
+  background: #eee;
+  color: #2E5339;
+  border: none;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+#profile-modal .modal-close:hover { background: #d8d8d8; }
+
+/* Ensure modals overlay site header/nav */
+#profile-modal,
+#send-message-modal {
+  z-index: 1000;
 }

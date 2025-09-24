@@ -205,3 +205,11 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Environment files
+.env          # local only (ignored)
+# Keep cross-platform templates in Git
+# (example: .env.mac, .env.win)
+
+.env.mac
+.env.win
