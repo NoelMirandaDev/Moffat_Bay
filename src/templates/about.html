@@ -1,468 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Us | Moffat Bay Lodge</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <!--  CSRF token for protection -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <style>
-    
-body {
-      font-family: 'Open Sans', sans-serif;
-      line-height: 1.6;
-      background-color: #F5EFE2;
-      color: #333;
-    }
-    .about-flex {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 3rem 1.5rem 2rem 1.5rem;
-      gap: 2.5rem;
-      min-height: 600px;
-    }
-    .team-header {
-      flex: 1 1 340px;
-      max-width: 470px;
-      text-align: left;
-    }
-    .team-header h1 {
-      font-size: 2.6rem;
-      font-family: 'Playfair Display', serif;
-      font-weight: 800;
-      color: #2E5339;
-      margin-bottom: 0.7rem;
-      text-align: left;
-    }
-    .team-header p {
-      font-size: 1.15rem;
-      color: #555;
-      margin: 0 0 0 0;
-      text-align: left;
-      max-width: 700px;
-    }
-    .pentagon-wrap {
-      flex: 1 1 430px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      min-width: 350px;
-    }
-    .pentagon-layout {
-      position: relative;
-      width: 430px;
-      height: 430px;
-      margin: 0;
-    }
-    .profile-pentagon {
-      position: absolute;
-      width: 120px;
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-      padding: 1rem 1rem 1rem 1rem;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      transition: box-shadow 0.2s;
-      z-index: 1;
-    }
-    .profile-pentagon:hover .profile-img{
-      transform: scale(1.08);
-    }
-    .profile-img {
-      width: 76px;
-      height: 76px;
-      object-fit: cover;
-      border-radius: 55%;
-      border: 2.5px solid #2E5339;
-      margin-bottom: 0.7rem;
-      transition: transform 0.25s ease;
-    }
-    /*  Pop effect only on main profile images */
-    .profile-pentagon:hover .profile-img {
-      transform: scale(1.08);
-      box-shadow: 0 0 10px rgba(46, 83, 57, 0.4);
-    }
-    .profile-name {
-      font-size: 1.04rem;
-      font-weight: 700;
-      color: #2E5339;
-      margin-bottom: 0.13rem;
-    }
-    .profile-role {
-      font-size: 0.97rem;
-      color: #8B5E3C;
-      margin-bottom: 0.2rem;
-      font-weight: 500;
-    }
-    /* Pentagon positions (clockwise: Noel, Kyle, Steve, Riese, Amit) */
-    .noel   { left: 50%; top: 0%; transform: translate(-50%, 0); }
-    .kyle   { left: 93%; top: 29%; transform: translate(-50%, -50%); }
-    .steve  { left: 77%; top: 89%; transform: translate(-50%, -50%); }
-    .riese  { left: 23%; top: 89%; transform: translate(-50%, -50%); }
-    .amit   { left: 7%;  top: 29%; transform: translate(-50%, -50%); }
-    @media (max-width:1100px) {
-      .about-flex { flex-direction: column; align-items: stretch; }
-      .pentagon-wrap { align-items: center; }
-      .pentagon-layout { margin: 2rem auto 0 auto; }
-    }
-    @media (max-width:600px) {
-      .pentagon-layout { width: 97vw; height: 97vw; max-width: 350px; max-height: 350px; }
-      .profile-pentagon { width: 80px; padding: 0.5rem 0.2rem 0.5rem 0.2rem; }
-      .profile-img { width: 40px; height: 40px; }
-      .profile-name { font-size: 0.88rem; }
-      .profile-role { font-size: 0.79rem; }
-    }
-   
-    .modal { display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(30,50,40,0.18);
-      align-items: center;
-      justify-content: center;
-      overflow-y: auto; }
-    .modal.active { display: flex; }
-    .modal-content {
-      background: #fff;
-      border-radius: 16px;
-      max-width: 520px;
-      width: 90vw;
-      box-shadow: 0 8px 40px rgba(46,83,57,0.25);
-      padding: 2.5rem 2rem;
-      position: relative;
-      animation: fadeInModal 0.3s;
-    }
-    @keyframes fadeInModal {
-      from { opacity: 0; transform: translateY(-32px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    .modal-close {
-      position: absolute;
-      top: 18px;
-      right: 20px;
-      background: #eee;
-      color: #2E5339;
-      border: none;
-      font-size: 1.5rem;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .modal-close:hover { background: #d8d8d8; }
-    .modal-profile-img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      max-width: 370px;
-      max-height: 320px;
-      height: auto;
-      border-radius: 0;
-      object-fit: contain;
-      border: none;
-      background: #e6e6e6;
-      margin-bottom: 1.2rem;
-    }
-    .modal-profile-name {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #2E5339;
-      text-align: center;
-      margin-bottom: 0.6rem;
-    }
-    .modal-profile-role {
-      text-align: center;
-      font-size: 1.08rem;
-      color: #8B5E3C;
-      margin-bottom: 1.2rem;
-    }
-    .modal-profile-bio {
-      font-size: 1rem;
-      color: #333;
-      margin-bottom: 1rem;
-      text-align: left;
-      white-space: pre-line; /* Preserves line breaks in bio */
-      line-height: 1.6;
-    }
-    .modal-profile-contributions {
-      text-align: left;
-      margin-bottom: 1rem;
-    }
-    .modal-profile-contributions ul {
-      padding-left: 1.2em;
-    }
-    .modal-profile-funfact {
-      font-size: 0.98rem;
-      color: #3f621a;
-      font-style: italic;
-      margin-bottom: 0.7rem;
-      text-align: left;
-    }
-    .modal-profile-contact {
-      font-size: 0.98rem;
-      color: #1e293b;
-      text-align: left;
-      margin-bottom: 0.5rem;
-    }
+  <head>
+    <!-- 
+    ===========================================================
+    File: about.html
+    Project: Moffat Bay Lodge
+    Author: Steve Stylin
+    Date: 2025-09-23
+    Purpose: About page showcasing the team with interactive 
+             pentagon layout and profile modals.
+    Notes:
+      - Uses external about.css + about.js for professionalism.
+      - Footer is sticky at bottom across all screen sizes.
+      - Accessible modals with focus trap + ESC to close.
+    ===========================================================
+    -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About Us | Moffat Bay Lodge</title>
 
-  </style>
-</head>
-<body>
-  {% include "partials/header_and_navbar.html" %}
-  <section class="about-flex">
-    <div class="team-header">
-      <h1>Meet the Team</h1>
-      <p>
-        The Moffat Bay Lodge team brings together a unique blend of technical expertise, leadership, and real-world experience. Guided by <strong>Noel Yobani Miranda</strong>, an accomplished project manager and full stack developer with a strong focus on security and a proven record in backend engineering, our team ensures that innovation and reliability are at the core of everything we build. <strong>Steve Stylin</strong>, our database architect and backend specialist, leverages years of professional experience in software development and data management to engineer robust, scalable systems and seamless user experiences. Together, we are committed to delivering a modern, user-focused web application for hospitality, combining advanced software engineering, thoughtful UI/UX design, and agile project management. Our collaborative approach means that every feature, from secure user registration to dynamic room reservations, is built with precision, usability, and long-term value in mind.
-      </p>
-    </div>
-    <div class="pentagon-wrap">
-      <div class="pentagon-layout" id="pentagon-layout">
-        <!-- Team member cards will be dynamically inserted here -->
+    <!-- Global Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <!-- Page-Specific Styles -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/about.css') }}"
+    />
+
+    <!-- CSRF token for protection -->
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+  </head>
+  <body>
+    <!-- ---------- Header + Nav ---------- -->
+    {% include "partials/header_and_navbar.html" %}
+
+    <!-- ---------- About Content Section ---------- -->
+    <main class="page-content" id="main-content">
+      <section class="about-flex">
+        <div class="team-header">
+          <h1>Meet the Team</h1>
+          <p>
+            The Moffat Bay Lodge team brings together a unique blend of
+            technical expertise, leadership, and real-world experience. Guided
+            by <strong>Noel Yobani Miranda</strong>, an accomplished project
+            manager and full stack developer with a strong focus on security and
+            a proven record in backend engineering, our team ensures that
+            innovation and reliability are at the core of everything we build.
+            <strong>Steve Stylin</strong>, our database architect and backend
+            specialist, leverages years of professional experience in software
+            development and data management to engineer robust, scalable systems
+            and seamless user experiences. Together, we are committed to
+            delivering a modern, user-focused web application for hospitality,
+            combining advanced software engineering, thoughtful UI/UX design,
+            and agile project management. Our collaborative approach means that
+            every feature, from secure user registration to dynamic room
+            reservations, is built with precision, usability, and long-term
+            value in mind.
+          </p>
+        </div>
+
+        <div class="pentagon-wrap">
+          <div class="pentagon-layout" id="pentagon-layout" aria-live="polite">
+            <!-- Team member cards dynamically inserted by JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ---------- Profile Modal (Structured) ---------- -->
+    <div
+      class="modal"
+      id="profile-modal"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="profileModalTitle"
+      aria-describedby="profileModalDesc"
+    >
+      <div
+        class="modal-content profile-modal-content"
+        id="profile-modal-content"
+      >
+        <button class="modal-close" data-close-modal aria-label="Close dialog">
+          &times;
+        </button>
+        <!-- JS injects structured profile details here -->
       </div>
     </div>
-  </section>
-  <!-- Profile Modal -->
-  <div class="modal" id="profile-modal" aria-modal="true" role="dialog" aria-labelledby="modal-profile-name" aria-describedby="modal-profile-bio">
-    <div class="modal-content" id="modal-content">
-      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-      <!-- Modal content will be injected here by JS -->
-    </div>
-  </div>
 
-  <!-- FOOTER WITH PAGE LINKS -->
-  {% include "partials/footer.html" %}
+    <!-- ---------- Footer Section ---------- -->
+    {% include "partials/footer.html" %}
 
-  <!-- LOGIN MODAL (Pop-up Overlay) -->
-  {% include "partials/login_modal.html" %}
+    <!-- ---------- Login Modal ---------- -->
+    {% include "partials/login_modal.html" %}
 
-  <!-- Message Modal -->
-  <div class="modal" id="send-message-modal" aria-modal="true" role="dialog">
-    <div class="modal-content message-modal-content">
-      <button class="modal-close" onclick="closeMessageModal()" aria-label="Close">&times;</button>
-      <h2 id="messageModalTitle" style="text-align: center; color: #2E5339; margin-bottom: 0.5em;">Send a Message</h2>
-      <div id="messageToName" style="text-align:center; margin-bottom:1em; font-weight:bold;"></div>
-      <form id="sendMessageForm" autocomplete="off">
-        <label style="display:block; margin-bottom:1em;">
-          Your Name:<br>
-          <input type="text" name="senderName" required style="width:100%; padding:0.6em; border-radius:5px; border:1px solid #ccc; font-size:1em;">
-        </label>
-        <label style="display:block; margin-bottom:1em;">
-          Your Email:<br>
-          <input type="email" name="senderEmail" required style="width:100%; padding:0.6em; border-radius:5px; border:1px solid #ccc; font-size:1em;">
-        </label>
-        <label style="display:block; margin-bottom:1em;">
-          Your Message: <span style="font-size:0.97em; color:#888;">(max 500 words)</span><br>
-          <textarea name="message" id="messageTextarea" rows="8" maxlength="6000" required style="width:100%; padding:0.7em; border-radius:7px; border:1.2px solid #bbb; font-size:1.08em; resize:vertical; min-height:110px; background:#FAFAF6;"></textarea>
-          <div style="margin-top:0.3em; font-size:0.97em; color:#555;">
-            <span id="wordCount">0</span>/500 words
-            <span id="wordLimitWarning" style="color:#b91c1c; margin-left:1em; display:none;">Word limit exceeded!</span>
+    <!-- ---------- Message Modal (Improved UX) ---------- -->
+    <div
+      class="modal"
+      id="send-message-modal"
+      aria-modal="true"
+      role="dialog"
+      aria-labelledby="messageModalTitle"
+      aria-describedby="messageModalDesc"
+    >
+      <div class="modal-content message-modal-content">
+        <!-- ❌ Removed top-right close button -->
+
+        <header class="modal-header">
+          <h2 id="messageModalTitle" class="modal-title">Send a Message</h2>
+          <p id="messageModalDesc" class="modal-subtitle">
+            Reach out privately to a team member. We’ll email them your note.
+          </p>
+        </header>
+
+        <div
+          id="messageToName"
+          class="message-to-name"
+          aria-live="polite"
+        ></div>
+
+        <form id="sendMessageForm" autocomplete="off" novalidate>
+          <div class="form-grid">
+            <label class="form-field">
+              <span class="form-label">Your Name</span>
+              <input
+                type="text"
+                name="senderName"
+                required
+                placeholder="Jane Doe"
+                autocomplete="name"
+              />
+              <span class="field-hint"
+                >So they know who wrote the message.</span
+              >
+            </label>
+
+            <label class="form-field">
+              <span class="form-label">Your Email</span>
+              <input
+                type="email"
+                name="senderEmail"
+                required
+                placeholder="jane@example.com"
+                autocomplete="email"
+              />
+              <span class="field-hint"
+                >We’ll share this with the recipient.</span
+              >
+            </label>
+
+            <label class="form-field form-field-full">
+              <span class="form-label">
+                Your Message <span class="muted">(max 500 words)</span>
+              </span>
+              <textarea
+                name="message"
+                id="messageTextarea"
+                rows="8"
+                maxlength="6000"
+                required
+                placeholder="Write a thoughtful note…"
+              ></textarea>
+
+              <div class="word-count" aria-live="polite">
+                <span id="wordCount">0</span>/500 words
+                <span id="wordLimitWarning" role="alert"
+                  >Word limit exceeded.</span
+                >
+              </div>
+            </label>
           </div>
-        </label>
-        <input type="hidden" name="memberId" id="messageMemberId">
-        <button type="submit" id="sendMessageBtnFinal" style="margin-top:0.7em; background:#2E5339; color:#fff; font-weight:bold; border:none; border-radius:5px; padding:0.7em 1.8em; font-size:1.13em; cursor:pointer; transition:background 0.15s;">Send Message</button>
-      </form>
-      <div id="sendMessageStatus" style="margin-top:0.8em; min-height:1.2em; text-align:center;"></div>
+
+          <input type="hidden" name="memberId" id="messageMemberId" />
+
+          <div class="form-actions">
+            <button
+              type="submit"
+              id="sendMessageBtnFinal"
+              class="btn btn-primary"
+            >
+              Send Message
+            </button>
+            <button type="button" class="btn btn-ghost" data-close-modal>
+              Cancel
+            </button>
+          </div>
+
+          <div id="sendMessageStatus" class="status" aria-live="polite"></div>
+        </form>
+      </div>
     </div>
-  </div>
 
-  <script>
-    //  CSRF helper
-    function getCSRFToken() {
-      return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    }
-
-    // Pentagon position classes
-    const pentagonPositions = ['noel', 'kyle', 'steve', 'riese', 'amit'];
-    function getPentagonClass(idx) {
-      return pentagonPositions[idx] || '';
-    }
-
-    // Fetch team members
-    let profiles = {};
-    fetch('/api/team')
-      .then(response => response.json())
-      .then(members => {
-        const layout = document.getElementById('pentagon-layout');
-        layout.innerHTML = '';
-        members.forEach((member, idx) => {
-          const pentClass = getPentagonClass(idx);
-          profiles[member.id] = member;
-          const imgUrl = "{{ url_for('static', filename='images/') }}" + member.profile_image;
-          const card = document.createElement('article');
-          card.className = `profile-pentagon ${pentClass}`;
-          card.tabIndex = 0;
-          card.setAttribute('role', 'button');
-          card.setAttribute('aria-label', `Open profile for ${member.first_name} ${member.last_name}`);
-          card.onclick = () => showModal(member.id);
-          card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') showModal(member.id); };
-          card.innerHTML = `
-            <img src="${imgUrl}" alt="${member.first_name} ${member.last_name}" class="profile-img">
-            <div class="profile-name">${member.first_name} ${member.last_name}</div>
-            <div class="profile-role">${member.role}</div>
-          `;
-          layout.appendChild(card);
-        });
-      })
-      .catch(err => {
-        document.getElementById('pentagon-layout').innerHTML = '<div style="color:#b91c1c;">Failed to load team data.</div>';
-        console.error(err);
-      });
-
-    // Show modal with member details
-    function showModal(memberId) {
-      const profile = profiles[memberId];
-      if (!profile) return;
-      const content = document.getElementById('modal-content');
-      const imgUrl = "{{ url_for('static', filename='images/') }}" + profile.profile_image;
-      let contributionsHTML = '';
-      if (profile.contributions && profile.contributions.length > 0) {
-        contributionsHTML = `<div class="modal-profile-contributions"><strong>Key Contributions:</strong><ul>`;
-        profile.contributions.forEach(item => contributionsHTML += `<li>${item}</li>`);
-        contributionsHTML += `</ul></div>`;
-      }
-      let funfactHTML = profile.fun_fact ? `<div class="modal-profile-funfact">${profile.fun_fact}</div>` : '';
-      let contactHTML = '';
-      if (profile.linkedin_url || profile.github_url || profile.email) {
-        contactHTML = `<div class="modal-profile-contact"><strong>Contact:</strong><br>`;
-        if (profile.linkedin_url) contactHTML += `<a href="${profile.linkedin_url}" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp;`;
-        if (profile.github_url) contactHTML += `<a href="${profile.github_url}" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;`;
-        if (profile.email) contactHTML += `<a href="mailto:${profile.email}">Email</a>`;
-        contactHTML += `</div>`;
-      }
-      content.innerHTML = `
-        <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
-        <img src="${imgUrl}" alt="${profile.first_name} ${profile.last_name}" class="modal-profile-img">
-        <div id="modal-profile-name" class="modal-profile-name">${profile.first_name} ${profile.middle_name ? profile.middle_name + ' ' : ''}${profile.last_name}</div>
-        <div class="modal-profile-role">${profile.role}</div>
-        <div id="modal-profile-bio" class="modal-profile-bio">${profile.bio}</div>
-        ${contributionsHTML}
-        ${funfactHTML}
-        ${contactHTML}
-        <button style="margin:1em auto 0 auto;display:block;background:#2E5339;color:#fff;font-weight:bold;border:none;border-radius:5px;padding:0.6em 1.6em;font-size:1.07em;cursor:pointer" onclick="openMessageModal('${profile.first_name} ${profile.last_name}','${profile.id}')">Send Message</button>
-      `;
-      document.getElementById('profile-modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeModal() {
-      document.getElementById('profile-modal').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // Message Modal open
-    function openMessageModal(memberName, memberId) {
-      document.getElementById('send-message-modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('messageToName').textContent = 'To: ' + memberName;
-      document.getElementById('sendMessageStatus').textContent = '';
-      document.getElementById('sendMessageForm').reset();
-      document.getElementById('messageMemberId').value = memberId;
-      updateWordCount();
-    }
-	// Message Modal close
-    function closeMessageModal() {
-      document.getElementById('send-message-modal').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-
-    // ESC close modals
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') {
-        closeModal();
-        closeMessageModal();
-      }
-    });
-
-    // Word count
-    const messageTextarea = document.getElementById('messageTextarea');
-    const wordCount = document.getElementById('wordCount');
-    const wordLimitWarning = document.getElementById('wordLimitWarning');
-    const maxWords = 500;
-    function countWords(str) { return str.trim().split(/\s+/).filter(Boolean).length; }
-    function updateWordCount() {
-      if (!messageTextarea) return;
-      const text = messageTextarea.value;
-      const count = countWords(text);
-      wordCount.textContent = count;
-      if (count > maxWords) {
-        wordLimitWarning.style.display = 'inline';
-        wordCount.style.color = '#b91c1c';
-      } else {
-        wordLimitWarning.style.display = 'none';
-        wordCount.style.color = '';
-      }
-    }
-    if (messageTextarea) {
-      messageTextarea.addEventListener('input', updateWordCount);
-    }
-
-    // Send message with CSRF
-    document.getElementById('sendMessageForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const status = document.getElementById('sendMessageStatus');
-      const form = e.target;
-      const words = countWords(messageTextarea.value);
-      if (words > maxWords) {
-        wordLimitWarning.style.display = 'inline';
-        wordCount.style.color = '#b91c1c';
-        messageTextarea.focus();
-        return;
-      }
-      status.textContent = 'Sending...';
-      const data = {
-        senderName: form.senderName.value,
-        senderEmail: form.senderEmail.value,
-        message: form.message.value,
-        memberId: form.memberId.value
-      };
-      try {
-        const response = await fetch('/api/send-team-message', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken()
-          },
-          body: JSON.stringify(data)
-        });
-        if (response.ok) {
-          status.textContent = 'Message sent successfully!';
-          form.reset();
-          updateWordCount();
-          setTimeout(function() { closeMessageModal(); }, 1000);
-        } else {
-          status.textContent = 'Failed to send message. Please try again.';
-        }
-      } catch (error) {
-        status.textContent = 'Network error. Please try again.';
-      }
-    });
-
-    // Login modal
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => { loginModal.classList.add('show'); });
-    }
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => { loginModal.classList.remove('show'); });
-    });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
-      }
-    });
-  </script>
-</body>
+    <!-- ---------- Page Scripts ---------- -->
+    <script>
+      window.STATIC_IMAGE_BASE = "{{ url_for('static', filename='images/') }}";
+    </script>
+    <script
+      defer
+      src="{{ url_for('static', filename='js/about.js') }}"
+    ></script>
+  </body>
 </html>

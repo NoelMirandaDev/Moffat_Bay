@@ -8,9 +8,10 @@ import re
 # html <input type="date"> format
 DATE_FMT = "%Y-%m-%d"
 
+
 def register_routes(app):
     # Enable CSRF tokens in headers (important for fetch/AJAX)
-    app.config['WTF_CSRF_HEADERS'] = ['X-CSRFToken', 'X-CSRF-Token']
+    app.config["WTF_CSRF_HEADERS"] = ["X-CSRFToken", "X-CSRF-Token"]
 
     # --------------
     # Landing Page
@@ -43,21 +44,18 @@ def register_routes(app):
         except ValueError:
             page = 1
 
-        per_page = 3 # rooms per page
+        per_page = 3  # rooms per page
         offset = (page - 1) * per_page
 
         # Total rooms
-        total = db.session.execute(
-            text(
-                "SELECT COUNT(*) FROM room"
-            )
-        ).scalar() or 0
+        total = db.session.execute(text("SELECT COUNT(*) FROM room")).scalar() or 0
 
         total_pages = max((total + per_page - 1) // per_page, 1)
 
-        rows = db.session.execute(
-            text(
-                """
+        rows = (
+            db.session.execute(
+                text(
+                    """
                 SELECT 
                     r.RoomID,
                     r.ADAAccessible,
@@ -70,9 +68,12 @@ def register_routes(app):
                 ORDER BY r.RoomNumber
                 LIMIT :limit OFFSET :offset
             """
-            ),
-            {"limit": per_page, "offset": offset},
-        ).mappings().all()
+                ),
+                {"limit": per_page, "offset": offset},
+            )
+            .mappings()
+            .all()
+        )
 
         return render_template(
             "lodge_reservation.html",
@@ -86,9 +87,10 @@ def register_routes(app):
     # ---------------------------------
     @app.route("/rooms/<int:room_id>", methods=["GET", "POST"])
     def room_details(room_id):
-        room = db.session.execute(
-            text(
-                """
+        room = (
+            db.session.execute(
+                text(
+                    """
                 SELECT
                     r.RoomID,
                     r.RoomNumber,
@@ -103,9 +105,12 @@ def register_routes(app):
                 JOIN roomtype rt ON r.RoomTypeID = rt.RoomTypeID
                 WHERE r.RoomID = :r_id
             """
-            ),
-            {"r_id": room_id},
-        ).mappings().first()
+                ),
+                {"r_id": room_id},
+            )
+            .mappings()
+            .first()
+        )
 
         if not room:
             flash("Room not found.", "error")
@@ -254,18 +259,17 @@ def register_routes(app):
                 reservations=[],
                 page=1,
                 total_pages=1,
-                total=0
+                total=0,
             )
-        
+
         where_sql = (" WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
         order_sql = " ORDER BY r.DateReserved DESC"
         limit_sql = " LIMIT :limit OFFSET :offset"
 
         # Total count (for pagination)
-        count_row = db.session.execute(
-            text(base_count + where_sql),
-            params
-        ).mappings().first()
+        count_row = (
+            db.session.execute(text(base_count + where_sql), params).mappings().first()
+        )
         total = int(count_row.cnt) if count_row else 0
 
         # Total pages
@@ -275,10 +279,13 @@ def register_routes(app):
         params_for_page = dict(params)
         params_for_page.update({"limit": per_page, "offset": offset})
 
-        rows = db.session.execute(
-            text(base_select + where_sql + order_sql + limit_sql),
-            params_for_page
-        ).mappings().all()
+        rows = (
+            db.session.execute(
+                text(base_select + where_sql + order_sql + limit_sql), params_for_page
+            )
+            .mappings()
+            .all()
+        )
 
         return render_template(
             "reservation_lookup.html",
@@ -286,7 +293,7 @@ def register_routes(app):
             reservations=rows,
             page=page,
             total_pages=total_pages,
-            total=total
+            total=total,
         )
 
     # --------------------------
@@ -375,7 +382,7 @@ def register_routes(app):
                         )
                         db.session.commit()
                     except Exception:
-                        db.session.rollback() # prevents failing the booking if audit fails silently
+                        db.session.rollback()  # prevents failing the booking if audit fails silently
 
                     session.pop("pending_reservation", None)
                     flash(
@@ -418,9 +425,7 @@ def register_routes(app):
                     r"[A-Za-z]+$", last
                 ):
                     flash("Name must only contain letters.", "error")
-                elif not re.match(
-                    r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone
-                ):
+                elif not re.match(r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone):
                     flash("Must be a valid US phone number.", "error")
                 elif not re.match(r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}", password):
                     flash(
@@ -544,100 +549,129 @@ def register_routes(app):
     # API: Get Team Members (improved to include fun_fact + contributions)
     @app.route("/api/team", methods=["GET"])
     def api_team():
-        rows = db.session.execute(
-            text(
-                """
+        rows = (
+            db.session.execute(
+                text(
+                    """
                 SELECT id, first_name, middle_name, last_name, role, bio, fun_fact,
                        linkedin_url, github_url, email, profile_image
                 FROM team_member
                 ORDER BY id
             """
+                )
             )
-        ).mappings().all()
+            .mappings()
+            .all()
+        )
 
         team = []
         for r in rows:
-            contribs = db.session.execute(
-                text("SELECT contribution FROM team_member_contribution WHERE team_member_id = :tid"),
-                {"tid": r.id},
-            ).scalars().all()
+            contribs = (
+                db.session.execute(
+                    text(
+                        "SELECT contribution FROM team_member_contribution WHERE team_member_id = :tid"
+                    ),
+                    {"tid": r.id},
+                )
+                .scalars()
+                .all()
+            )
 
-            team.append({
-                "id": r.id,
-                "first_name": r.first_name,
-                "middle_name": r.middle_name,
-                "last_name": r.last_name,
-                "role": r.role,
-                "bio": r.bio,
-                "fun_fact": r.fun_fact,
-                "linkedin_url": r.linkedin_url,
-                "github_url": r.github_url,
-                "email": r.email,
-                "profile_image": r.profile_image,
-                "contributions": contribs,
-            })
+            team.append(
+                {
+                    "id": r.id,
+                    "first_name": r.first_name,
+                    "middle_name": r.middle_name,
+                    "last_name": r.last_name,
+                    "role": r.role,
+                    "bio": r.bio,
+                    "fun_fact": r.fun_fact,
+                    "linkedin_url": r.linkedin_url,
+                    "github_url": r.github_url,
+                    "email": r.email,
+                    "profile_image": r.profile_image,
+                    "contributions": contribs,
+                }
+            )
 
         return jsonify(team)
 
     # API: Get a single team member by ID
     @app.route("/api/team/<int:member_id>", methods=["GET"])
     def api_team_member(member_id):
-        member = db.session.execute(
-            text(
-                """
+        member = (
+            db.session.execute(
+                text(
+                    """
                 SELECT id, first_name, middle_name, last_name, role, bio, fun_fact,
                        linkedin_url, github_url, email, profile_image
                 FROM team_member
                 WHERE id = :id
             """
-            ),
-            {"id": member_id},
-        ).mappings().first()
+                ),
+                {"id": member_id},
+            )
+            .mappings()
+            .first()
+        )
 
         if not member:
             return jsonify({"error": "Team member not found"}), 404
 
-        contributions = db.session.execute(
-            text("SELECT contribution FROM team_member_contribution WHERE team_member_id = :id"),
-            {"id": member_id},
-        ).scalars().all()
+        contributions = (
+            db.session.execute(
+                text(
+                    "SELECT contribution FROM team_member_contribution WHERE team_member_id = :id"
+                ),
+                {"id": member_id},
+            )
+            .scalars()
+            .all()
+        )
 
-        return jsonify({
-            "id": member.id,
-            "first_name": member.first_name,
-            "middle_name": member.middle_name,
-            "last_name": member.last_name,
-            "role": member.role,
-            "bio": member.bio,
-            "fun_fact": member.fun_fact,
-            "linkedin_url": member.linkedin_url,
-            "github_url": member.github_url,
-            "email": member.email,
-            "profile_image": member.profile_image,
-            "contributions": contributions,
-        })
+        return jsonify(
+            {
+                "id": member.id,
+                "first_name": member.first_name,
+                "middle_name": member.middle_name,
+                "last_name": member.last_name,
+                "role": member.role,
+                "bio": member.bio,
+                "fun_fact": member.fun_fact,
+                "linkedin_url": member.linkedin_url,
+                "github_url": member.github_url,
+                "email": member.email,
+                "profile_image": member.profile_image,
+                "contributions": contributions,
+            }
+        )
 
     # ----------------------------
     # HELPER Functions Below
     # ----------------------------
     def _load_amenities(room_id: int):
-        return db.session.execute(
-            text(
-                """
+        return (
+            db.session.execute(
+                text(
+                    """
                 SELECT a.AmenityID, a.Name
                 FROM roomamenity ra
                 JOIN amenity a ON a.AmenityID = ra.AmenityID
                 WHERE ra.RoomID = :r_id
                 ORDER BY a.Name
             """
-            ),
-            {"r_id": room_id},
-        ).mappings().all()
+                ),
+                {"r_id": room_id},
+            )
+            .mappings()
+            .all()
+        )
 
     def _room_is_available(room_id: int, check_in: str, check_out: str) -> bool:
-        row = db.session.execute(
-            text(
-                """
+        row = (
+            db.session.execute(
+                text(
+                    """
                 SELECT COUNT(*) AS cnt
                 FROM reservation
                 WHERE RoomID = :room_id
@@ -645,7 +679,10 @@ def register_routes(app):
                 AND CheckInDate < :new_out
                 AND CheckOutDate > :new_in
             """
-            ),
-            {"room_id": room_id, "new_in": check_in, "new_out": check_out},
-        ).mappings().first()
+                ),
+                {"room_id": room_id, "new_in": check_in, "new_out": check_out},
+            )
+            .mappings()
+            .first()
+        )
         return row and int(row.cnt) == 0

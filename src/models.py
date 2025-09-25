@@ -1,10 +1,12 @@
 from extensions import db
 
+
 class TeamMember(db.Model):
     """
     Stores core information about each team member.
     """
-    __tablename__ = 'team_member'
+
+    __tablename__ = "team_member"
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
@@ -20,21 +22,19 @@ class TeamMember(db.Model):
 
     # One-to-many relationship: a member can have multiple contributions
     contributions = db.relationship(
-        'TeamMemberContribution',
-        backref='member',
-        cascade="all, delete-orphan"
+        "TeamMemberContribution", backref="member", cascade="all, delete-orphan"
     )
+
 
 class TeamMemberContribution(db.Model):
     """
     Stores individual contributions for each team member.
     """
-    __tablename__ = 'team_member_contribution'
+
+    __tablename__ = "team_member_contribution"
 
     id = db.Column(db.Integer, primary_key=True)
     team_member_id = db.Column(
-        db.Integer,
-        db.ForeignKey('team_member.id'),
-        nullable=False
+        db.Integer, db.ForeignKey("team_member.id"), nullable=False
     )
     contribution = db.Column(db.Text, nullable=False)

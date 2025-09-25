@@ -18,6 +18,8 @@ TRUNCATE TABLE room;
 TRUNCATE TABLE amenity;
 TRUNCATE TABLE roomtype;
 TRUNCATE TABLE customer;
+TRUNCATE TABLE team_member_contribution;
+TRUNCATE TABLE team_member;
 
 -- 3) Re-enable FK checks
 SET FOREIGN_KEY_CHECKS = 1;
@@ -91,7 +93,7 @@ NOW());
 -- =========================
 INSERT INTO reservation (ReservationID, CustomerID, RoomID, CheckInDate, CheckOutDate, NumberOfGuests, ReservationStatus, DateReserved) VALUES
 (1001, 1, 201, '2025-09-06', '2025-09-09', 2, 'Confirmed', NOW()),
-(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Confirmed',   NOW()),
+(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Confirmed', NOW()),
 (1003, 3, 301, '2025-09-29', '2025-10-02', 3, 'Confirmed', NOW()),
 (1004, 1, 103, '2025-10-14', '2025-10-16', 2, 'Cancelled', NOW());
 
