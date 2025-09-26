@@ -927,3 +927,124 @@ body {
 #send-message-modal {
   z-index: 1000;
 }
+/* ===== Attractions Page Styles ===== */
+.attractions {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.attractions h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.attractions p {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.attraction-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.attraction-list article {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.attraction-list article:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.attraction-list h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+/* ===== Attractions Page Styles (Enhanced) ===== */
+.attractions {
+  max-width: 1400px; /* wider page layout */
+  margin: 3rem auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.attractions h1 {
+  font-family: "Playfair Display", serif;
+  font-size: 3.2rem;
+  margin-bottom: 1rem;
+  color: var(--nav-text, #2c3e50); /* match navbar text color */
+}
+
+.attractions p {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.25rem;
+  color: #555;
+  margin-bottom: 2.5rem;
+}
+
+.attraction-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(320px, 1fr)
+  ); /* bigger cards */
+  gap: 3rem;
+  justify-items: center;
+}
+
+.attraction {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.attraction:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.slideshow {
+  position: relative;
+  width: 100%;
+  height: 250px; /* taller slides for impact */
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.slideshow img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slideshow img.active {
+  opacity: 1;
+}
+
+.attraction h2 {
+  margin-bottom: 0.5rem;
+  font-size: 1.8rem;
+  color: var(--nav-text, #2c3e50); /* match navbar text color */
+}
