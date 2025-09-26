@@ -1,11 +1,16 @@
+{# Purpose: Sticky site footer with navigation + credits Notes: - Links now
+match existing Flask endpoints: * landing -> home page ("/") * about ->
+"/about.html" * lodge_reservation -> "/lodge_reservation.html" * contact -> not
+defined; using safe placeholder "#" #}
 <footer class="site-footer">
-    <div class="footer-links">
-      <a href="{{ url_for('landing') }}">Home</a>
-      <a href="{{ url_for('attraction') }}">Attraction</a>
-      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
-      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
-      <a href="{{ url_for('reservation_summary') }}">Reservation Summary</a>
-      <a href="{{ url_for('about') }}">About Us</a>
-    </div>
-    <p>&copy; 2025 Moffat Bay Lodge. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="{{ url_for('landing') }}">Home</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('lodge_reservation') }}">Rooms</a>
+    <a href="{{ url_for('about') }}">Contact</a>
+  </div>
+
+  <p class="footer-credit">
+    &copy; {{ current_year }} Moffat Bay Lodge. All rights reserved.
+  </p>
 </footer>

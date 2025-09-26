@@ -1,0 +1,374 @@
+/* ==========================================================
+  Purpose: Styles specific to About page
+   
+   Notes:
+     - Sticky footer
+     - Pentagon layout
+     - Profile + message modals
+     - No hover/active transforms (debugging dancing issue)
+   ========================================================== */
+
+/* -------- Layout + Sticky Footer -------- */
+html,
+body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: #1f2937;
+}
+.page-content {
+  flex: 1;
+}
+
+.site-footer {
+  background-color: #2e5339;
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}
+.site-footer .footer-links {
+  margin-bottom: 0.5rem;
+}
+.site-footer .footer-credit {
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+/* -------- About section -------- */
+.about-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+  gap: 2.5rem;
+  min-height: 600px;
+}
+.team-header h1 {
+  font-size: 2.6rem;
+  font-family: "Playfair Display", serif;
+  color: #2e5339;
+  margin-bottom: 0.7rem;
+}
+.team-header p {
+  font-size: 1.05rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* -------- Pentagon layout -------- */
+.pentagon-wrap {
+  flex: 1 1 430px;
+  display: flex;
+  justify-content: center;
+}
+.pentagon-layout {
+  position: relative;
+  width: 430px;
+  height: 430px;
+}
+.profile-pentagon {
+  position: absolute;
+  width: 130px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+  text-align: center;
+  cursor: pointer;
+  padding: 1rem;
+  outline: none;
+}
+.profile-img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #2e5339;
+  margin-bottom: 0.7rem;
+  pointer-events: none; /* clicks always go to card */
+}
+.profile-name {
+  font-weight: 600;
+}
+.profile-role {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+/* Pentagon positions */
+.noel {
+  left: 50%;
+  top: 0%;
+  transform: translate(-50%, 0);
+}
+.kyle {
+  left: 93%;
+  top: 29%;
+  transform: translate(-50%, -50%);
+}
+.steve {
+  left: 77%;
+  top: 89%;
+  transform: translate(-50%, -50%);
+}
+.riese {
+  left: 23%;
+  top: 89%;
+  transform: translate(-50%, -50%);
+}
+.amit {
+  left: 7%;
+  top: 29%;
+  transform: translate(-50%, -50%);
+}
+
+/* Responsive pentagon */
+@media (max-width: 900px) {
+  .about-flex {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pentagon-wrap {
+    order: -1;
+  }
+}
+@media (max-width: 600px) {
+  .pentagon-layout {
+    width: 95vw;
+    height: 95vw;
+  }
+  .profile-pentagon {
+    width: 100px;
+    padding: 0.5rem;
+  }
+  .profile-img {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* -------- Modal Base -------- */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+.modal.active {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  max-width: 720px;
+  width: min(92vw, 720px);
+  padding: 1.5rem 1.25rem;
+  position: relative;
+  box-shadow: 0 8px 40px rgba(46, 83, 57, 0.25);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-close {
+  position: sticky;
+  top: 8px;
+  float: right;
+  background: #eef2f7;
+  border: none;
+  font-size: 1.5rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+}
+.modal-close:hover {
+  background: #e2e8f0;
+}
+
+/* -------- Buttons -------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-decoration: none;
+}
+.btn-primary {
+  background: #2e5339;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #25432f;
+}
+.btn-ghost {
+  background: transparent;
+  color: #374151;
+  border-color: #d1d5db;
+}
+.btn-ghost:hover {
+  background: #f3f4f6;
+}
+.btn-link {
+  background: #f1f5f9;
+  color: #1f2937;
+  border-color: #e5e7eb;
+}
+.btn-link:hover {
+  background: #e2e8f0;
+}
+.btn-lg {
+  padding: 0.9rem 1.2rem;
+  font-size: 1.05rem;
+  width: 100%;
+}
+
+/* -------- Profile Modal -------- */
+.profile-modal-content {
+  padding: 2rem 1.5rem;
+}
+.profile-modal-header {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.modal-profile-img {
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 20px;
+  border: 3px solid #2e5339;
+}
+.modal-profile-name {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.modal-profile-role {
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+.modal-section {
+  margin-top: 1.25rem;
+}
+.section-title {
+  font-size: 1.05rem;
+  color: #2e5339;
+  margin-bottom: 0.5rem;
+}
+.modal-profile-bio {
+  line-height: 1.6;
+}
+.contrib-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+.contrib-bullet {
+  list-style: disc;
+  margin: 0.25rem 0;
+}
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 2rem; /* add breathing space above button */
+  align-items: center;
+}
+
+/* -------- Message Modal -------- */
+.message-to-name {
+  font-weight: 600;
+  margin: 0.5rem 0 1rem;
+  color: #2e5339;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-field {
+  display: grid;
+  gap: 0.35rem;
+}
+.form-field-full {
+  grid-column: 1 / -1;
+}
+.form-label {
+  font-weight: 600;
+}
+input[type="text"],
+input[type="email"],
+textarea {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+}
+#messageTextarea {
+  resize: vertical;
+  min-height: 130px;
+}
+.word-count {
+  font-size: 0.9rem;
+  margin-top: 0.3em;
+  color: #374151;
+  display: flex;
+  gap: 0.5rem;
+}
+#wordLimitWarning {
+  color: #b91c1c;
+  display: none;
+}
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  align-items: center;
+}
+.status-success {
+  color: #065f46;
+}
+.status-error {
+  color: #991b1b;
+}
+
+/* -------- Responsive -------- */
+@media (max-width: 640px) {
+  .modal-content {
+    width: 100%;
+    padding: 1.25rem 1rem;
+  }
+  .profile-modal-header {
+    grid-template-columns: 96px 1fr;
+  }
+  .modal-profile-img {
+    width: 96px;
+    height: 96px;
+  }
+  .btn-lg {
+    width: 100%;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
