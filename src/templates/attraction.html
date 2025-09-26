@@ -1,57 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Attractions - Moffat Bay Lodge</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attractions - Moffat Bay Lodge</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- HEADER + NAVIGATION BAR -->
+    {% include "partials/header_and_navbar.html" %}
 
-  <!-- HEADER + NAVIGATION BAR -->
-  {% include "partials/header_and_navbar.html" %}
+    <!-- Flash Messages -->
+    {% include "partials/success_flash_messages.html" %}
 
-  <!-- Flash Messages -->
-  {% include "partials/success_flash_messages.html" %}
+    <main class="page-content">
+      <section class="basic-section attractions">
+        <h1>Island Attractions</h1>
+        <p>
+          Discover the best activities the island has to offer — from thrilling
+          outdoor adventures to relaxing experiences in nature.
+        </p>
 
-  <main class="page-content">
-    <section class="basic-section">
-      <h1>Island Attractions</h1>
-      <p>This is a placeholder for the Attractions page. Highlight hiking, kayaking, whale watching, scuba diving, and more!</p>
-    </section>
-  </main>
+        <div class="attraction-list">
+          <!-- Hiking -->
+          <article class="attraction">
+            <h2>Hiking</h2>
+            <div class="slideshow">
+              <img
+                src="{{ url_for('static', filename='images/attractions/hiking1.jpg') }}"
+                class="slide active"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/hiking2.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/hiking3.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/hiking4.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/hiking5.jpg') }}"
+                class="slide"
+              />
+            </div>
+            <p>
+              Explore scenic forest trails and rugged coastal paths with
+              breathtaking views at every turn.
+            </p>
+          </article>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+          <!-- Kayaking -->
+          <article class="attraction">
+            <h2>Kayaking</h2>
+            <div class="slideshow">
+              <img
+                src="{{ url_for('static', filename='images/attractions/kayak1.jpg') }}"
+                class="slide active"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/kayak2.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/kayak3.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/kayak4.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/kayak5.jpg') }}"
+                class="slide"
+              />
+            </div>
+            <p>
+              Paddle through calm bays and hidden coves while spotting marine
+              life in their natural environment.
+            </p>
+          </article>
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+          <!-- Whale Watching -->
+          <article class="attraction">
+            <h2>Whale Watching</h2>
+            <div class="slideshow">
+              <img
+                src="{{ url_for('static', filename='images/attractions/whale1.jpg') }}"
+                class="slide active"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/whale2.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/whale3.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/whale4.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/whale5.jpg') }}"
+                class="slide"
+              />
+            </div>
+            <p>
+              Witness orcas and humpback whales up close on guided tours that
+              showcase the beauty of the sea.
+            </p>
+          </article>
 
-<script>
-    // Login Modal functionality
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+          <!-- Scuba Diving -->
+          <article class="attraction">
+            <h2>Scuba Diving</h2>
+            <div class="slideshow">
+              <img
+                src="{{ url_for('static', filename='images/attractions/diving1.jpg') }}"
+                class="slide active"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/diving2.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/diving3.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/diving4.jpg') }}"
+                class="slide"
+              />
+              <img
+                src="{{ url_for('static', filename='images/attractions/diving5.jpg') }}"
+                class="slide"
+              />
+            </div>
+            <p>
+              Dive beneath the waves to uncover vibrant reefs, kelp forests, and
+              fascinating underwater ecosystems.
+            </p>
+          </article>
+        </div>
+      </section>
+    </main>
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
-    }
+    <!-- FOOTER WITH PAGE LINKS -->
+    {% include "partials/footer.html" %}
 
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
-    });
+    <!-- LOGIN MODAL (Pop-up Overlay) -->
+    {% include "partials/login_modal.html" %}
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
-      }
-    });
-  </script>
-
-</body>
+    <!-- Attractions Slideshow Script -->
+    <script src="{{ url_for('static', filename='js/attractions.js') }}"></script>
+  </body>
 </html>

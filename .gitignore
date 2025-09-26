@@ -205,12 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
-
-# Environment files
-
-# Keep cross-platform templates in Git
-# (example: .env.mac, .env.win)
-
 # VS Code workspace settings
 .vscode/
 
