@@ -1,104 +1,106 @@
 /* style.css */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    line-height: 1.6;
-    background-color: #F3E9DC;
-    color: #333;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.6;
+  background-color: #f3e9dc;
+  color: #333;
 }
 
 .site-header {
-    background: #F5EFE2;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 1rem 2rem;
+  background: #f5efe2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem;
 }
 
 .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .logo {
-    flex-shrink: 0;
-    margin-right: 2rem;
+  flex-shrink: 0;
+  margin-right: 2rem;
 }
 
 .logo img {
-    height: 90px;
-    object-fit: contain;
-    display: block;
+  height: 90px;
+  object-fit: contain;
+  display: block;
 }
 
 .navbar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-grow: 1;
 }
 
 .navbar a {
-    text-decoration: none;
-    color: #2E5339;
-    font-weight: bold;
+  text-decoration: none;
+  color: #2e5339;
+  font-weight: bold;
 }
 
 .navbar button {
-    margin-left: 0;
+  margin-left: 0;
 }
 
 .hero {
-    position: relative;
-    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') no-repeat center center/cover;
-    height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  position: relative;
+  background: url("https://images.unsplash.com/photo-1506744038136-46273834b3fb")
+    no-repeat center center/cover;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .hero::before {
-    content: "";
-    background: rgba(0, 0, 0, 0.4);
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
+  content: "";
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 700px;
-    color: #fff;
-    padding: 2rem;
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  color: #fff;
+  padding: 2rem;
 }
 
 .hero-content h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    margin-bottom: 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
 .hero-buttons button {
-    margin: 0 0.5rem;
+  margin: 0 0.5rem;
 }
 
-.reservation-container{
+.reservation-container {
   display: flex;
   gap: 20px;
 }
@@ -108,34 +110,33 @@ body {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-
 }
 
 .reservation-box h3 {
-  color: #2E5339;
+  color: #2e5339;
   margin-bottom: 5px;
 }
-.reservation-confirm-box{
+.reservation-confirm-box {
   background-color: #fff;
   flex: 1;
   padding: 20px;
-  border-radius: 8px
+  border-radius: 8px;
 }
 
 .reservation-confirm-box img {
   border-top: 8px;
   margin: -20px -20px 5px -20px;
   width: calc(100% + 40px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .reservation-confirm-box h3 {
-  color: #2E5339;
+  color: #2e5339;
   margin-bottom: 5px;
 }
 
 .reservation-segment {
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
   padding: 10px;
   border-radius: 8px;
 }
@@ -154,38 +155,38 @@ body {
 
 /* Button Styles */
 .btn-green {
-    background-color: #2E5339;
-    color: #FFFFFF;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  background-color: #2e5339;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .btn-green:hover {
-    background-color: #3D7040;
+  background-color: #3d7040;
 }
 
 .btn-brown {
-    background-color: #8B5E3C;
-    color: #FFFFFF;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  background-color: #8b5e3c;
+  color: #ffffff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .btn-brown:hover {
-    background-color: #A97148;
+  background-color: #a97148;
 }
 
 .res-btn-brown {
-  background-color: #8B5E3C;
-  color: #FFFFFF;
+  background-color: #8b5e3c;
+  color: #ffffff;
   padding: 12px 24px;
   border: none;
   border-radius: 6px;
@@ -195,37 +196,37 @@ body {
 }
 
 .res-btn-brown:hover {
-    background-color: #A97148;
+  background-color: #a97148;
 }
 
 .btn-light {
-    background-color: #FFFFFF;
-    color: #2E5339;
-    padding: 12px 24px;
-    border: 2px solid #2E5339;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  background-color: #ffffff;
+  color: #2e5339;
+  padding: 12px 24px;
+  border: 2px solid #2e5339;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .btn-light:hover {
-    background-color: #F3E9DC;
+  background-color: #f3e9dc;
 }
 
-.btn-register{
-    background-color: #2E5339;
-    color: #FFFFFF;
-    width: 100%;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s ease;
+.btn-register {
+  background-color: #2e5339;
+  color: #ffffff;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 .btn-register:hover {
-    background-color: #3D7040;
+  background-color: #3d7040;
 }
 
 .feature-grid {
@@ -243,7 +244,7 @@ body {
   border-radius: 8px;
   overflow: hidden;
   text-decoration: none;
-  color: #2E5339;
+  color: #2e5339;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
@@ -252,7 +253,7 @@ body {
 
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
 .feature-card img {
@@ -266,7 +267,7 @@ body {
 }
 
 .card-text h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
 }
@@ -277,10 +278,10 @@ body {
 }
 
 .site-footer {
-    text-align: center;
-    padding: 1rem;
-    background-color: #2E5339;
-    color: #fff;
+  text-align: center;
+  padding: 1rem;
+  background-color: #2e5339;
+  color: #fff;
 }
 
 .page-content {
@@ -292,7 +293,7 @@ body {
 .basic-section {
   background-color: #fff;
   padding: 2rem;
-  border: 1px solid #2E5339;
+  border: 1px solid #2e5339;
   border-radius: 8px;
   max-width: 800px;
   width: 100%;
@@ -300,7 +301,7 @@ body {
 }
 
 .basic-section h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   margin-bottom: 1rem;
 }
 
@@ -357,7 +358,7 @@ body {
   max-width: 400px;
   border-radius: 12px;
   z-index: 1;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 /* Close button */
@@ -386,7 +387,7 @@ body {
 
 .login-form label {
   font-weight: bold;
-  color: #2E5339;
+  color: #2e5339;
 }
 
 .alt-option {
@@ -395,48 +396,54 @@ body {
   text-align: center;
 }
 
-.register-form{
+.register-form {
   display: flex;
   flex-direction: column;
 }
 
-.register-input{
- padding: 0.75rem;
- width: 100%;
- margin-bottom: 20px;
- border:2px solid #2E5339;
- border-radius: 6px;
- outline: none;
-}
-.register-input:focus{
-  border:2px solid #3D7040;
-}
-
-.name-input{
+.register-input {
   padding: 0.75rem;
-  width: 50%;
-  border:2px solid #2E5339;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 2px solid #2e5339;
   border-radius: 6px;
   outline: none;
 }
-.name-input:focus{
-  border:2px solid #3D7040
+.register-input:focus {
+  border: 2px solid #3d7040;
 }
-.name-grouping{
+
+.name-input {
+  padding: 0.75rem;
+  width: 50%;
+  border: 2px solid #2e5339;
+  border-radius: 6px;
+  outline: none;
+}
+.name-input:focus {
+  border: 2px solid #3d7040;
+}
+.name-grouping {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
 /* Flash styling */
-.flash { 
-  padding: 8px 10px; margin: 10px 0; border-radius: 6px; 
+.flash {
+  padding: 8px 10px;
+  margin: 10px 0;
+  border-radius: 6px;
 }
-.flash.error { 
-  background: #ffe6e6; color: #7a0000; border: 1px solid #ffcccc; 
+.flash.error {
+  background: #ffe6e6;
+  color: #7a0000;
+  border: 1px solid #ffcccc;
 }
-.flash.success { 
-  background: #e9ffea; color: #0b5; border: 1px solid #bff0c6; 
+.flash.success {
+  background: #e9ffea;
+  color: #0b5;
+  border: 1px solid #bff0c6;
 }
 .modal-profile-contact {
   margin-top: 1rem;
@@ -445,7 +452,7 @@ body {
   word-break: break-all;
 }
 .modal-profile-contact a {
-  color: #2E5339;
+  color: #2e5339;
   text-decoration: underline;
 }
 
@@ -462,9 +469,9 @@ body {
 }
 
 .reservation-header h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 2.2rem;
-  color: #2E5339;
+  color: #2e5339;
   margin-bottom: 0.25rem;
 }
 
@@ -482,30 +489,37 @@ body {
 
 /* 3 cards on desktop, 2 on tablet, 1 on mobile */
 @media (min-width: 1024px) {
-  .room-card { grid-column: span 4; }
+  .room-card {
+    grid-column: span 4;
+  }
 }
 @media (min-width: 640px) and (max-width: 1023px) {
-  .room-card { grid-column: span 6; }
+  .room-card {
+    grid-column: span 6;
+  }
 }
 @media (max-width: 639px) {
-  .room-card { grid-column: span 12; }
+  .room-card {
+    grid-column: span 12;
+  }
 }
 
 /* Room card */
 .room-card {
   background: #fff;
-  border: 1px solid #E2DED5;
+  border: 1px solid #e2ded5;
   border-radius: 12px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .room-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-  border-color: #D3CBBB;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  border-color: #d3cbbb;
 }
 
 /* Media (image + ADA badge) */
@@ -527,7 +541,7 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
-  background: #2E5339;
+  background: #2e5339;
   color: #fff;
   font-size: 0.75rem;
   font-weight: 700;
@@ -541,37 +555,37 @@ body {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
   flex: 1;
 }
 
 .room-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 1.25rem;
-  color: #2E5339;
-  margin-bottom: .25rem;
+  color: #2e5339;
+  margin-bottom: 0.25rem;
 }
 
 .room-meta {
   list-style: none;
   color: #555;
   display: grid;
-  gap: .25rem;
+  gap: 0.25rem;
 }
 
 .room-meta li strong {
-  color: #2E5339;
+  color: #2e5339;
 }
 
 .price {
   font-weight: 700;
-  color: #2E5339;
+  color: #2e5339;
 }
 
 /* CTA */
 .room-cta {
   align-self: flex-start;
-  margin-top: .35rem;
+  margin-top: 0.35rem;
   text-decoration: none;
 }
 
@@ -585,37 +599,37 @@ body {
 .pagination ul {
   list-style: none;
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: center;
   padding: 0;
 }
 
 .pagination .page-status {
-  color: #2E5339;
+  color: #2e5339;
   font-weight: 600;
-  padding: .4rem .75rem;
+  padding: 0.4rem 0.75rem;
 }
 
 .pagination .page-link {
   display: inline-block;
-  padding: .5rem .85rem;
-  border: 1px solid #D3CBBB;
+  padding: 0.5rem 0.85rem;
+  border: 1px solid #d3cbbb;
   border-radius: 6px;
-  color: #2E5339;
+  color: #2e5339;
   text-decoration: none;
   background: #fff;
-  transition: background .18s ease, border-color .18s ease;
+  transition: background 0.18s ease, border-color 0.18s ease;
   font-weight: 600;
 }
 
 .pagination .page-link:hover {
-  background: #F5EFE2;
-  border-color: #C8BEAC;
+  background: #f5efe2;
+  border-color: #c8beac;
 }
 
 .pagination .page-link.disabled {
   pointer-events: none;
-  opacity: .5;
+  opacity: 0.5;
 }
 
 /* ---------- Room details layout ---------- */
@@ -656,66 +670,68 @@ body {
 /* Reusable card */
 .card {
   background: #fff;
-  border: 1px solid #E2DED5;
+  border: 1px solid #e2ded5;
   border-radius: 12px;
   padding: 1.25rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .detail-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 2rem;
-  color: #2E5339;
-  margin-bottom: .75rem;
+  color: #2e5339;
+  margin-bottom: 0.75rem;
 }
 
 .detail-meta {
   list-style: none;
   display: grid;
-  gap: .35rem;
-  margin-bottom: .75rem;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
   color: #555;
 }
-.detail-meta strong { color: #2E5339; }
+.detail-meta strong {
+  color: #2e5339;
+}
 
 .detail-desc {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   color: #444;
 }
 
 /* Amenities list */
 .amenities-list {
   list-style: disc inside;
-  margin-top: .35rem;
+  margin-top: 0.35rem;
   color: #444;
 }
 
 /* Booking card */
 .detail-book h2 {
   font-size: 1.25rem;
-  color: #2E5339;
-  margin-bottom: .75rem;
+  color: #2e5339;
+  margin-bottom: 0.75rem;
 }
 
 .booking-form {
   display: grid;
-  gap: .75rem;
+  gap: 0.75rem;
 }
 
 .form-row {
   display: grid;
-  gap: .35rem;
+  gap: 0.35rem;
 }
 
 .form-row span {
   font-weight: 600;
-  color: #2E5339;
+  color: #2e5339;
 }
 
 .booking-form input[type="date"],
 .booking-form input[type="number"] {
-  padding: .65rem .75rem;
-  border: 1.5px solid #C8BEAC;
+  padding: 0.65rem 0.75rem;
+  border: 1.5px solid #c8beac;
   border-radius: 8px;
   font: inherit;
   outline: none;
@@ -723,18 +739,20 @@ body {
 
 .booking-form input[type="date"]:focus,
 .booking-form input[type="number"]:focus {
-  border-color: #3D7040;
+  border-color: #3d7040;
 }
 
 .btn-brown.full {
-   width: 100%; margin-top: .25rem;
+  width: 100%;
+  margin-top: 0.25rem;
 }
 
 .rate-note {
-  margin-top: .25rem; color: #555;
+  margin-top: 0.25rem;
+  color: #555;
 }
 #send-message-modal .modal-content {
-  border-top: 6px solid #2E5339;
+  border-top: 6px solid #2e5339;
 }
 /* Enhanced Message Modal Styles */
 .message-modal-content {
@@ -757,8 +775,8 @@ body {
 
 #send-message-modal input:focus,
 #send-message-modal textarea:focus {
-  outline: 2px solid #2E5339;
-  border-color: #2E5339;
+  outline: 2px solid #2e5339;
+  border-color: #2e5339;
   background: #f5fef5;
 }
 
@@ -768,15 +786,17 @@ body {
 }
 
 /* =========================================================
-   ✨ Enhancements (2025-09-23) — Added by Steve
-   - Sticky footer (without removing the team’s original code)
+    - Sticky footer (without removing the team’s original code)
    - Profile modal (About page) fix for Mac: scrollable content
      + sticky close button so “X” is always visible.
    - Kept generic modal styles untouched to avoid regressions.
    ========================================================= */
 
 /* Sticky footer enhancement (safe, global) */
-html, body { min-height: 100vh; }
+html,
+body {
+  min-height: 100vh;
+}
 body {
   display: flex;
   flex-direction: column;
@@ -787,18 +807,18 @@ body {
 
 /* About page: Profile modal overrides (more specific = no conflict) */
 #profile-modal .modal-content {
-  max-height: 90vh;     /* prevent off-screen content */
-  overflow-y: auto;     /* enable scroll inside modal */
+  max-height: 90vh; /* prevent off-screen content */
+  overflow-y: auto; /* enable scroll inside modal */
   -webkit-overflow-scrolling: touch; /* smoother iOS scroll */
-  padding-top: 2.4rem;  /* space so sticky close won’t overlap content */
+  padding-top: 2.4rem; /* space so sticky close won’t overlap content */
 }
 #profile-modal .modal-close {
-  position: sticky;  /* stays visible while scrolling modal content */
+  position: sticky; /* stays visible while scrolling modal content */
   top: 10px;
   float: right;
   z-index: 2;
   background: #eee;
-  color: #2E5339;
+  color: #2e5339;
   border: none;
   font-size: 1.5rem;
   border-radius: 50%;
@@ -807,7 +827,9 @@ body {
   cursor: pointer;
   transition: background 0.15s;
 }
-#profile-modal .modal-close:hover { background: #d8d8d8; }
+#profile-modal .modal-close:hover {
+  background: #d8d8d8;
+}
 
 /* Ensure modals overlay site header/nav */
 #profile-modal,

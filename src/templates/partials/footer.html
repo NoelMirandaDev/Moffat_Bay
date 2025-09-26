@@ -1,10 +1,7 @@
-{# =========================================================== File: footer.html
-Project: Moffat Bay Lodge Author: Steve Stylin Date: 2025-09-23 Purpose: Sticky
-site footer with navigation + credits Notes: - Old footer kept in comments below
-(for Noel’s peace of mind). - Links now match existing Flask endpoints: *
-landing -> home page ("/") * about -> "/about.html" * lodge_reservation ->
-"/lodge_reservation.html" * contact -> not defined; using safe placeholder "#"
-=========================================================== #}
+{# Purpose: Sticky site footer with navigation + credits Notes: - Links now
+match existing Flask endpoints: * landing -> home page ("/") * about ->
+"/about.html" * lodge_reservation -> "/lodge_reservation.html" * contact -> not
+defined; using safe placeholder "#" #}
 <footer class="site-footer">
   <div class="footer-links">
     <a href="{{ url_for('landing') }}">Home</a>
@@ -17,17 +14,3 @@ landing -> home page ("/") * about -> "/about.html" * lodge_reservation ->
     &copy; {{ current_year }} Moffat Bay Lodge. All rights reserved.
   </p>
 </footer>
-
-{# =========================================================== OLD FOOTER (kept
-for reference / rollback if Noel prefers) NOTE: These links caused BuildError
-because the endpoints 'index', 'rooms', and 'contact' don't exist.
-<footer class="site-footer">
-  <div class="footer-links">
-    <a href="{{ url_for('index') }}">Home</a>
-    <a href="{{ url_for('about') }}">About</a>
-    <a href="{{ url_for('rooms') }}">Rooms</a>
-    <a href="{{ url_for('contact') }}">Contact</a>
-  </div>
-  <p>&copy; {{ current_year }} Moffat Bay Lodge. All rights reserved.</p>
-</footer>
-===========================================================#}

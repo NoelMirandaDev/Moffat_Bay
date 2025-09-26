@@ -1,15 +1,7 @@
 import os
-import platform
 from dotenv import load_dotenv
 
-# Detect system and load the right env file
-if platform.system() == "Darwin":  # macOS
-    load_dotenv(".env.mac")
-elif platform.system() == "Windows":
-    load_dotenv(".env.win")
-else:
-    # Default for Linux or shared repo
-    load_dotenv(".env")
+load_dotenv(".env")
 
 class Config:
     DB_USER = os.getenv("DB_USER", "root")

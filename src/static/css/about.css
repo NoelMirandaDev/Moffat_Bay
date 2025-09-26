@@ -1,12 +1,11 @@
 /* ==========================================================
-   File: about.css
-   Purpose: Styles specific to About page
-   Author: Steve Stylin
+  Purpose: Styles specific to About page
+   
    Notes:
      - Sticky footer
      - Pentagon layout
      - Profile + message modals
-     - 🚫 No hover/active transforms (debugging dancing issue)
+     - No hover/active transforms (debugging dancing issue)
    ========================================================== */
 
 /* -------- Layout + Sticky Footer -------- */

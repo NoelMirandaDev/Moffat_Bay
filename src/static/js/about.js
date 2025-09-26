@@ -1,7 +1,5 @@
 /* ==========================================================
-   File: about.js
    Purpose: Handles About page interactivity (pentagon + modals)
-   Author: Steve Stylin
    Notes:
      - Accessible modals (focus trap, ESC, overlay click)
      - Profile modal: About, Fun Fact, Contributions, Contact
