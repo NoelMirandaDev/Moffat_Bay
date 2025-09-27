@@ -25,7 +25,6 @@ class TeamMember(db.Model):
         "TeamMemberContribution", backref="member", cascade="all, delete-orphan"
     )
 
-
 class TeamMemberContribution(db.Model):
     """
     Stores individual contributions for each team member.
