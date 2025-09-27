@@ -1,13 +1,44 @@
-from flask import render_template, request, redirect, url_for, flash, session, jsonify
-from sqlalchemy import text
-from werkzeug.security import check_password_hash, generate_password_hash
-from extensions import db, csrf
-from datetime import datetime
-import re
-
-# html <input type="date"> format
-DATE_FMT = "%Y-%m-%d"
-
+from flask import (
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session,
+    jsonify,
+)
+from extensions import db
+from services.rooms_service import (
+    list_rooms_paginated,
+    get_room_with_type,
+    load_amenities,
+)
+from services.booking_service import (
+    parse_and_validate_booking,
+    build_pending_reservation,
+    DATE_FMT,
+    BookingValidationError,
+)
+from services.reservations_service import (
+    list_reservations,
+    compute_totals,
+    room_is_available,
+    confirm_reservation,
+    write_audit_log,
+)
+from services.auth_service import (
+    validate_registration,
+    register_customer,
+    authenticate_user,
+    LoginError,
+    RegistrationError,
+)
+from services.team_service import (
+    save_team_message,
+    get_team_with_contributions,
+    get_team_member_with_contributions,
+    TeamMessageError,
+)
 
 def register_routes(app):
     # Enable CSRF tokens in headers (important for fetch/AJAX)
@@ -44,40 +75,13 @@ def register_routes(app):
         except ValueError:
             page = 1
 
-        per_page = 3  # rooms per page
-        offset = (page - 1) * per_page
+        per_page = 3 # Rooms
 
-        # Total rooms
-        total = db.session.execute(text("SELECT COUNT(*) FROM room")).scalar() or 0
-
-        total_pages = max((total + per_page - 1) // per_page, 1)
-
-        rows = (
-            db.session.execute(
-                text(
-                    """
-                SELECT 
-                    r.RoomID,
-                    r.ADAAccessible,
-                    r.ImagePath,
-                    rt.TypeName,
-                    rt.PricePerNight,
-                    rt.MaxOccupancy
-                FROM room r
-                JOIN roomtype rt ON r.RoomTypeID = rt.RoomTypeID
-                ORDER BY r.RoomNumber
-                LIMIT :limit OFFSET :offset
-            """
-                ),
-                {"limit": per_page, "offset": offset},
-            )
-            .mappings()
-            .all()
-        )
+        rooms, total_pages = list_rooms_paginated(page=page, per_page=per_page)
 
         return render_template(
             "lodge_reservation.html",
-            rooms=rows,
+            rooms=rooms,
             page=page,
             total_pages=total_pages,
         )
@@ -87,112 +91,61 @@ def register_routes(app):
     # ---------------------------------
     @app.route("/rooms/<int:room_id>", methods=["GET", "POST"])
     def room_details(room_id):
-        room = (
-            db.session.execute(
-                text(
-                    """
-                SELECT
-                    r.RoomID,
-                    r.RoomNumber,
-                    r.ADAAccessible,
-                    r.Description,
-                    r.ImagePath,
-                    rt.TypeName,
-                    rt.PricePerNight,
-                    rt.MaxOccupancy,
-                    rt.BedConfiguration
-                FROM room r
-                JOIN roomtype rt ON r.RoomTypeID = rt.RoomTypeID
-                WHERE r.RoomID = :r_id
-            """
-                ),
-                {"r_id": room_id},
-            )
-            .mappings()
-            .first()
-        )
+        room = get_room_with_type(room_id)
 
         if not room:
             flash("Room not found.", "error")
             return redirect(url_for("lodge_reservation"))
 
         if request.method == "POST":
-            check_in_str = request.form.get("check_in", "").strip()
-            check_out_str = request.form.get("check_out", "").strip()
-            guests_str = request.form.get("guests", "").strip()
-
-            # server-side date format validation
-            try:
-                check_in = datetime.strptime(check_in_str, DATE_FMT).date()
-                check_out = datetime.strptime(check_out_str, DATE_FMT).date()
-            except ValueError:
-                flash("Please provide valid check-in and check-out dates.", "error")
-                return render_template(
-                    "room_details.html", room=room, amenities=_load_amenities(room_id)
-                )
-
-            if check_in >= check_out:
-                flash("Check-out must be after check-in.", "error")
-                return render_template(
-                    "room_details.html", room=room, amenities=_load_amenities(room_id)
-                )
+            check_in_str = request.form.get("check_in", "")
+            check_out_str = request.form.get("check_out", "")
+            guests_str = request.form.get("guests", "")
 
             try:
-                guests = int(guests_str)
-            except ValueError:
-                flash("Guests must be a whole number.", "error")
+                check_in, check_out, guests, nights = parse_and_validate_booking(
+                    check_in_str, check_out_str, guests_str, room.MaxOccupancy
+                )
+            except BookingValidationError as e:
+                flash(str(e), "error")
                 return render_template(
-                    "room_details.html", room=room, amenities=_load_amenities(room_id)
+                    "room_details.html", room=room, amenities=load_amenities(room_id)
                 )
 
-            if guests < 1 or guests > room.MaxOccupancy:
-                flash(f"Guests must be between 1 and {room.MaxOccupancy}.", "error")
-                return render_template(
-                    "room_details.html", room=room, amenities=_load_amenities(room_id)
-                )
+            session["pending_reservation"] = build_pending_reservation(
+                room_row=room,
+                check_in_str=check_in.strftime(DATE_FMT),
+                check_out_str=check_out.strftime(DATE_FMT),
+                guests=guests,
+                nights=nights,
+            )
 
-            # Computes nights and cost
-            nights = (check_out - check_in).days
-            nightly_rate = float(room.PricePerNight)
-            subtotal = nightly_rate * nights
-
-            # Saves pending reservation in session
-            session["pending_reservation"] = {
-                "room_id": room.RoomID,
-                "room_type": room.TypeName,
-                "price_per_night": nightly_rate,
-                "max_occupancy": int(room.MaxOccupancy),
-                "check_in": check_in_str,
-                "check_out": check_out_str,
-                "nights": nights,
-                "guests": guests,
-                "room_number": room.RoomNumber,
-                "description": room.Description,
-                "image_path": room.ImagePath,
-            }
-
-            # If not logged in, prompts user to log in or register; else redirected to reservation summary page
+            # If user is not logged in, show login modal on the same page
             if not session.get("customer_id"):
                 flash("Please log in to continue your reservation.", "error")
                 return render_template(
                     "room_details.html",
                     room=room,
-                    amenities=_load_amenities(room_id),
+                    amenities=load_amenities(room_id),
                     show_login=True,
                 )
 
+            # Otherwise, show reservation summary page
             return redirect(url_for("reservation_summary"))
 
-        # GET request: render page
-        amenities = _load_amenities(room_id)
-        return render_template("room_details.html", room=room, amenities=amenities)
+        # GET request: render details page
+        return render_template(
+            "room_details.html",
+            room=room,
+            amenities=load_amenities(room_id)
+        )
 
     # -------------------------
     # Reservation Lookup Page
     # -------------------------
     @app.route("/reservation_lookup.html", methods=["GET"])
     def reservation_lookup():
-        # Searches query (?q=). If empty and user is logged in, it shows their reservations.
+        # Searches query/input (?q=).
         q = (request.args.get("q") or "").strip()
 
         # Page number (?page=). Sanitizes to a positive int; default = 1
@@ -203,56 +156,10 @@ def register_routes(app):
             page = 1
 
         per_page = 3
-        offset = (page - 1) * per_page
+        customer_id = session.get("customer_id")
 
-        # Reservation summary
-        base_select = """
-            SELECT
-                r.ReservationID,
-                r.CheckInDate,
-                r.CheckOutDate,
-                r.ReservationStatus,
-                r.NumberOfGuests,
-                r.DateReserved,
-                rm.RoomNumber,
-                rt.TypeName,
-                rt.BedConfiguration,
-                c.FirstName,
-                c.LastName,
-                c.Email
-            FROM reservation r
-            JOIN room rm     ON rm.RoomID = r.RoomID
-            JOIN roomtype rt ON rt.RoomTypeID = rm.RoomTypeID
-            JOIN customer c  ON c.CustomerID = r.CustomerID
-        """
-
-        # Number or reservations
-        base_count = """
-            SELECT COUNT(*) AS cnt
-            FROM reservation r
-            JOIN room rm     ON rm.RoomID = r.RoomID
-            JOIN roomtype rt ON rt.RoomTypeID = rm.RoomTypeID
-            JOIN customer c  ON c.CustomerID = r.CustomerID
-        """
-
-        # Dynamic WHERE depending on login state and query
-        where_clauses = []
-        params = {}
-
-        if session.get("customer_id") and not q:
-            # If user is logged in & there is no query, it shows only logged in user's reservations
-            where_clauses.append("r.CustomerID = :cust")
-            params["cust"] = session["customer_id"]
-        elif q:
-            # If q is digits, it is treated as a ReservationID. Otherwise, it treats it as an Email (case-insensitive exact)
-            if q.isdigit():
-                where_clauses.append("r.ReservationID = :rid")
-                params["rid"] = int(q)
-            else:
-                where_clauses.append("LOWER(c.Email) = LOWER(:email)")
-                params["email"] = q
-        else:
-            # If user not logged in and no query, it shows an empty page with a prompt to search
+        # If user not logged in and no query, it shows an empty page with a prompt to search
+        if not q and not customer_id:
             return render_template(
                 "reservation_lookup.html",
                 q="",
@@ -261,36 +168,16 @@ def register_routes(app):
                 total_pages=1,
                 total=0,
             )
-
-        where_sql = (" WHERE " + " AND ".join(where_clauses)) if where_clauses else ""
-        order_sql = " ORDER BY r.DateReserved DESC"
-        limit_sql = " LIMIT :limit OFFSET :offset"
-
-        # Total count (for pagination)
-        count_row = (
-            db.session.execute(text(base_count + where_sql), params).mappings().first()
-        )
-        total = int(count_row.cnt) if count_row else 0
-
-        # Total pages
-        total_pages = max((total + per_page - 1) // per_page, 1)
-
-        # Page data
-        params_for_page = dict(params)
-        params_for_page.update({"limit": per_page, "offset": offset})
-
-        rows = (
-            db.session.execute(
-                text(base_select + where_sql + order_sql + limit_sql), params_for_page
-            )
-            .mappings()
-            .all()
+        
+        # Fetches reservations with filters and pagination from reservations_service
+        reservations, total, total_pages = list_reservations(
+            q=q, customer_id=customer_id, page=page, per_page=per_page
         )
 
         return render_template(
             "reservation_lookup.html",
             q=q,
-            reservations=rows,
+            reservations=reservations,
             page=page,
             total_pages=total_pages,
             total=total,
@@ -302,6 +189,7 @@ def register_routes(app):
     @app.route("/reservation_summary.html", methods=["GET", "POST"])
     def reservation_summary():
         pending = session.get("pending_reservation")
+
         if not pending:
             flash("No reservation in progress.", "error")
             return redirect(url_for("lodge_reservation"))
@@ -311,83 +199,48 @@ def register_routes(app):
             flash("Please log in to continue.", "error")
             return redirect(url_for("landing", show_login=True))
 
-        # Recompute totals on server
+        # Recomputes totals safely on the server
         try:
-            check_in = datetime.strptime(pending["check_in"], DATE_FMT).date()
-            check_out = datetime.strptime(pending["check_out"], DATE_FMT).date()
+            print(pending)
+            nights, subtotal, check_in_dt, check_out_dt = compute_totals(pending)
         except Exception:
             flash("Your reservation data is invalid. Please try again.", "error")
             session.pop("pending_reservation", None)
             return redirect(url_for("lodge_reservation"))
 
-        nights = (check_out - check_in).days
-        price_per_night = float(pending["price_per_night"])
-        subtotal = price_per_night * nights
-
         if request.method == "POST":
             action = request.form.get("action")
 
             if action == "cancel":
+                flash(f"Reservation canceled for Room #{pending['room_number']}.", "success")
                 session.pop("pending_reservation", None)
-                flash("Reservation canceled.", "success")
                 return redirect(url_for("room_details", room_id=pending["room_id"]))
 
             if action == "confirm":
-                if not _room_is_available(
-                    pending["room_id"], pending["check_in"], pending["check_out"]
-                ):
-                    flash(
-                        "Sorry, this room is no longer available for those dates.",
-                        "error",
-                    )
+                # Checks availability just before finalizing
+                if not room_is_available(pending["room_id"], pending["check_in"], pending["check_out"]):
+                    flash("Sorry, this room is no longer available for those dates.", "error",)
                     return redirect(url_for("room_details", room_id=pending["room_id"]))
 
                 try:
-                    db.session.execute(
-                        text(
-                            """
-                            INSERT INTO reservation
-                                (CustomerID, RoomID, CheckInDate, CheckOutDate, NumberOfGuests, ReservationStatus)
-                            VALUES
-                                (:cust, :room, :in_date, :out_date, :guests, 'Confirmed')
-                        """
-                        ),
-                        {
-                            "cust": session["customer_id"],
-                            "room": pending["room_id"],
-                            "in_date": pending["check_in"],
-                            "out_date": pending["check_out"],
-                            "guests": pending["guests"],
-                        },
-                    )
-                    db.session.commit()
+                    reservation_id = confirm_reservation(pending, session["customer_id"])
 
-                    # Audit log
+                    # Attempts audit log (does not fail booking if this errors)
                     try:
-                        db.session.execute(
-                            text(
-                                """
-                                INSERT INTO auditlog (CustomerID, Action, Description)
-                                VALUES (:cust, 'Reservation Created',
-                                        CONCAT('Reservation for room ', :room_id,
-                                            ' from ', :in_date, ' to ', :out_date))
-                            """
-                            ),
-                            {
-                                "cust": session["customer_id"],
-                                "room_id": pending("room_id"),
-                                "in_date": pending["check_in"],
-                                "out_date": pending["check_out"],
-                            },
+                        write_audit_log(
+                            customer_id=session["customer_id"],
+                            room_number=pending["room_number"],
+                            in_date=pending["check_in"],
+                            out_date=pending["check_out"],
                         )
-                        db.session.commit()
                     except Exception:
-                        db.session.rollback()  # prevents failing the booking if audit fails silently
+                        db.session.rollback()
 
                     session.pop("pending_reservation", None)
                     flash(
-                        "Your reservation has been confirmed! Enjoy the available attractions.",
-                        "success",
+                        f"Your reservation for Room #{pending['room_number']} has been confirmed! "
+                        "Here are some attractions to explore during your stay.",
+                        "success"
                     )
                     return redirect(url_for("attraction"))
 
@@ -410,7 +263,7 @@ def register_routes(app):
     @app.route("/registration", methods=["GET", "POST"])
     def registration():
         if request.method == "POST" and all(
-            k in request.form for k in ["first", "last", "email", "password", "phone"]
+            field in request.form for field in ["first", "last", "email", "password", "phone"]
         ):
             first = request.form["first"]
             last = request.form["last"]
@@ -419,49 +272,19 @@ def register_routes(app):
             phone = request.form["phone"]
 
             try:
-                if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-                    flash("Invalid email address", "error")
-                elif not re.match(r"[A-Za-z]+$", first) or not re.match(
-                    r"[A-Za-z]+$", last
-                ):
-                    flash("Name must only contain letters.", "error")
-                elif not re.match(r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone):
-                    flash("Must be a valid US phone number.", "error")
-                elif not re.match(r"(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}", password):
-                    flash(
-                        "Password must contain at least 8 characters, contain uppercase, lowercase, and a number.",
-                        "error",
-                    )
-                else:
-                    result = db.session.execute(
-                        text("SELECT * FROM customer WHERE email = :email"),
-                        {"email": email},
-                    ).fetchone()
-                    if result:
-                        flash("Email is already registered.", "error")
-                    else:
-                        pw_hash = generate_password_hash(password)
-                        try:
-                            db.session.execute(
-                                text(
-                                    "INSERT INTO customer (FirstName, LastName, Email, Phone, PasswordHash) VALUES (:first, :last, :email, :phone, :pw_hash)"
-                                ),
-                                {
-                                    "first": first,
-                                    "last": last,
-                                    "email": email,
-                                    "phone": phone,
-                                    "pw_hash": pw_hash,
-                                },
-                            )
-                            db.session.commit()
-                            flash("You have successfully registered.", "success")
-                        except Exception as e:
-                            db.session.rollback()
-                            print(f"Error: {e}")
-                            flash("Database error. Please try again later.", "error")
+                # Validates the inputs
+                validate_registration(first, last, email, password, phone)
+
+                # Insert into DB
+                register_customer(first, last, email, phone, password)
+
+                flash("You have successfully registered.", "success")
+            
+            except RegistrationError as e:
+                flash(str(e), "error")
             except Exception:
                 flash("Something went wrong, please try again.", "error")
+
         return render_template("registration.html")
 
     # ------------
@@ -470,27 +293,32 @@ def register_routes(app):
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
-            email = request.form.get("email", "").strip().lower()
+            email = request.form.get("email", "")
             password = request.form.get("password", "")
 
-            customer = db.session.execute(
-                text("SELECT * FROM customer WHERE Email = :email"), {"email": email}
-            ).fetchone()
+            try:
+                # Authenticates users
+                customer = authenticate_user(email, password)
 
-            if not customer or not check_password_hash(customer.PasswordHash, password):
-                flash("Invalid email or password.", "error")
+                # Stores user info in session
+                session["customer_id"] = customer.CustomerID
+                session["customer_email"] = customer.Email
+                session["customer_phone"] = customer.Phone
+                session["customer_firstName"] = customer.FirstName
+                session["customer_lastName"] = customer.LastName
+
+                # Redirects to reservation summary if a reservation is pending
+                if session.get("pending_reservation"):
+                    return redirect(url_for("reservation_summary"))
+
+                flash(f"Welcome back, {customer.FirstName}!", "success")
+            
+            except LoginError as e:
+                flash(str(e), "error")
                 return render_template("index.html", show_login=True)
-
-            session["customer_id"] = customer.CustomerID
-            session["customer_email"] = customer.Email
-            session["customer_phone"] = customer.Phone
-            session["customer_firstName"] = customer.FirstName
-            session["customer_lastName"] = customer.LastName
-
-            if session.get("pending_reservation"):
-                return redirect(url_for("reservation_summary"))
-
-            flash(f"Welcome back, {customer.FirstName}!", "success")
+            except Exception:
+                flash("Something went wrong. Please try again later.", "error")
+                return render_template("index.html", show_login=True)
 
         return redirect(url_for("landing"))
 
@@ -526,163 +354,24 @@ def register_routes(app):
             return jsonify({"error": "Invalid member ID."}), 400
 
         try:
-            db.session.execute(
-                text(
-                    """
-                    INSERT INTO team_message (team_member_id, sender_name, sender_email, message, sent_at)
-                    VALUES (:member_id, :sender_name, :sender_email, :message, NOW())
-                """
-                ),
-                {
-                    "member_id": member_id_int,
-                    "sender_name": sender_name,
-                    "sender_email": sender_email,
-                    "message": message,
-                },
-            )
-            db.session.commit()
+            save_team_message(member_id_int, sender_name, sender_email, message)
             return jsonify({"success": True}), 200
-        except Exception as e:
+        except TeamMessageError as e:
             db.session.rollback()
             return jsonify({"error": str(e)}), 500
 
-    # API: Get Team Members (improved to include fun_fact + contributions)
+    # API: Returns JSON for all team members with their contributions.
     @app.route("/api/team", methods=["GET"])
     def api_team():
-        rows = (
-            db.session.execute(
-                text(
-                    """
-                SELECT id, first_name, middle_name, last_name, role, bio, fun_fact,
-                       linkedin_url, github_url, email, profile_image
-                FROM team_member
-                ORDER BY id
-            """
-                )
-            )
-            .mappings()
-            .all()
-        )
-
-        team = []
-        for r in rows:
-            contribs = (
-                db.session.execute(
-                    text(
-                        "SELECT contribution FROM team_member_contribution WHERE team_member_id = :tid"
-                    ),
-                    {"tid": r.id},
-                )
-                .scalars()
-                .all()
-            )
-
-            team.append(
-                {
-                    "id": r.id,
-                    "first_name": r.first_name,
-                    "middle_name": r.middle_name,
-                    "last_name": r.last_name,
-                    "role": r.role,
-                    "bio": r.bio,
-                    "fun_fact": r.fun_fact,
-                    "linkedin_url": r.linkedin_url,
-                    "github_url": r.github_url,
-                    "email": r.email,
-                    "profile_image": r.profile_image,
-                    "contributions": contribs,
-                }
-            )
-
+        team = get_team_with_contributions()
         return jsonify(team)
 
     # API: Get a single team member by ID
     @app.route("/api/team/<int:member_id>", methods=["GET"])
     def api_team_member(member_id):
-        member = (
-            db.session.execute(
-                text(
-                    """
-                SELECT id, first_name, middle_name, last_name, role, bio, fun_fact,
-                       linkedin_url, github_url, email, profile_image
-                FROM team_member
-                WHERE id = :id
-            """
-                ),
-                {"id": member_id},
-            )
-            .mappings()
-            .first()
-        )
-
+        member = get_team_member_with_contributions(member_id)
+        
         if not member:
             return jsonify({"error": "Team member not found"}), 404
-
-        contributions = (
-            db.session.execute(
-                text(
-                    "SELECT contribution FROM team_member_contribution WHERE team_member_id = :id"
-                ),
-                {"id": member_id},
-            )
-            .scalars()
-            .all()
-        )
-
-        return jsonify(
-            {
-                "id": member.id,
-                "first_name": member.first_name,
-                "middle_name": member.middle_name,
-                "last_name": member.last_name,
-                "role": member.role,
-                "bio": member.bio,
-                "fun_fact": member.fun_fact,
-                "linkedin_url": member.linkedin_url,
-                "github_url": member.github_url,
-                "email": member.email,
-                "profile_image": member.profile_image,
-                "contributions": contributions,
-            }
-        )
-
-    # ----------------------------
-    # HELPER Functions Below
-    # ----------------------------
-    def _load_amenities(room_id: int):
-        return (
-            db.session.execute(
-                text(
-                    """
-                SELECT a.AmenityID, a.Name
-                FROM roomamenity ra
-                JOIN amenity a ON a.AmenityID = ra.AmenityID
-                WHERE ra.RoomID = :r_id
-                ORDER BY a.Name
-            """
-                ),
-                {"r_id": room_id},
-            )
-            .mappings()
-            .all()
-        )
-
-    def _room_is_available(room_id: int, check_in: str, check_out: str) -> bool:
-        row = (
-            db.session.execute(
-                text(
-                    """
-                SELECT COUNT(*) AS cnt
-                FROM reservation
-                WHERE RoomID = :room_id
-                AND ReservationStatus = 'Confirmed'
-                AND CheckInDate < :new_out
-                AND CheckOutDate > :new_in
-            """
-                ),
-                {"room_id": room_id, "new_in": check_in, "new_out": check_out},
-            )
-            .mappings()
-            .first()
-        )
-        return row and int(row.cnt) == 0
+        
+        return jsonify(member)

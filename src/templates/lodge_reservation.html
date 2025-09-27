@@ -14,6 +14,7 @@
 
   <!-- Flash Messages -->
   {% include "partials/success_flash_messages.html" %}
+  {% include "partials/error_flash_messages.html" %}
 
   <main class="page-content">
     <section class="reservation-section">
@@ -80,29 +81,7 @@
   <!-- LOGIN MODAL (Pop-up Overlay) -->
   {% include "partials/login_modal.html" %}
 
-  <script>
-      // Login Modal functionality
-      const loginModal = document.getElementById('loginModal');
-      const loginBtn = document.getElementById('loginBtn');
-      const closeTriggers = document.querySelectorAll('[data-close-modal]');
-
-      if (loginBtn) {
-        loginBtn.addEventListener('click', () => {
-          loginModal.classList.add('show');
-        });
-      }
-
-      closeTriggers.forEach(el => {
-        el.addEventListener('click', () => {
-          loginModal.classList.remove('show');
-        });
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === "Escape") {
-          loginModal.classList.remove('show');
-        }
-      });
-    </script>
+  <!-- Login Modal Script -->
+    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 </body>
 </html>

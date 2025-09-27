@@ -1,7 +1,4 @@
 import os
-from dotenv import load_dotenv
-
-load_dotenv(".env")
 
 class Config:
     DB_USER = os.getenv("DB_USER", "root")

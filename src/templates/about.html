@@ -92,7 +92,7 @@
     <!-- ---------- Login Modal ---------- -->
     {% include "partials/login_modal.html" %}
 
-    <!-- ---------- Message Modal (Improved UX) ---------- -->
+    <!-- ---------- Message Modal ---------- -->
     <div
       class="modal"
       id="send-message-modal"
@@ -197,5 +197,8 @@
       defer
       src="{{ url_for('static', filename='js/about.js') }}"
     ></script>
+    <script 
+      src="{{ url_for('static', filename='js/loginModal.js') }}">
+    </script>
   </body>
 </html>
