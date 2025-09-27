@@ -1,113 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moffat Bay Lodge Backend Connection</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f5f8fa;
+        font-family: "Montserrat", sans-serif;
+      }
+      .video-hero {
+        width: 100vw;
+        max-width: 100%;
+        height: 340px; /* Fixed, elegant height */
+        background: #f5efe2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 40px;
+        overflow: hidden;
+        position: relative;
+      }
+      .video-hero video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; /* Show full video, no crop */
+        background: #f5efe2;
+        display: block;
+        max-width: 100vw;
+        max-height: 100%;
+      }
+      @media (max-width: 800px) {
+        .video-hero {
+          height: 220px; /* Smaller on tablets/phones */
+        }
+      }
+      @media (max-width: 500px) {
+        .video-hero {
+          height: 140px; /* Very compact on mobile */
+        }
+      }
+    </style>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moffat Bay Lodge Backend Connection</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: #f5f8fa;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .video-hero {
-    width: 100vw;
-    max-width: 100%;
-    height: 340px;           /* Fixed, elegant height */
-    background: #F5EFE2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;
-    overflow: hidden;
-    position: relative;
-  }
-  .video-hero video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;    /* Show full video, no crop */
-    background: #F5EFE2;
-    display: block;
-    max-width: 100vw;
-    max-height: 100%;
-  }
-  @media (max-width: 800px) {
-    .video-hero {
-      height: 220px;        /* Smaller on tablets/phones */
-    }
-  }
-  @media (max-width: 500px) {
-    .video-hero {
-      height: 140px;        /* Very compact on mobile */
-    }
-  }
-  </style>
-</head>
+  <body>
+    <!-- HEADER + NAVIGATION BAR -->
+    {% include "partials/header_and_navbar.html" %}
 
-<body>
+    <!-- Flash Messages -->
+    {% include "partials/success_flash_messages.html" %}
 
-  <!-- HEADER + NAVIGATION BAR -->
-  {% include "partials/header_and_navbar.html" %}
- 
-  <!-- Flash Messages -->
-  {% include "partials/success_flash_messages.html" %}
-  {% include "partials/error_flash_messages.html" %}
+    <!-- HERO VIDEO SECTION -->
+    <section class="video-hero">
+      <video autoplay loop playsinline muted controls>
+        <source
+          src="{{ url_for('static', filename='images/Moffat_video.mp4') }}"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
 
-  <!-- HERO VIDEO SECTION (no overlay text) -->
-  <section class="video-hero">
-  <video autoplay loop playsinline muted controls>
-    <source src="{{ url_for('static', filename='images/Moffat_video.mp4') }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</section>
+      <!-- ========================= -->
+      <!-- SALMON LOGO PLACEMENT TEST -->
+      <!-- ========================= -->
 
-  <!-- FEATURED LINKS SECTION (Photo Cards linking to main pages) -->
-  <section class="feature-grid">
-    <a href="attraction.html" class="feature-card">
-      <img src="{{ url_for('static', filename='images/Island.jpg') }}" alt="Aerial view of the island coastline">
-      <div class="card-text">
-        <h3>Explore the Island</h3>
-        <p>Discover hiking trails, kayaking routes, and breathtaking wildlife around Moffat Bay.</p>
+      <!-- ========================
+     OPTION 1 (Bottom-Right Overlay Inside Hero Video)
+     To test this: REMOVE the at the top and the -->
+
+      <!-- START OPTION
+
+      <div class="salmon-bottom-right">
+        <img
+          src="{{ url_for('static', filename='images/salmon.png') }}"
+          alt="Salish Salmon"
+          class="salmon-image"
+        />
+        <div class="option-label">Option 1: Bottom-Right</div>
       </div>
-    </a>
-    <a href="lodge_reservation.html" class="feature-card">
-      <img src="{{ url_for('static', filename='images/Reservation.jpg') }}" alt="Interior of a lodge room with fireplace">
-      <div class="card-text">
-        <h3>Book Your Stay</h3>
-        <p>Reserve your lodge room online with real-time availability and seasonal pricing.</p>
-      </div>
-    </a>
-    <a href="reservation_lookup.html" class="feature-card">
-      <img src="{{ url_for('static', filename='images/Booking.jpg') }}" alt="Laptop showing a reservation lookup form">
-      <div class="card-text">
-        <h3>Find Your Booking</h3>
-        <p>Already booked? Look up your reservation with your email or confirmation ID.</p>
-      </div>
-    </a>
-    <a href="reservation_summary.html" class="feature-card">
-      <img src="{{ url_for('static', filename='images/Summary.jpg') }}" alt="Group of guests reviewing their itinerary at a table">
-      <div class="card-text">
-        <h3>Trip Summary</h3>
-        <p>View, confirm, or cancel your upcoming reservation in just a few clicks.</p>
-      </div>
-    </a>
-  </section>
 
-  <!-- FOOTER WITH PAGE LINKS -->
-  {% include "partials/footer.html" %}
+       END OPTION 1 -->
 
-  <!-- LOGIN MODAL (Pop-up Overlay) -->
-  {% include "partials/login_modal.html" %}
+      <!-- ========================
+     OPTION 2 (Centered Overlay Inside Hero Video)
+     To test this: REMOVE the 
+      START OPTION 2 -->
+      <!--
+<div class="salmon-overlay-center">
+  <img src="{{ url_for('static', filename='images/salmon.png') }}" 
+       alt="Salish Salmon" 
+       class="salmon-image">
+  <div class="option-label">Option 2: Center Overlay</div>
+</div>
+-->
+      <!-- END OPTION 2 -->
+    </section>
+    <!-- close video-hero -->
 
-  <!-- Login Modal Script -->
-  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+    <!-- ========================
+     OPTION 3 (Below Hero Video as Standalone Signature)
+     To test this: REMOVE the
+    START OPTION 3 -->
 
-  <!-- Opens Login Modal Automatically Script -->
-  {% if show_login %}
-    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
-  {% endif %}
-</body>
+    <section class="salmon-signature">
+      <img
+        src="{{ url_for('static', filename='images/salmon.png') }}"
+        alt="Salish Salmon"
+        class="salmon-image"
+      />
+      <div class="option-label">Option 3: Below Video</div>
+    </section>
+
+    <!-- END OPTION 3 -->
+
+    <!-- FEATURED LINKS SECTION (Photo Cards linking to main pages) -->
+    <section class="feature-grid">
+      <a href="attraction.html" class="feature-card">
+        <img
+          src="{{ url_for('static', filename='images/Island.jpg') }}"
+          alt="Aerial view of the island coastline"
+        />
+        <div class="card-text">
+          <h3>Explore the Island</h3>
+          <p>
+            Discover hiking trails, kayaking routes, and breathtaking wildlife
+            around Moffat Bay.
+          </p>
+        </div>
+      </a>
+      <a href="lodge_reservation.html" class="feature-card">
+        <img
+          src="{{ url_for('static', filename='images/Reservation.jpg') }}"
+          alt="Interior of a lodge room with fireplace"
+        />
+        <div class="card-text">
+          <h3>Book Your Stay</h3>
+          <p>
+            Reserve your lodge room online with real-time availability and
+            seasonal pricing.
+          </p>
+        </div>
+      </a>
+      <a href="reservation_lookup.html" class="feature-card">
+        <img
+          src="{{ url_for('static', filename='images/Booking.jpg') }}"
+          alt="Laptop showing a reservation lookup form"
+        />
+        <div class="card-text">
+          <h3>Find Your Booking</h3>
+          <p>
+            Already booked? Look up your reservation with your email or
+            confirmation ID.
+          </p>
+        </div>
+      </a>
+      <a href="reservation_summary.html" class="feature-card">
+        <img
+          src="{{ url_for('static', filename='images/Summary.jpg') }}"
+          alt="Group of guests reviewing their itinerary at a table"
+        />
+        <div class="card-text">
+          <h3>Trip Summary</h3>
+          <p>
+            View, confirm, or cancel your upcoming reservation in just a few
+            clicks.
+          </p>
+        </div>
+      </a>
+    </section>
+
+    <!-- FOOTER WITH PAGE LINKS -->
+    {% include "partials/footer.html" %}
+
+    <!-- LOGIN MODAL (Pop-up Overlay) -->
+    {% include "partials/login_modal.html" %}
+
+    <!-- Login Modal Script -->
+    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+
+    {% if show_login %}
+    <script>
+      window.onload = () => {
+        const modal = document.getElementById("loginModal");
+        if (modal) modal.classList.add("show");
+      };
+    </script>
+    {% endif %}
+  </body>
 </html>

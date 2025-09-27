@@ -135,18 +135,18 @@ body {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .lookup-container table {
-  background-color: #D3D3D3;
+  background-color: #d3d3d3;
   padding: 10px;
   border-radius: 8px;
   border-spacing: 0;
 }
 
 .lookup-container th {
-  color: #2E5339;
+  color: #2e5339;
   padding: 12px;
   text-align: center;
 }
@@ -157,7 +157,7 @@ body {
 }
 
 .lookup-container tbody tr:hover {
-  background-color: #A3C293 ;
+  background-color: #a3c293;
 }
 
 .lookup-section header {
@@ -170,20 +170,19 @@ body {
 }
 
 .lookup-input {
-  border:2px solid #2E5339;
+  border: 2px solid #2e5339;
   padding: 10px;
   border-radius: 6px;
   outline: none;
   margin-bottom: 15px;
 }
 
-.lookup-input:focus{
-  border: 2px solid #A3C293;
+.lookup-input:focus {
+  border: 2px solid #a3c293;
 }
 
 /* Mobile layout for lookup page */
 @media (max-width: 1050px) {
-
   .lookup-container form {
     display: flex;
     flex-direction: column;
@@ -191,7 +190,11 @@ body {
     margin-bottom: 15px;
   }
 
-  .lookup-container table, tbody, th, td, tr {
+  .lookup-container table,
+  tbody,
+  th,
+  td,
+  tr {
     display: block;
     width: 100%;
   }
@@ -200,24 +203,24 @@ body {
     display: none;
   }
 
-  .lookup-container tr{
+  .lookup-container tr {
     margin-bottom: 15px;
     border-radius: 8px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     padding: 10px;
   }
 
   .lookup-container td {
     display: flex;
     justify-content: space-between;
-    padding: 4px ;
+    padding: 4px;
     border: none;
     text-align: right;
   }
 
   .lookup-container td::before {
     content: attr(data-label);
-    color: #2E5339;
+    color: #2e5339;
     font-weight: bold;
     width: 50%;
     text-align: left;
@@ -1075,7 +1078,6 @@ body {
   font-size: 1.8rem;
   color: var(--nav-text, #2c3e50); /* match navbar text color */
 }
-
 /* ===== 404 Page ===== */
 .error-page {
   text-align: center;
@@ -1087,21 +1089,88 @@ body {
   padding: 2rem;
   box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
-
 .error-page h1 {
   font-family: "Playfair Display", serif;
   color: #2e5339;
   margin-bottom: 0.5rem;
 }
-
 .error-page p {
   color: #555;
   margin-bottom: 1rem;
 }
-
 .error-illustration {
   display: block;
   margin: 20px auto;
   width: 120px;      /* adjust as needed */
   height: auto;
+}
+
+/* ==============================
+   CLIENT REQUEST: SALISH SALMON
+   Three placement options (choose one)
+   ============================== */
+
+/* Shared styling for salmon images */
+.salmon-image {
+  width: 50px; /* smallest size */
+  max-width: 50px;
+  height: auto;
+  opacity: 0.85;              /* default subtle */
+  filter: brightness(0) invert(1); /* white-toned look for overlays */
+  pointer-events: none;
+}
+
+/* OPTION 1: Bottom-right overlay inside video */
+.salmon-bottom-right {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 1;                 /* keep salmon above the video */
+  pointer-events: none;       /* makes salmon "invisible" to clicks */
+}
+
+/* OPTION 2: Centered overlay inside video */
+.salmon-overlay-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* OPTION 3: Below video as standalone signature */
+.salmon-signature {
+  display: flex;
+  justify-content: flex-end;  /* align to the right */
+  margin: 15px 20px 0 0;      /* add right margin for breathing space */
+}
+.salmon-signature .salmon-image {
+  opacity: 1;                 /* full visibility */
+  filter: none;               /* original salmon artwork */
+  width: 80px;                /* slightly larger for signature presence */
+  max-width: 80px;
+}
+
+/* Salmon Placement Labels */
+.option-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #444;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-top: 5px;
+  text-align: center;
+  display: inline-block;
+}
+.salmon-signature .option-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #444;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 8px; /* small space from salmon */
+  align-self: center; /* keep aligned with the fish */
 }
