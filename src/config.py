@@ -1,5 +1,6 @@
+from dotenv import load_dotenv
 import os
-
+load_dotenv("/home/sstylin/Moffat_Bay_Sandbox/.env")
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
     WTF_CSRF_ENABLED = True
