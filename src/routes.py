@@ -122,7 +122,7 @@ def register_routes(app):
 
             # If user is not logged in, show login modal on the same page
             if not session.get("customer_id"):
-                flash("Please log in to continue your reservation.", "error")
+                flash("Please log in to continue your reservation.", "error_login_modal")
                 return render_template(
                     "room_details.html",
                     room=room,
@@ -196,7 +196,7 @@ def register_routes(app):
 
         # Must be logged in to confirm
         if not session.get("customer_id"):
-            flash("Please log in to continue.", "error")
+            flash("Please log in to continue.", "error_login_modal")
             return redirect(url_for("landing", show_login=True))
 
         # Recomputes totals safely on the server
@@ -278,7 +278,8 @@ def register_routes(app):
                 # Insert into DB
                 register_customer(first, last, email, phone, password)
 
-                flash("You have successfully registered.", "success")
+                flash("You have successfully registered.", "success_login_modal")
+                return render_template("registration.html", show_login=True)
             
             except RegistrationError as e:
                 flash(str(e), "error")
@@ -314,10 +315,10 @@ def register_routes(app):
                 flash(f"Welcome back, {customer.FirstName}!", "success")
             
             except LoginError as e:
-                flash(str(e), "error")
+                flash(str(e), "error_login_modal")
                 return render_template("index.html", show_login=True)
             except Exception:
-                flash("Something went wrong. Please try again later.", "error")
+                flash("Something went wrong. Please try again later.", "error_login_modal")
                 return render_template("index.html", show_login=True)
 
         return redirect(url_for("landing"))

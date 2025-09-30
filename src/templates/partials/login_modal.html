@@ -4,15 +4,9 @@
     <button class="modal-close" aria-label="Close login" data-close-modal>&times;</button>
     <h2 id="loginTitle">Welcome back</h2>
 
-    {% with messages = get_flashed_messages(with_categories=true, category_filter=["error"]) %}
-      {% if messages %}
-        <div>
-            {% for category, message in messages %}
-                <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-        </div>
-      {% endif %}
-      {% endwith %}
+    <!-- Flash Messages -->
+    {% include "partials/success_login_modal_flash_messages.html" %}
+    {% include "partials/error_login_modal_flash_messages.html" %}
 
     <form class="login-form" method="POST" action="{{ url_for('login') }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
