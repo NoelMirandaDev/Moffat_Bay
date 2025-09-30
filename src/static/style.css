@@ -526,12 +526,12 @@ body {
   margin: 10px 0;
   border-radius: 6px;
 }
-.flash.error {
+.flash.error, .flash.error_login_modal {
   background: #ffe6e6;
   color: #7a0000;
   border: 1px solid #ffcccc;
 }
-.flash.success {
+.flash.success, .flash.success_login_modal {
   background: #e9ffea;
   color: #0b5;
   border: 1px solid #bff0c6;
