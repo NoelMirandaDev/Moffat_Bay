@@ -32,6 +32,15 @@ def create_app():
     # Initializes SQLAlchemy from extensions with our Flask app
     db.init_app(app)
 
+    # Import all models so SQLAlchemy can register them
+    import models
+    import services.auth_service
+    import services.booking_service
+    import services.reservations_service
+    import services.rooms_service
+    import services.team_service
+
+
     # Enables CSRF for all POST/PUT/DELETE
     csrf.init_app(app)
 
