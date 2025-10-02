@@ -39,23 +39,18 @@
     </section>
   </main>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+  <!-- FOOTER WITH PAGE LINKS -->
+  {% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
 
-<!-- Login Modal Script -->
-<script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+  <!-- Login Modal Script -->
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
-{% if show_login %}
-<script>
-  window.onload = () => {
-    const modal = document.getElementById('loginModal');
-    if (modal) modal.classList.add('show');
-  };
-</script>
-{% endif %}
-
+  <!-- Opens Login Modal Automatically Script -->
+  {% if show_login %}
+    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
+  {% endif %}
 </body>
 </html>

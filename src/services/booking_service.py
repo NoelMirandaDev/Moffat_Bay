@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 DATE_FMT = "%Y-%m-%d"
 
@@ -17,6 +17,13 @@ def parse_and_validate_booking(check_in_str: str, check_out_str: str, guests_str
         check_out = datetime.strptime(check_out_str.strip(), DATE_FMT).date()
     except ValueError:
         raise BookingValidationError("Please provide valid check-in and check-out dates.")
+    
+    today = date.today()
+
+    if check_in < today:
+        raise BookingValidationError("Check-in cannot be in the past.")
+    if check_out < today:
+        raise BookingValidationError("Check-out cannot be in the past.")
 
     if check_in >= check_out:
         raise BookingValidationError("Check-out must be after check-in.")
@@ -51,3 +58,9 @@ def build_pending_reservation(room_row, check_in_str: str, check_out_str: str, g
         "description":     room_row.Description,
         "image_path":      room_row.ImagePath,
     }
+
+def date_today():
+    """
+    Returns today's date in string format [%Y-%m-%d]
+    """
+    return date.today().strftime(DATE_FMT)

@@ -16,6 +16,7 @@ from services.rooms_service import (
 from services.booking_service import (
     parse_and_validate_booking,
     build_pending_reservation,
+    date_today,
     DATE_FMT,
     BookingValidationError,
 )
@@ -109,7 +110,10 @@ def register_routes(app):
             except BookingValidationError as e:
                 flash(str(e), "error")
                 return render_template(
-                    "room_details.html", room=room, amenities=load_amenities(room_id)
+                    "room_details.html",
+                    room=room,
+                    amenities=load_amenities(room_id),
+                    today_str=date_today(),
                 )
 
             session["pending_reservation"] = build_pending_reservation(
@@ -128,6 +132,7 @@ def register_routes(app):
                     room=room,
                     amenities=load_amenities(room_id),
                     show_login=True,
+                    today_str=date_today(),
                 )
 
             # Otherwise, show reservation summary page
@@ -137,7 +142,8 @@ def register_routes(app):
         return render_template(
             "room_details.html",
             room=room,
-            amenities=load_amenities(room_id)
+            amenities=load_amenities(room_id),
+            today_str=date_today(),
         )
 
     # -------------------------
