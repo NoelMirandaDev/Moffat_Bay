@@ -169,8 +169,10 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 (1, 'Developed the login (backend) and logout (frontend and backend) functionality'),
 (1, 'Built the room reservation system: frontend and backend for room listings with pagination and detailed room booking page, and backend for the reservation summary page'),
 (1, 'Implemented the reservation lookup backend'),
+(1, 'Implemented secure password hashing during registration and contributed to backend validation for the registration process'),
 (1, 'Handled session management across the application'),
 (1, 'Refactored and modularized the codebase to improve reusability and scalability'),
+(1, 'Broke down the routes page into a dedicated services layer to separate concerns and improve maintainability'),
 (1, 'Led the team by breaking down tasks, updating the Kanban board, reviewing code, and providing constructive feedback throughout development'),
 -- Kyle
 (2, 'Created the main blueprint for the style guide the website will utilize'),
