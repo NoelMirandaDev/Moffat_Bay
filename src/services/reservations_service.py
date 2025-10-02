@@ -87,7 +87,7 @@ def list_reservations(q: str, customer_id: int | None, page: int, per_page: int)
 def compute_totals(pending: dict):
     """
     Recompute totals on the server from the pending reservation dict.
-    Returns (nights, subtotal, check_in_date, check_out_date).
+    Returns (nights, subtotal).
     Raises ValueError if dates are invalid.
     """
     check_in = datetime.strptime(pending["check_in"], DATE_FMT).date()
@@ -96,7 +96,7 @@ def compute_totals(pending: dict):
     price_per_night = float(pending["price_per_night"])
     subtotal = price_per_night * nights
 
-    return nights, subtotal, check_in, check_out
+    return nights, subtotal
 
 def room_is_available(room_id: int, check_in_str: str, check_out_str: str) -> bool:
     """
