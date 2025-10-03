@@ -174,6 +174,7 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 (1, 'Refactored and modularized the codebase to improve reusability and scalability'),
 (1, 'Broke down the routes page into a dedicated services layer to separate concerns and improve maintainability'),
 (1, 'Led the team by breaking down tasks, updating the Kanban board, reviewing code, and providing constructive feedback throughout development'),
+(1, 'Added a custom 404 error page with styled message and image to improve user experience when navigating to invalid URLs'),
 -- Kyle
 (2, 'Created the main blueprint for the style guide the website will utilize'),
 (2, 'Designed and implemented a pop-up login window (much like AirBnB or Kayak) that keeps the user on the page they were on'),
