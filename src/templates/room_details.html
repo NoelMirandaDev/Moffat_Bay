@@ -61,17 +61,17 @@
 
             <label class="form-row">
               <span>Check-in</span>
-              <input type="date" name="check_in" required>
+              <input type="date" name="check_in" required min="{{ today_str  }}" value="{{ request.form.get('check_in', '') }}">
             </label>
 
             <label class="form-row">
               <span>Check-out</span>
-              <input type="date" name="check_out" required>
+              <input type="date" name="check_out" required min="{{ today_str  }}" value="{{ request.form.get('check_out', '') }}">
             </label>
 
             <label class="form-row">
               <span>Guests (max {{ room.MaxOccupancy }})</span>
-              <input type="number" name="guests" min="1" max="{{ room.MaxOccupancy }}" required>
+              <input type="number" name="guests" min="1" max="{{ room.MaxOccupancy }}" required value="{{ request.form.get('guests', '') }}">
             </label>
 
             <button type="submit" class="btn-brown full">Book Now</button>
@@ -92,16 +92,14 @@
   {% include "partials/login_modal.html" %}
 
   <!-- Login Modal Script -->
-    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
+  <!-- Opens Login Modal Automatically Script -->
   {% if show_login %}
-  <script>
-    window.onload = () => {
-      const modal = document.getElementById('loginModal');
-      if (modal) modal.classList.add('show');
-    };
-  </script>
+    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
   {% endif %}
 
+  <!-- Check-in/check-out Script -->
+  <script src="{{ url_for('static', filename='js/check_in_check_out_ux.js') }}"></script>
 </body>
 </html>

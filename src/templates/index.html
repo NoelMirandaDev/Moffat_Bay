@@ -103,16 +103,11 @@
   {% include "partials/login_modal.html" %}
 
   <!-- Login Modal Script -->
-    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
+  <!-- Opens Login Modal Automatically Script -->
   {% if show_login %}
-  <script>
-    window.onload = () => {
-      const modal = document.getElementById('loginModal');
-      if (modal) modal.classList.add('show');
-    };
-  </script>
+    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
   {% endif %}
-
 </body>
 </html>

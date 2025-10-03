@@ -12,7 +12,7 @@
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
-    <!-- Flash Messages -->
+  <!-- Flash Messages -->
   {% include "partials/success_flash_messages.html" %}
   {% include "partials/error_flash_messages.html" %}
 
@@ -104,14 +104,13 @@
     </section>
   </main>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+  <!-- FOOTER WITH PAGE LINKS -->
+  {% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
 
-<!-- Login Modal Script -->
-    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
-
+  <!-- Login Modal Script -->
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 </body>
 </html>

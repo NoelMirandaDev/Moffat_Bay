@@ -16,6 +16,7 @@ from services.rooms_service import (
 from services.booking_service import (
     parse_and_validate_booking,
     build_pending_reservation,
+    date_today,
     DATE_FMT,
     BookingValidationError,
 )
@@ -109,7 +110,10 @@ def register_routes(app):
             except BookingValidationError as e:
                 flash(str(e), "error")
                 return render_template(
-                    "room_details.html", room=room, amenities=load_amenities(room_id)
+                    "room_details.html",
+                    room=room,
+                    amenities=load_amenities(room_id),
+                    today_str=date_today(),
                 )
 
             session["pending_reservation"] = build_pending_reservation(
@@ -128,6 +132,7 @@ def register_routes(app):
                     room=room,
                     amenities=load_amenities(room_id),
                     show_login=True,
+                    today_str=date_today(),
                 )
 
             # Otherwise, show reservation summary page
@@ -137,7 +142,8 @@ def register_routes(app):
         return render_template(
             "room_details.html",
             room=room,
-            amenities=load_amenities(room_id)
+            amenities=load_amenities(room_id),
+            today_str=date_today(),
         )
 
     # -------------------------
@@ -201,8 +207,7 @@ def register_routes(app):
 
         # Recomputes totals safely on the server
         try:
-            print(pending)
-            nights, subtotal, check_in_dt, check_out_dt = compute_totals(pending)
+            nights, subtotal = compute_totals(pending)
         except Exception:
             flash("Your reservation data is invalid. Please try again.", "error")
             session.pop("pending_reservation", None)
@@ -238,7 +243,7 @@ def register_routes(app):
 
                     session.pop("pending_reservation", None)
                     flash(
-                        f"Your reservation for Room #{pending['room_number']} has been confirmed! "
+                        f"Your reservation #{reservation_id} has been confirmed! "
                         "Here are some attractions to explore during your stay.",
                         "success"
                     )
@@ -376,3 +381,10 @@ def register_routes(app):
             return jsonify({"error": "Team member not found"}), 404
         
         return jsonify(member)
+    
+    # --------------------
+    # 404 Error Handler
+    # --------------------
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template("404.html"), 404
