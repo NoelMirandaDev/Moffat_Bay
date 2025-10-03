@@ -207,8 +207,7 @@ def register_routes(app):
 
         # Recomputes totals safely on the server
         try:
-            print(pending)
-            nights, subtotal, check_in_dt, check_out_dt = compute_totals(pending)
+            nights, subtotal = compute_totals(pending)
         except Exception:
             flash("Your reservation data is invalid. Please try again.", "error")
             session.pop("pending_reservation", None)
@@ -244,7 +243,7 @@ def register_routes(app):
 
                     session.pop("pending_reservation", None)
                     flash(
-                        f"Your reservation for Room #{pending['room_number']} has been confirmed! "
+                        f"Your reservation #{reservation_id} has been confirmed! "
                         "Here are some attractions to explore during your stay.",
                         "success"
                     )
