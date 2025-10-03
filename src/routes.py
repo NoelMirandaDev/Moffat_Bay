@@ -270,11 +270,11 @@ def register_routes(app):
         if request.method == "POST" and all(
             field in request.form for field in ["first", "last", "email", "password", "phone"]
         ):
-            first = request.form["first"]
-            last = request.form["last"]
-            email = request.form["email"]
-            password = request.form["password"]
-            phone = request.form["phone"]
+            first = request.form["first"].strip()
+            last = request.form["last"].strip()
+            email = request.form["email"].strip()
+            password = request.form["password"].strip()
+            phone = request.form["phone"].strip()
 
             try:
                 # Validates the inputs
