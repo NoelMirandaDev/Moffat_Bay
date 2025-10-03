@@ -1,11 +1,11 @@
 /* ==========================================================
   Purpose: Styles specific to About page
-   
+
    Notes:
      - Sticky footer
      - Pentagon layout
      - Profile + message modals
-     - No hover/active transforms (debugging dancing issue)
+     - Professional enhancements for hover/focus states
    ========================================================== */
 
 /* -------- Layout + Sticky Footer -------- */
@@ -83,6 +83,7 @@ body {
   cursor: pointer;
   padding: 1rem;
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .profile-img {
   width: 96px;
@@ -99,6 +100,13 @@ body {
 .profile-role {
   font-size: 0.9rem;
   color: #6b7280;
+}
+
+/* ✅ Added subtle hover/focus highlight */
+.profile-pentagon:hover .profile-img,
+.profile-pentagon:focus .profile-img {
+  border-color: #2e5339;
+  box-shadow: 0 0 8px rgba(46, 83, 57, 0.5);
 }
 
 /* Pentagon positions */
@@ -193,6 +201,8 @@ body {
 .modal-close:hover {
   background: #e2e8f0;
 }
+
+/* (rest of your modal, message, form styles unchanged) */
 
 /* -------- Buttons -------- */
 .btn {
