@@ -121,13 +121,13 @@ body {
   flex: 1;
   padding: 20px;
   border-radius: 8px;
-  overflow: hidden;
 }
 
 .reservation-confirm-box img {
   margin: -20px -20px 5px -20px;
   width: calc(100% + 40px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 8px 8px 0 0;
 }
 
 /* Lookup page styling */
@@ -223,7 +223,11 @@ body {
 }
 .reservation-confirm-box h3 {
   color: #2e5339;
-  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+.reservation-confirm-box p {
+  padding-bottom: 10px;
 }
 
 .reservation-segment {
@@ -235,6 +239,27 @@ body {
 .reservation-segment p {
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 1050px) {
+
+  .reservation-container {
+    flex-direction: column;
+  }
+
+  .reservation-confirm-box form {
+    display: flex;
+    flex-direction: column;
+    gap : 10px;
+  }
+
+  .reservation-confirm-box .btn-brown, .btn-green {
+    width: 100%;
+  }
+
+  .value{
+    text-align: right;
+  }
 }
 
 .label {
@@ -998,7 +1023,7 @@ body {
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(320px, 1fr)
+    minmax(260px, 1fr)
   ); /* bigger cards */
   gap: 3rem;
   justify-items: center;
