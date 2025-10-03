@@ -162,9 +162,19 @@ INSERT INTO team_member (first_name, middle_name, last_name, role, bio, fun_fact
 -- ========================
 INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Noel
-(1, 'Implemented user Login system'),
-(1, 'Initialized the Moffat Bay GitHub repository and project structure'),
-(1, 'Implemented the room reservation system'),
+(1, 'Initialized the Moffat Bay project and repository structure'),
+(1, 'Created the project README file'),
+(1, 'Connected the database and configured application settings'),
+(1, 'Implemented CSRF protection across all forms'),
+(1, 'Developed the login (backend) and logout (frontend and backend) functionality'),
+(1, 'Built the room reservation system: frontend and backend for room listings with pagination and detailed room booking page, and backend for the reservation summary page'),
+(1, 'Implemented the reservation lookup backend'),
+(1, 'Implemented secure password hashing during registration and contributed to backend validation for the registration process'),
+(1, 'Handled session management across the application'),
+(1, 'Refactored and modularized the codebase to improve reusability and scalability'),
+(1, 'Broke down the routes page into a dedicated services layer to separate concerns and improve maintainability'),
+(1, 'Led the team by breaking down tasks, updating the Kanban board, reviewing code, and providing constructive feedback throughout development'),
+(1, 'Added a custom 404 error page with styled message and image to improve user experience when navigating to invalid URLs'),
 -- Kyle
 (2, 'Created the main blueprint for the style guide the website will utilize'),
 (2, 'Designed and implemented a pop-up login window (much like AirBnB or Kayak) that keeps the user on the page they were on'),

@@ -23,15 +23,15 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             
             <div class ="name-grouping">
-              <input name="first" type="text" class="name-input" placeholder="First Name" required/>
-              <input name="last" type="text" class="name-input" placeholder="Last Name" required/>
+              <input name="first" type="text" class="name-input" placeholder="First Name" required value="{{ request.form.get('first', '') }}"/>
+              <input name="last" type="text" class="name-input" placeholder="Last Name" required value="{{ request.form.get('last', '') }}"/>
             </div>
 
-            <input name="email" type="email" class="register-input" placeholder="Email" required/>
+            <input name="email" type="email" class="register-input" placeholder="Email" required value="{{ request.form.get('email', '') }}"/>
             
             <input name="password" type="password" class="register-input" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Password must be at least 8 characters, contain an uppercase and lowercase letter, and a number."/>
             
-            <input name="phone" type="tel" class="register-input" placeholder="Phone Number" required/>
+            <input name="phone" type="tel" class="register-input" placeholder="Phone Number" required value="{{ request.form.get('phone', '') }}"/>
         
             <button type="submit" class="btn-register">Register</button>
         </form>
