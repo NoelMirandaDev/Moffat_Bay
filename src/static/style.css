@@ -148,10 +148,12 @@ body {
 .lookup-container th {
   color: #2E5339;
   padding: 12px;
+  text-align: center;
 }
 
 .lookup-container td {
   padding: 12px;
+  text-align: center;
 }
 
 .lookup-container tbody tr:hover {
