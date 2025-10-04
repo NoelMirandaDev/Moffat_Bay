@@ -15,7 +15,7 @@ def validate_registration(first: str, last: str, email: str, password: str, phon
     """
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         raise RegistrationError("Invalid email address.")
-    if not re.match(r"[A-Za-z]+$", first) or not re.match(r"[A-Za-z]+$", last):
+    if not re.match(r"^[A-za-z]+(?:[-' ][A-Za-z]+)*$", first) or not re.match(r"^[A-za-z]+(?:[-' ][A-Za-z]+)*$", last):
         raise RegistrationError("Name must only contain letters.")
     if not re.match(r"^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$", phone):
         raise RegistrationError("Must be a valid US phone number.")
