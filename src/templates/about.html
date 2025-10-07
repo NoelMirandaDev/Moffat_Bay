@@ -3,12 +3,14 @@
   <head>
     <!-- 
     ===========================================================
-   Purpose: About page showcasing the team with interactive 
-             pentagon layout and profile modals.
+    File: about.html
+    Project: Moffat Bay Lodge
+    Author: Steve Stylin
+    Purpose: About page with modern team layout (Noel lead + 2×2 grid)
+             and a two-step profile modal (Story → Work & Message).
     Notes:
-      - Uses external about.css + about.js for professionalism.
-      - Footer is sticky at bottom across all screen sizes.
-      - Accessible modals with focus trap + ESC to close.
+      - Uses external about.css + about.js.
+      - Footer/header/login modal kept exactly as the project expects.
     ===========================================================
     -->
     <meta charset="UTF-8" />
@@ -16,68 +18,36 @@
     <title>About Us | Moffat Bay Lodge</title>
 
     <!-- Global Styles -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <!-- Page-Specific Styles -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/about.css') }}"
-    />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <!-- Page Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}" />
 
-    <!-- CSRF token for protection -->
+    <!-- CSRF token (fetch will read this) -->
     <meta name="csrf-token" content="{{ csrf_token() }}" />
   </head>
   <body>
-    <!-- ---------- Header + Nav ---------- -->
+    <!-- ---------- Header + Nav (Noel’s code untouched) ---------- -->
     {% include "partials/header_and_navbar.html" %}
 
-    <!-- ---------- About Content Section ---------- -->
+    <!-- ---------- Page Content ---------- -->
     <main class="page-content" id="main-content">
-      <section class="about-flex">
-        <div class="team-header">
-          <h1>Meet the Team</h1>
-          <p>
-            The Moffat Bay Lodge team brings together a unique blend of technical
-            expertise, leadership, and real-world experience. Guided by 
-            <strong>Noel Yobani Miranda</strong>, an accomplished project manager 
-            and full stack developer with a strong focus on security and a proven 
-            record in backend engineering, our team ensures that innovation and 
-            reliability are at the core of everything we build. 
-            <strong>Steve Stylin</strong>, our database architect and backend 
-            specialist, leverages years of professional experience in software 
-            development and data management to engineer robust, scalable systems 
-            and seamless user experiences. 
-            <strong>Kyle</strong> shapes the visual identity and user experience, 
-            having created the main blueprint for our style guide and designed a 
-            seamless pop-up login window inspired by leading travel platforms. 
-            <strong>Riese</strong> contributes to both the frontend and backend, 
-            ensuring the Registration and Reservation Summary pages function 
-            flawlessly and offer a seamless user experience. 
-            <strong>Amit</strong> specializes in registration and reservation flows, 
-            collaborating on user interface design and prototyping to keep our 
-            application intuitive and efficient.
-          </p>
-          <p>
-            Together, we are committed to delivering a modern, user-focused web 
-            application for the hospitality industry, combining advanced software 
-            engineering, thoughtful UI/UX design, and agile project management. 
-            Our collaborative approach means that every feature, from secure user 
-            registration to dynamic room reservations, is built with precision, 
-            usability, and long-term value in mind.
-          </p>
-        </div>
+      <!-- Centered hero (title + one-line tagline) -->
+      <section class="team-hero" aria-label="Team intro">
+        <h1 class="team-hero__title">Meet the Team</h1>
+        <p class="team-hero__tagline">
+          Meet the people behind Moffat Bay—practical builders, curious minds, and nature lovers who care about simple, reliable experiences.
+        </p>
+      </section>
 
-        <div class="pentagon-wrap">
-          <div class="pentagon-layout" id="pentagon-layout" aria-live="polite">
-            <!-- Team member cards dynamically inserted by JS -->
-          </div>
+      <!-- Team layout: Noel (left) + 2×2 grid (right) -->
+      <section class="team-wrap" aria-label="Team members">
+        <div id="team-layout" class="team-layout" aria-live="polite">
+          <!-- about.js injects Noel on the left and a 2×2 grid on the right -->
         </div>
       </section>
     </main>
 
-    <!-- ---------- Profile Modal (Structured) ---------- -->
+    <!-- ---------- Profile Modal (two-step) ---------- -->
     <div
       class="modal"
       id="profile-modal"
@@ -86,24 +56,27 @@
       aria-labelledby="profileModalTitle"
       aria-describedby="profileModalDesc"
     >
-      <div
-        class="modal-content profile-modal-content"
-        id="profile-modal-content"
-      >
-        <button class="modal-close" data-close-modal aria-label="Close dialog">
-          &times;
-        </button>
-        <!-- JS injects structured profile details here -->
+      <div class="modal-content profile-modal-content" id="profile-modal-content">
+        <!-- JS injects:
+             - Close button
+             - Header (photo + name + role)
+             - Step tabs
+             - Step panels (Story / Work & Message)
+        -->
       </div>
     </div>
 
-    <!-- ---------- Footer Section ---------- -->
+    <!-- ---------- Footer ---------- -->
     {% include "partials/footer.html" %}
 
-    <!-- ---------- Login Modal ---------- -->
+    <!-- LOGIN MODAL (Pop-up Overlay) -->
     {% include "partials/login_modal.html" %}
 
-    <!-- ---------- Message Modal ---------- -->
+        <!-- Login Modal Script -->
+    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+
+
+    <!-- ---------- Message Modal (existing backend endpoint) ---------- -->
     <div
       class="modal"
       id="send-message-modal"
@@ -113,8 +86,6 @@
       aria-describedby="messageModalDesc"
     >
       <div class="modal-content message-modal-content">
-        <!--  Removed top-right close button -->
-
         <header class="modal-header">
           <h2 id="messageModalTitle" class="modal-title">Send a Message</h2>
           <p id="messageModalDesc" class="modal-subtitle">
@@ -122,40 +93,20 @@
           </p>
         </header>
 
-        <div
-          id="messageToName"
-          class="message-to-name"
-          aria-live="polite"
-        ></div>
+        <div id="messageToName" class="message-to-name" aria-live="polite"></div>
 
         <form id="sendMessageForm" autocomplete="off" novalidate>
           <div class="form-grid">
             <label class="form-field">
               <span class="form-label">Your Name</span>
-              <input
-                type="text"
-                name="senderName"
-                required
-                placeholder="Jane Doe"
-                autocomplete="name"
-              />
-              <span class="field-hint"
-                >So they know who wrote the message.</span
-              >
+              <input type="text" name="senderName" required placeholder="Jane Doe" autocomplete="name" />
+              <span class="field-hint">So they know who wrote the message.</span>
             </label>
 
             <label class="form-field">
               <span class="form-label">Your Email</span>
-              <input
-                type="email"
-                name="senderEmail"
-                required
-                placeholder="jane@example.com"
-                autocomplete="email"
-              />
-              <span class="field-hint"
-                >We’ll share this with the recipient.</span
-              >
+              <input type="email" name="senderEmail" required placeholder="jane@example.com" autocomplete="email" />
+              <span class="field-hint">We’ll share this with the recipient.</span>
             </label>
 
             <label class="form-field form-field-full">
@@ -173,9 +124,7 @@
 
               <div class="word-count" aria-live="polite">
                 <span id="wordCount">0</span>/500 words
-                <span id="wordLimitWarning" role="alert"
-                  >Word limit exceeded.</span
-                >
+                <span id="wordLimitWarning" role="alert">Word limit exceeded.</span>
               </div>
             </label>
           </div>
@@ -183,16 +132,8 @@
           <input type="hidden" name="memberId" id="messageMemberId" />
 
           <div class="form-actions">
-            <button
-              type="submit"
-              id="sendMessageBtnFinal"
-              class="btn btn-primary"
-            >
-              Send Message
-            </button>
-            <button type="button" class="btn btn-ghost" data-close-modal>
-              Cancel
-            </button>
+            <button type="submit" id="sendMessageBtnFinal" class="btn btn-primary">Send Message</button>
+            <button type="button" class="btn btn-ghost" data-close-modal>Cancel</button>
           </div>
 
           <div id="sendMessageStatus" class="status" aria-live="polite"></div>
@@ -202,15 +143,8 @@
 
     <!-- ---------- Page Scripts ---------- -->
     <script>
-      /* Ensure correct static path for team images */
       window.STATIC_IMAGE_BASE = "{{ url_for('static', filename='images/') }}";
     </script>
-    <script
-      defer
-      src="{{ url_for('static', filename='js/about.js') }}"
-    ></script>
-    <script 
-      src="{{ url_for('static', filename='js/loginModal.js') }}">
-    </script>
+    <script defer src="{{ url_for('static', filename='js/about.js') }}"></script>
   </body>
 </html>

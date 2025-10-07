@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ member.first_name }} {{ member.last_name }} | Moffat Bay Lodge</title>
+
+    <!-- Global & Page Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+  </head>
+  <body class="profile-body">
+    {% include "partials/header_and_navbar.html" %}
+
+    <main class="profile-page">
+      <a class="back-link" href="{{ url_for('about') }}">&larr; Back to Team</a>
+
+      <article class="profile-book">
+        <header class="profile-header">
+          <img
+            class="profile-photo"
+            src="{{ url_for('static', filename='images/' + (member.profile_image or 'placeholder.png')) }}"
+            alt="{{ member.first_name }} {{ member.last_name }} portrait"
+          />
+          <div class="profile-title">
+            <h1>{{ member.first_name }} {{ member.last_name }}</h1>
+            <p class="role">{{ member.role }}</p>
+          </div>
+        </header>
+
+        <section class="profile-section">
+          <h2>About</h2>
+          <p class="bio-text">
+            {{ member.bio or "This team member has not provided a biography yet." }}
+          </p>
+        </section>
+
+        {% if member.fun_fact %}
+        <section class="profile-section">
+          <h2>Fun Fact</h2>
+          <p>{{ member.fun_fact }}</p>
+        </section>
+        {% endif %}
+
+        {% if member.contributions and member.contributions|length %}
+        <section class="profile-section">
+          <h2>Contributions</h2>
+          {% for c in member.contributions %}
+          <p class="contrib-paragraph">{{ c }}</p>
+          {% endfor %}
+        </section>
+        {% endif %}
+
+        <section class="profile-section contact-section">
+          <h2>Contact</h2>
+          <div class="contact-links">
+            {% if member.linkedin_url %}
+            <a
+              class="btn btn-link"
+              href="{{ member.linkedin_url }}"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn</a
+            >
+            {% endif %}
+            {% if member.github_url %}
+            <a
+              class="btn btn-link"
+              href="{{ member.github_url }}"
+              target="_blank"
+              rel="noopener"
+              >GitHub</a
+            >
+            {% endif %}
+            {% if member.email %}
+            <a class="btn btn-link" href="mailto:{{ member.email }}">Email</a>
+            {% endif %}
+          </div>
+
+          <button
+            class="btn btn-primary btn-lg"
+            onclick="openMessageModal('{{ member.first_name }} {{ member.last_name }}', {{ member.id }})"
+          >
+            Send a Message
+          </button>
+        </section>
+      </article>
+    </main>
+
+    {% include "partials/footer.html" %}
+    {% include "partials/login_modal.html" %}
+    {% include "partials/send_message_modal.html" %}
+
+    <script>
+      window.STATIC_IMAGE_BASE = "{{ url_for('static', filename='images/') }}";
+    </script>
+    <script defer src="{{ url_for('static', filename='js/profile.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
+  </body>
+</html>

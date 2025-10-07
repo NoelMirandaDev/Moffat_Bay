@@ -1,0 +1,24 @@
+/* Two-tone profile page to match About */
+:root{
+  --cream:#F5F0E6; --green:#2E5339; --blue:#004C91; --ink:#1E1E1E; --muted:#4f5b52;
+}
+.profile-body{ background:var(--cream); color:var(--ink); }
+.profile-page{ max-width:900px; margin:0 auto; padding:2rem 1rem 3rem; }
+.back-link{ display:inline-block; margin-bottom:.75rem; color:var(--green); text-decoration:none; font-weight:600; }
+.back-link:hover{ color:var(--blue); }
+.profile-book{ background:#fff; border:1px solid rgba(46,83,57,.2); border-radius:18px; box-shadow:0 12px 36px rgba(0,0,0,.08); padding:1.25rem 1.25rem 2rem; }
+.profile-header{ display:flex; gap:1rem; align-items:center; margin-bottom:.5rem; }
+.profile-photo{ width:160px; height:160px; object-fit:cover; border-radius:18px; border:4px solid var(--green); background:#eee; }
+.profile-title h1{ margin:0; color:var(--green); font-family:"Playfair Display",serif; }
+.role{ color:var(--muted); margin-top:.25rem; font-weight:600; }
+.profile-section{ margin-top:1rem; }
+.profile-section h2{ color:var(--green); margin:0 0 .35rem; font-family:"Playfair Display",serif; }
+.bio-text{ line-height:1.7; }
+.contrib-paragraph{ margin:.5rem 0; line-height:1.6; }
+.contact-links{ display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:.75rem; }
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.4rem; padding:.7rem 1rem; border-radius:10px; border:1px solid transparent; font-weight:600; cursor:pointer; text-decoration:none; }
+.btn-primary{ background:var(--green); color:#fff; }
+.btn-primary:hover{ background:#234730; }
+.btn-link{ background:#f0f3ef; color:#1f2937; border-color:#e5e7eb; }
+.btn-link:hover{ background:#e5eae5; }
+@media (max-width:640px){ .profile-header{ flex-direction:column; align-items:flex-start; } .profile-photo{ width:140px; height:140px; } }

@@ -1,0 +1,23 @@
+<div class="modal" id="send-message-modal" aria-modal="true" role="dialog" aria-labelledby="messageModalTitle" aria-describedby="messageModalDesc">
+  <div class="modal-content message-modal-content">
+    <header class="modal-header">
+      <h2 id="messageModalTitle" class="modal-title">Send a Message</h2>
+      <p id="messageModalDesc" class="modal-subtitle">Reach out privately to a team member. We'll email them your note.</p>
+    </header>
+    <div id="messageToName" class="message-to-name" aria-live="polite"></div>
+    <form id="sendMessageForm" autocomplete="off" novalidate>
+      <div class="form-grid">
+        <label class="form-field"><span class="form-label">Your Name</span><input type="text" name="senderName" required placeholder="Jane Doe" autocomplete="name" /></label>
+        <label class="form-field"><span class="form-label">Your Email</span><input type="email" name="senderEmail" required placeholder="jane@example.com" autocomplete="email" /></label>
+        <label class="form-field form-field-full">
+          <span class="form-label">Your Message <span class="muted">(max 500 words)</span></span>
+          <textarea name="message" id="messageTextarea" rows="8" maxlength="6000" required placeholder="Write a thoughtful note…"></textarea>
+          <div class="word-count" aria-live="polite"><span id="wordCount">0</span>/500 words <span id="wordLimitWarning" role="alert">Word limit exceeded.</span></div>
+        </label>
+      </div>
+      <input type="hidden" name="memberId" id="messageMemberId" />
+      <div class="form-actions"><button type="submit" id="sendMessageBtnFinal" class="btn btn-primary">Send Message</button><button type="button" class="btn btn-ghost" data-close-modal>Cancel</button></div>
+      <div id="sendMessageStatus" class="status" aria-live="polite"></div>
+    </form>
+  </div>
+</div>

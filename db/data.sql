@@ -169,6 +169,9 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Kyle
 (2, 'Created the main blueprint for the style guide the website will utilize'),
 (2, 'Designed and implemented a pop-up login window (much like AirBnB or Kayak) that keeps the user on the page they were on'),
+(2, 'Implemented site-wide scripts to enhance functionality'),
+(2, 'Produced a project voice-over video presentation'),
+(2, 'Developed and executed user test cases to validate design and functionality'),
 
 -- Steve
 (3, 'Created the Technical Design Document (TDD) for the project'),
@@ -177,6 +180,9 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 (3, 'Leading the development of the About Us page (frontend and backend)'),
 (3, 'Developed the Attractions page (frontend grid and slideshow functionality)'),
 (3, 'Authored and executed the Functional Test Plan for the Attractions page'),
+(3, 'Deployed the project to PythonAnywhere for real user testing'),
+(3, 'Collected and analyzed real user test cases'),
+(3, 'Implemented fixes and improvements based on user testing feedback'),
 
 -- Riese
 (4, 'Registration Page Functional Test'),

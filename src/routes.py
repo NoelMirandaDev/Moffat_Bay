@@ -40,14 +40,18 @@ from services.team_service import (
     get_team_member_with_contributions,
     TeamMessageError,
 )
+from models import TeamMember, TeamMemberContribution
+
 
 def register_routes(app):
+    """Registers all main routes for the Moffat Bay web application."""
+
     # Enable CSRF tokens in headers (important for fetch/AJAX)
     app.config["WTF_CSRF_HEADERS"] = ["X-CSRFToken", "X-CSRF-Token"]
 
-    # --------------
+    # ----------------
     # Landing Page
-    # --------------
+    # ----------------
     @app.route("/")
     def landing():
         return render_template("index.html")
@@ -76,8 +80,7 @@ def register_routes(app):
         except ValueError:
             page = 1
 
-        per_page = 3 # Rooms
-
+        per_page = 3  # Rooms per page
         rooms, total_pages = list_rooms_paginated(page=page, per_page=per_page)
 
         return render_template(
@@ -87,8 +90,36 @@ def register_routes(app):
             total_pages=total_pages,
         )
 
+    # -------------------------------
+    # Team Profile Dynamic Page (Fixed)
+    # -------------------------------
+    @app.route("/team/<int:member_id>")
+    def team_profile(member_id):
+        """Renders a full 'book-style' page for each team member."""
+        member = TeamMember.query.get_or_404(member_id)
+        contributions = TeamMemberContribution.query.filter_by(
+            team_member_id=member_id
+        ).all()
+
+        # ✅ FIX: Do not overwrite the SQLAlchemy relationship
+        member_display = {
+            "id": member.id,
+            "first_name": member.first_name,
+            "last_name": member.last_name,
+            "role": member.role,
+            "bio": member.bio,
+            "fun_fact": member.fun_fact,
+            "linkedin_url": member.linkedin_url,
+            "github_url": member.github_url,
+            "email": member.email,
+            "profile_image": member.profile_image,
+            "contributions": [c.contribution for c in contributions],
+        }
+
+        return render_template("profile_base.html", member=member_display)
+
     # ---------------------------------
-    # Room details Page + booking step
+    # Room Details Page + Booking Step
     # ---------------------------------
     @app.route("/rooms/<int:room_id>", methods=["GET", "POST"])
     def room_details(room_id):
@@ -124,9 +155,12 @@ def register_routes(app):
                 nights=nights,
             )
 
-            # If user is not logged in, show login modal on the same page
+            # Require login before confirming reservation
             if not session.get("customer_id"):
-                flash("Please log in to continue your reservation.", "error_login_modal")
+                flash(
+                    "Please log in to continue your reservation.",
+                    "error_login_modal",
+                )
                 return render_template(
                     "room_details.html",
                     room=room,
@@ -135,10 +169,9 @@ def register_routes(app):
                     today_str=date_today(),
                 )
 
-            # Otherwise, show reservation summary page
             return redirect(url_for("reservation_summary"))
 
-        # GET request: render details page
+        # GET request
         return render_template(
             "room_details.html",
             room=room,
@@ -151,20 +184,16 @@ def register_routes(app):
     # -------------------------
     @app.route("/reservation_lookup.html", methods=["GET"])
     def reservation_lookup():
-        # Searches query/input (?q=).
         q = (request.args.get("q") or "").strip()
 
-        # Page number (?page=). Sanitizes to a positive int; default = 1
-        page_param = request.args.get("page", "1")
         try:
-            page = max(int(page_param), 1)
+            page = max(int(request.args.get("page", "1")), 1)
         except ValueError:
             page = 1
 
         per_page = 3
         customer_id = session.get("customer_id")
 
-        # If user not logged in and no query, it shows an empty page with a prompt to search
         if not q and not customer_id:
             return render_template(
                 "reservation_lookup.html",
@@ -174,8 +203,7 @@ def register_routes(app):
                 total_pages=1,
                 total=0,
             )
-        
-        # Fetches reservations with filters and pagination from reservations_service
+
         reservations, total, total_pages = list_reservations(
             q=q, customer_id=customer_id, page=page, per_page=per_page
         )
@@ -205,7 +233,6 @@ def register_routes(app):
             flash("Please log in to continue.", "error_login_modal")
             return redirect(url_for("landing", show_login=True))
 
-        # Recomputes totals safely on the server
         try:
             nights, subtotal = compute_totals(pending)
         except Exception:
@@ -217,20 +244,31 @@ def register_routes(app):
             action = request.form.get("action")
 
             if action == "cancel":
-                flash(f"Reservation canceled for Room #{pending['room_number']}.", "success")
+                flash(
+                    f"Reservation canceled for Room #{pending['room_number']}.",
+                    "success",
+                )
                 session.pop("pending_reservation", None)
                 return redirect(url_for("room_details", room_id=pending["room_id"]))
 
             if action == "confirm":
-                # Checks availability just before finalizing
-                if not room_is_available(pending["room_id"], pending["check_in"], pending["check_out"]):
-                    flash("Sorry, this room is no longer available for those dates.", "error",)
-                    return redirect(url_for("room_details", room_id=pending["room_id"]))
+                if not room_is_available(
+                    pending["room_id"], pending["check_in"], pending["check_out"]
+                ):
+                    flash(
+                        "Sorry, this room is no longer available for those dates.",
+                        "error",
+                    )
+                    return redirect(
+                        url_for("room_details", room_id=pending["room_id"])
+                    )
 
                 try:
-                    reservation_id = confirm_reservation(pending, session["customer_id"])
+                    reservation_id = confirm_reservation(
+                        pending, session["customer_id"]
+                    )
 
-                    # Attempts audit log (does not fail booking if this errors)
+                    # Write audit log (non-critical)
                     try:
                         write_audit_log(
                             customer_id=session["customer_id"],
@@ -245,7 +283,7 @@ def register_routes(app):
                     flash(
                         f"Your reservation #{reservation_id} has been confirmed! "
                         "Here are some attractions to explore during your stay.",
-                        "success"
+                        "success",
                     )
                     return redirect(url_for("attraction"))
 
@@ -254,7 +292,6 @@ def register_routes(app):
                     flash(f"Failed to save reservation: {e}", "error")
                     return redirect(url_for("reservation_summary"))
 
-        # GET: show summary
         return render_template(
             "reservation_summary.html",
             reservation=pending,
@@ -268,7 +305,8 @@ def register_routes(app):
     @app.route("/registration", methods=["GET", "POST"])
     def registration():
         if request.method == "POST" and all(
-            field in request.form for field in ["first", "last", "email", "password", "phone"]
+            field in request.form
+            for field in ["first", "last", "email", "password", "phone"]
         ):
             first = request.form["first"].strip()
             last = request.form["last"].strip()
@@ -277,15 +315,11 @@ def register_routes(app):
             phone = request.form["phone"].strip()
 
             try:
-                # Validates the inputs
                 validate_registration(first, last, email, password, phone)
-
-                # Insert into DB
                 register_customer(first, last, email, phone, password)
-
                 flash("You have successfully registered.", "success_login_modal")
                 return render_template("registration.html", show_login=True)
-            
+
             except RegistrationError as e:
                 flash(str(e), "error")
             except Exception:
@@ -293,9 +327,9 @@ def register_routes(app):
 
         return render_template("registration.html")
 
-    # ------------
+    # ----------------
     # Login Page
-    # ------------
+    # ----------------
     @app.route("/login", methods=["GET", "POST"])
     def login():
         if request.method == "POST":
@@ -303,22 +337,18 @@ def register_routes(app):
             password = request.form.get("password", "")
 
             try:
-                # Authenticates users
                 customer = authenticate_user(email, password)
-
-                # Stores user info in session
                 session["customer_id"] = customer.CustomerID
                 session["customer_email"] = customer.Email
                 session["customer_phone"] = customer.Phone
                 session["customer_firstName"] = customer.FirstName
                 session["customer_lastName"] = customer.LastName
 
-                # Redirects to reservation summary if a reservation is pending
                 if session.get("pending_reservation"):
                     return redirect(url_for("reservation_summary"))
 
                 flash(f"Welcome back, {customer.FirstName}!", "success")
-            
+
             except LoginError as e:
                 flash(str(e), "error_login_modal")
                 return render_template("index.html", show_login=True)
@@ -328,9 +358,9 @@ def register_routes(app):
 
         return redirect(url_for("landing"))
 
-    # ------------
-    # Logout Route
-    # ------------
+    # ----------------
+    # Logout
+    # ----------------
     @app.route("/logout")
     def logout():
         session.clear()
@@ -338,50 +368,46 @@ def register_routes(app):
         return redirect(url_for("landing"))
 
     # ---------------------------------------
-    # TEAM FEATURES OF ABOUT US / CONTACT US
+    # TEAM FEATURES (About / Contact Section)
     # ---------------------------------------
-
-    # API: Send Team Message (CSRF Protected)
     @app.route("/api/send-team-message", methods=["POST"])
     def send_team_message():
+        """Handles POST requests for team contact form."""
         data = request.get_json()
         sender_name = data.get("senderName")
         sender_email = data.get("senderEmail")
         message = data.get("message")
         member_id = data.get("memberId")
 
-        required_fields = [sender_name, sender_email, message, member_id]
-        if not all(field and str(field).strip() for field in required_fields):
+        if not all([sender_name, sender_email, message, member_id]):
             return jsonify({"error": "Missing required fields."}), 400
 
         try:
-            member_id_int = int(member_id)
+            member_id = int(member_id)
         except (TypeError, ValueError):
             return jsonify({"error": "Invalid member ID."}), 400
 
         try:
-            save_team_message(member_id_int, sender_name, sender_email, message)
+            save_team_message(member_id, sender_name, sender_email, message)
             return jsonify({"success": True}), 200
         except TeamMessageError as e:
             db.session.rollback()
             return jsonify({"error": str(e)}), 500
 
-    # API: Returns JSON for all team members with their contributions.
     @app.route("/api/team", methods=["GET"])
     def api_team():
+        """Returns JSON for all team members and their contributions."""
         team = get_team_with_contributions()
         return jsonify(team)
 
-    # API: Get a single team member by ID
     @app.route("/api/team/<int:member_id>", methods=["GET"])
     def api_team_member(member_id):
+        """Returns JSON for a specific team member."""
         member = get_team_member_with_contributions(member_id)
-        
         if not member:
             return jsonify({"error": "Team member not found"}), 404
-        
         return jsonify(member)
-    
+
     # --------------------
     # 404 Error Handler
     # --------------------
