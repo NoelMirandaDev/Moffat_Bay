@@ -362,7 +362,7 @@
         })
       });
       if (!r.ok) throw new Error();
-      wc.status.textContent = "Sent ✅";
+      wc.status.textContent = "Message Sent ✅";
       setTimeout(()=>{ const m=$("#send-message-modal"); if(m) closeModal(m); }, 900);
     }catch{
       wc.status.textContent = "Failed to send.";
@@ -371,7 +371,7 @@
 
   /* ---------------- Boot ---------------- */
   document.addEventListener("DOMContentLoaded", () => {
-    // Cache message form controls (same IDs as your original)
+    // Cache message form controls (same IDs as the original)
     wc = {
       form: $("#sendMessageForm"),
       textarea: $("#messageTextarea"),
