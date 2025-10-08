@@ -269,7 +269,7 @@ def register_routes(app):
     def registration():
         if request.method == "POST" and all(
             field in request.form for field in ["first", "last", "email", "password", "phone"]
-        ):
+            ):
             first = request.form["first"].strip()
             last = request.form["last"].strip()
             email = request.form["email"].strip()
