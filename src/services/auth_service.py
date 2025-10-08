@@ -9,12 +9,12 @@ class RegistrationError(Exception):
 class LoginError(Exception):
     """Raised when login credentials are invalid."""
 
-def validate_registration(first: str, last: str, email: str, password: str, phone: str):
+def validate_registration(first: str, last: str, email: str, password: str, phone: str, confirm_password: str):
     """
     Validate registration fields. Raises RegistrationError if invalid.
     """
     # Field presence
-    if not all([first, last, email, password, phone]):
+    if not all([first, last, email, password, phone, confirm_password]):
         raise RegistrationError("All fields are required.")
     
     # Max length checks
@@ -40,8 +40,12 @@ def validate_registration(first: str, last: str, email: str, password: str, phon
         raise RegistrationError(
             "Password must contain at least 8 characters, contain uppercase, lowercase, and a number."
         )
+    
+    # Password Matching
+    if password != (confirm_password or ""):
+        raise RegistrationError("Passwords do not match.")
 
-def register_customer(first: str, last: str, email: str, phone: str, password: str):
+def register_customer(first: str, last: str, email: str, password: str, phone: str):
     """
     Inserts a new customer if email not taken.
     Raises RegistrationError on duplicate or DB issues.

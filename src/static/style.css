@@ -1102,6 +1102,37 @@ body {
 .error-illustration {
   display: block;
   margin: 20px auto;
-  width: 120px;      /* adjust as needed */
+  width: 120px;
   height: auto;
+}
+
+.password-confirm-group {
+  position: relative;
+}
+
+.pw-status-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  pointer-events: none;
+}
+
+.pw-status-icon.valid {
+  color: #2e7d32;
+}
+
+.pw-status-icon.invalid {
+  color: #c62828;
+}
+
+.register-input.valid-input {
+  border-color: #2e7d32;
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.register-input.invalid-input {
+  border-color: #c62828;
+  box-shadow: 0 0 6px rgba(198, 40, 40, 0.4);
 }
