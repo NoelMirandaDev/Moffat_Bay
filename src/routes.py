@@ -267,9 +267,10 @@ def register_routes(app):
     # -------------------
     @app.route("/registration", methods=["GET", "POST"])
     def registration():
-        if request.method == "POST" and all(
-            field in request.form for field in ["first", "last", "email", "password", "phone"]
-            ):
+        if (
+            request.method == "POST" 
+            and all(field in request.form for field in ["first", "last", "email", "password", "phone"])
+        ):
             first = request.form["first"].strip()
             last = request.form["last"].strip()
             email = request.form["email"].strip()
