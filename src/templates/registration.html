@@ -63,6 +63,18 @@
               pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
               title="Password must be at least 8 characters, contain an uppercase and lowercase letter, and a number."
             />
+
+            <div class="password-confirm-group">
+              <input
+                name="confirm_password"
+                type="password"
+                class="register-input"
+                placeholder="Confirm Password"
+                required
+                maxlength="128"
+              />
+              <span class="pw-status-icon"></span>
+            </div>
             
             <input
               name="phone"
@@ -93,5 +105,8 @@
   {% if show_login %}
     <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
   {% endif %}
+
+  <!-- Confirming Password Script -->
+  <script src="{{ url_for('static', filename='js/confirming_password_ux.js') }}"></script>
 </body>
 </html>

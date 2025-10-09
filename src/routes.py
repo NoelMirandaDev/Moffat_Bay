@@ -269,20 +269,21 @@ def register_routes(app):
     def registration():
         if (
             request.method == "POST" 
-            and all(field in request.form for field in ["first", "last", "email", "password", "phone"])
+            and all(field in request.form for field in ["first", "last", "email", "password", "confirm_password", "phone"])
         ):
-            first = request.form["first"].strip()
-            last = request.form["last"].strip()
-            email = request.form["email"].strip()
-            password = request.form["password"].strip()
-            phone = request.form["phone"].strip()
+            first            = request.form["first"].strip()
+            last             = request.form["last"].strip()
+            email            = request.form["email"].strip().lower()
+            password         = request.form["password"].strip()
+            confirm_password = request.form["confirm_password"].strip()
+            phone            = request.form["phone"].strip()
 
             try:
                 # Validates the inputs
-                validate_registration(first, last, email, password, phone)
+                validate_registration(first, last, email, password, phone, confirm_password)
 
                 # Insert into DB
-                register_customer(first, last, email, phone, password)
+                register_customer(first, last, email, password, phone)
 
                 flash("You have successfully registered.", "success_login_modal")
                 return render_template("registration.html", show_login=True)
