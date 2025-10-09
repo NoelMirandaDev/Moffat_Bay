@@ -19,7 +19,7 @@ body.landing-page {
 .site-header {
   background: #f5efe2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  padding: 1.2rem 3rem;
 }
 
 .header-inner {
@@ -27,6 +27,7 @@ body.landing-page {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .logo {
@@ -35,7 +36,7 @@ body.landing-page {
 }
 
 .logo img {
-  height: 90px;
+  height: 110px;
   object-fit: contain;
   display: block;
 }
@@ -51,6 +52,22 @@ body.landing-page {
 
 .navbar a {
   text-decoration: none;
+  color: #2e5339;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0.4rem 0.8rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #1f3b2d;
+  transform: translateY(-1px);
+}
+
+.navbar a.active {
+  border-bottom: 2px solid #2e5339;
+  padding-bottom: 2px;
   color: #2e5339;
   font-weight: 700;
 }
@@ -1175,14 +1192,6 @@ body {
   border-color: #c62828;
   box-shadow: 0 0 6px rgba(198, 40, 40, 0.4);
 }
-/* ===== Salish Sea / Give Back tile ===== */
-:root{
-  --sage:#2e5339;
-  --sage-strong:#24422e;
-  --parchment:#f5efe2;
-  --ink:#1f3b2d;
-  --ink-soft:#3f4a44;
-}
 
 /* ===== Salish Sea / Give Back tile ===== */
 .fish-tile{
@@ -1212,6 +1221,7 @@ body {
   margin-left: -20px;
   min-height: 160px;
 }
+
 .fish-tile-graphic::before{
   content: "";
   position: absolute;
@@ -1224,15 +1234,18 @@ body {
   transform: scale(1.8) translateX(-15%);
   transform-origin: left center;
 }
+
 .fish-tile-content{
   padding-left: 100px;
 }
+
 /* Text area */
 .fish-tile-content{
   color: #1f3b2d;
   font-family: "Open Sans", sans-serif;
   max-width: none;
 }
+
 .section-title{
   font-family:"Playfair Display", serif;
   color: #2e5339;
@@ -1241,6 +1254,7 @@ body {
   letter-spacing:.4px;
   margin: 0 0 .25rem;
 }
+
 .section-subtitle{
   font-family:"Open Sans", sans-serif;
   color:#3f4a44;
@@ -1248,12 +1262,15 @@ body {
   font-weight: 700;
   margin: 0 0 .5rem;
 }
+
 .fish-tile-content p{
   color: #3f4a44;
   line-height: 1.55;
   margin: 0 0 .6rem;
 }
+
 .fish-tile-content ul{ margin:.2rem 0 .8rem 1.1rem; }
+
 .fish-tile-content li{ margin:.18rem 0; }
 
 /* CTA anchored to bottom/right of the tile content */
@@ -1263,6 +1280,7 @@ body {
   bottom: clamp(12px, 2vw, 24px);
   display: flex; gap:.6rem; align-items:center;
 }
+
 .help-button{
   background: #2e5339;
   color:#fff; font-weight:700; text-decoration:none;
@@ -1270,16 +1288,20 @@ body {
   transition: background .2s ease, transform .15s ease;
   box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 6px 14px rgba(0,0,0,.06);
 }
+
 .help-button:hover{ background: #24422e; transform: translateY(-1px); }
+
 .giveback-link{
   color: #2e5339; font-weight:600; font-size:.95rem; text-decoration:none;
   border-bottom: 2px solid rgba(46,83,57,.22); padding-bottom:1px;
   transition: color .2s ease, border-color .2s ease;
 }
+
 .giveback-link:hover{ color: #24422e; border-color: #24422e; }
 
 /* Bottom wave only */
 .wave-bottom svg{ display:block; width:100%; height:25px; }
+
 .wave-bottom path{ fill:#2e5339; }
 
 /* Responsive */
