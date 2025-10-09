@@ -19,7 +19,7 @@ body.landing-page {
 .site-header {
   background: #f5efe2;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  padding: 1.2rem 3rem;
 }
 
 .header-inner {
@@ -27,6 +27,7 @@ body.landing-page {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .logo {
@@ -35,7 +36,7 @@ body.landing-page {
 }
 
 .logo img {
-  height: 90px;
+  height: 110px;
   object-fit: contain;
   display: block;
 }
@@ -52,7 +53,22 @@ body.landing-page {
 .navbar a {
   text-decoration: none;
   color: #2e5339;
-  font-weight: 700;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  padding: 0.4rem 0.8rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar a:hover {
+  color: #1f3b2d;
+  transform: translateY(-1px);
+}
+
+.navbar a.active {
+  border-bottom: 2px solid #2e5339;
+  padding-bottom: 2px;
+  color: #2e5339;
 }
 
 .navbar button {

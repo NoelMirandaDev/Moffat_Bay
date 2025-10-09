@@ -7,11 +7,11 @@
     </div>
     
     <nav class="navbar">
-      <a href="{{ url_for('landing') }}">Home</a>
-      <a href="{{ url_for('attraction') }}">Attraction</a>
-      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
-      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
-      <a href="{{ url_for('about') }}">About Us</a>
+      <a href="{{ url_for('landing') }}" class="{% if request.endpoint == 'landing' %}active{% endif %}">Home</a>
+      <a href="{{ url_for('attraction') }}" class="{% if request.endpoint == 'attraction' %}active{% endif %}">Attraction</a>
+      <a href="{{ url_for('lodge_reservation') }}" class="{% if request.endpoint == 'lodge_reservation' %}active{% endif %}">Lodge Reservation</a>
+      <a href="{{ url_for('reservation_lookup') }}" class="{% if request.endpoint == 'reservation_lookup' %}active{% endif %}">Reservation Lookup</a>
+      <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About Us</a>
       
       {% if session.get("customer_id") %}
         <!-- User initials Account Menu -->
