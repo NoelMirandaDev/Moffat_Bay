@@ -1105,3 +1105,117 @@ body {
   width: 120px;      /* adjust as needed */
   height: auto;
 }
+/* ===== Salish Sea / Give Back tile ===== */
+:root{
+  --sage:#2e5339;
+  --sage-strong:#24422e;
+  --parchment:#f5efe2;
+  --ink:#1f3b2d;
+  --ink-soft:#3f4a44;
+}
+
+/* Section container: compact height, no top wave */
+.fish-tile{
+  background: var(--parchment);
+  border-top: 1px solid #e8e0d1;
+  border-bottom: 0;
+  padding: 1rem 0.75rem;  
+  position: relative;
+}
+
+/* Grid: small left column for fish, rest for text */
+.fish-tile-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.75 rem;
+  display: grid;
+  grid-template-columns: 160px 1fr; /* fish | text */
+  gap: 1.25rem;
+  align-items: center;
+  position: relative;
+}
+
+/* Left salmon watermark */
+.fish-tile-graphic{
+  position: relative;
+  overflow: visible;
+  margin-left: -20px;     /* your left nudge */
+  min-height: 160px;      /* ← key line */
+}
+.fish-tile-graphic::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/static/images/salmon_image.png")
+              no-repeat left center / contain;
+  opacity: 0.18;
+  filter: grayscale(100%) contrast(85%);
+  pointer-events: none;
+  transform: scale(1.8) translateX(-15%);
+  transform-origin: left center;
+}
+.fish-tile-content{
+  padding-left: 100px;
+}
+/* Text area */
+.fish-tile-content{
+  color: var(--ink);
+  font-family: "Open Sans", sans-serif;
+  max-width: none;                  /* stretch */
+}
+.section-title{
+  font-family:"Playfair Display", serif;
+  color: var(--sage);
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  font-weight: 700;
+  letter-spacing:.4px;
+  margin: 0 0 .25rem;
+}
+.section-subtitle{
+  font-family:"Open Sans", sans-serif;
+  color:#3f4a44;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 700;
+  margin: 0 0 .5rem;
+}
+.fish-tile-content p{
+  color: var(--ink-soft);
+  line-height: 1.55;
+  margin: 0 0 .6rem;
+}
+.fish-tile-content ul{ margin:.2rem 0 .8rem 1.1rem; }
+.fish-tile-content li{ margin:.18rem 0; }
+
+/* CTA anchored to bottom/right of the tile content */
+.fish-cta{
+  position: absolute;
+  right: clamp(16px, 2.5vw, 32px);
+  bottom: clamp(12px, 2vw, 24px);
+  display: flex; gap:.6rem; align-items:center;
+}
+.help-button{
+  background: var(--sage);
+  color:#fff; font-weight:700; text-decoration:none;
+  padding:.5rem .9rem; border-radius:.45rem; font-size:.95rem;
+  transition: background .2s ease, transform .15s ease;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 6px 14px rgba(0,0,0,.06);
+}
+.help-button:hover{ background: var(--sage-strong); transform: translateY(-1px); }
+.giveback-link{
+  color: var(--sage); font-weight:600; font-size:.95rem; text-decoration:none;
+  border-bottom: 2px solid rgba(46,83,57,.22); padding-bottom:1px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.giveback-link:hover{ color: var(--sage-strong); border-color: var(--sage-strong); }
+
+/* Bottom wave only */
+.wave-bottom svg{ display:block; width:100%; height:25px; }
+.wave-bottom path{ fill:#2e5339; } /* deep sage */
+
+/* Responsive */
+@media (max-width: 860px){
+  .fish-tile-inner{ grid-template-columns: 1fr; gap:.8rem; }
+  .fish-tile-graphic{ order:2; min-height:50px; transform:none; }
+  .fish-tile-content{ order:1; }
+  .fish-cta{ position: static; margin-top:.4rem; }
+}
