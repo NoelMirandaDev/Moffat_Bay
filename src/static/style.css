@@ -1161,6 +1161,37 @@ body {
   height: auto;
 }
 
+.password-confirm-group {
+  position: relative;
+}
+
+.pw-status-icon {
+  position: absolute;
+  right: 12px;
+  top: 35%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  pointer-events: none;
+}
+
+.pw-status-icon.valid {
+  color: #2e7d32;
+}
+
+.pw-status-icon.invalid {
+  color: #c62828;
+}
+
+.register-input.valid-input {
+  border-color: #2e7d32;
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.register-input.invalid-input {
+  border-color: #c62828;
+  box-shadow: 0 0 6px rgba(198, 40, 40, 0.4);
+}
+
 /* ===== Salish Sea / Give Back tile ===== */
 .fish-tile{
   background: #f3e9dc;
@@ -1189,6 +1220,7 @@ body {
   margin-left: -20px;
   min-height: 160px;
 }
+
 .fish-tile-graphic::before{
   content: "";
   position: absolute;
@@ -1201,15 +1233,18 @@ body {
   transform: scale(1.8) translateX(-15%);
   transform-origin: left center;
 }
+
 .fish-tile-content{
   padding-left: 100px;
 }
+
 /* Text area */
 .fish-tile-content{
   color: #1f3b2d;
   font-family: "Open Sans", sans-serif;
   max-width: none;
 }
+
 .section-title{
   font-family:"Playfair Display", serif;
   color: #2e5339;
@@ -1218,6 +1253,7 @@ body {
   letter-spacing:.4px;
   margin: 0 0 .25rem;
 }
+
 .section-subtitle{
   font-family:"Open Sans", sans-serif;
   color:#3f4a44;
@@ -1225,12 +1261,15 @@ body {
   font-weight: 700;
   margin: 0 0 .5rem;
 }
+
 .fish-tile-content p{
   color: #3f4a44;
   line-height: 1.55;
   margin: 0 0 .6rem;
 }
+
 .fish-tile-content ul{ margin:.2rem 0 .8rem 1.1rem; }
+
 .fish-tile-content li{ margin:.18rem 0; }
 
 /* CTA anchored to bottom/right of the tile content */
@@ -1240,6 +1279,7 @@ body {
   bottom: clamp(12px, 2vw, 24px);
   display: flex; gap:.6rem; align-items:center;
 }
+
 .help-button{
   background: #2e5339;
   color:#fff; font-weight:700; text-decoration:none;
@@ -1247,16 +1287,20 @@ body {
   transition: background .2s ease, transform .15s ease;
   box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 6px 14px rgba(0,0,0,.06);
 }
+
 .help-button:hover{ background: #24422e; transform: translateY(-1px); }
+
 .giveback-link{
   color: #2e5339; font-weight:600; font-size:.95rem; text-decoration:none;
   border-bottom: 2px solid rgba(46,83,57,.22); padding-bottom:1px;
   transition: color .2s ease, border-color .2s ease;
 }
+
 .giveback-link:hover{ color: #24422e; border-color: #24422e; }
 
 /* Bottom wave only */
 .wave-bottom svg{ display:block; width:100%; height:25px; }
+
 .wave-bottom path{ fill:#2e5339; }
 
 /* Responsive */
