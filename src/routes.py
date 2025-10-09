@@ -312,6 +312,7 @@ def register_routes(app):
                 session["customer_phone"] = customer.Phone
                 session["customer_firstName"] = customer.FirstName
                 session["customer_lastName"] = customer.LastName
+                session["initials"] = f"{customer.FirstName[0]}{customer.LastName[0]}".upper()
 
                 # Redirects to reservation summary if a reservation is pending
                 if session.get("pending_reservation"):

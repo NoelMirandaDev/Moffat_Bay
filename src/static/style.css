@@ -1219,3 +1219,72 @@ body {
   .fish-tile-content{ order:1; }
   .fish-cta{ position: static; margin-top:.4rem; }
 }
+
+/* Wrapper positions dropdown */
+.account-menu {
+  position: relative;
+  display: inline-block;
+}
+
+/* Avatar button */
+.avatar-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+/* Initials badge */
+.user-initials {
+  background-color: #2e5339;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+/* Dropdown panel */
+.menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #e2ded5;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  padding: 6px;
+  display: none;
+  z-index: 1000;
+}
+
+/* Visible state */
+.menu.show {
+  display: block;
+}
+
+/* Items */
+.menu-item {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: #2e5339;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+  background: #f5efe2;
+  outline: none;
+}

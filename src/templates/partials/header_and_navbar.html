@@ -14,10 +14,18 @@
       <a href="{{ url_for('about') }}">About Us</a>
       
       {% if session.get("customer_id") %}
-        <!-- Logout button -->
-        <form method="GET" action="{{ url_for('logout') }}" style="display:inline;">
-          <button type="submit" class="btn-brown">Sign Out</button>
-        </form>
+        <!-- User initials Account Menu -->
+        <div class="account-menu">
+          <button class="avatar-btn" id="accountMenuButton" type="button">
+            <span class="user-initials">{{ session.get("initials") }}</span>
+          </button>
+
+          <div class="menu" id="accountMenuList">
+            <form method="GET" action="{{ url_for('logout') }}">
+              <button type="submit" class="menu-item">Sign Out</button>
+            </form>
+          </div>
+        </div>
       {% else %}
         <!-- Login button -->
         <button class="btn-brown" id="loginBtn">Sign In</button>
