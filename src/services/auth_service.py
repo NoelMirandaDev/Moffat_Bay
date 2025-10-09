@@ -13,6 +13,23 @@ def validate_registration(first: str, last: str, email: str, password: str, phon
     """
     Validate registration fields. Raises RegistrationError if invalid.
     """
+    # Field presence
+    if not all([first, last, email, password, phone]):
+        raise RegistrationError("All fields are required.")
+    
+    # Max length checks
+    if len(first) > 50:
+        raise RegistrationError("First name must not exceed 50 characters.")
+    if len(last) > 50:
+        raise RegistrationError("Last name must not exceed 50 characters.")
+    if len(email) > 100:
+        raise RegistrationError("Email must not exceed 100 characters.")
+    if len(password) > 128:
+        raise RegistrationError("Password must not exceed 128 characters.")
+    if len(phone) > 20:
+        raise RegistrationError("Phone number must not exceed 20 characters.")
+    
+    # Format validations
     if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
         raise RegistrationError("Invalid email address.")
     if not re.match(r"^[A-za-z]+(?:[-' ][A-Za-z]+)*$", first) or not re.match(r"^[A-za-z]+(?:[-' ][A-Za-z]+)*$", last):
