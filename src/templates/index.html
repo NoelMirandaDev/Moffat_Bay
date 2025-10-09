@@ -119,7 +119,6 @@
         <li><strong>100%</strong> shoreline trash-free days</li>
       </ul>
 
-      <!-- Buttons (bottom/right) -->
       <div class="fish-cta">
         <a href="https://www.pacificwild.org/" target="_blank" rel="noopener" class="help-button">Help Today</a>
         <a href="/about.html" class="giveback-link">How we give back →</a>
@@ -128,7 +127,7 @@
   </div>
 </section>
 
-<!-- Bottom wave only -->
+<!-- Bottom wave -->
 <div class="wave-bottom" aria-hidden="true">
   <svg viewBox="0 0 1440 110" preserveAspectRatio="none">
     <path d="M0,70 C250,180 1190,-100 1440,70 L1440,110 L0,110 Z"></path>
@@ -148,5 +147,8 @@
   {% if show_login %}
     <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
   {% endif %}
+
+  <!-- Account Menu Script -->
+  <script src="{{ url_for('static', filename='js/accountMenu.js') }}"></script>
 </body>
 </html>
