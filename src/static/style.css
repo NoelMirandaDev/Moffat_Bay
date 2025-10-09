@@ -1145,6 +1145,45 @@ body {
   height: auto;
 }
 
+.password-confirm-group {
+  position: relative;
+}
+
+.pw-status-icon {
+  position: absolute;
+  right: 12px;
+  top: 35%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  pointer-events: none;
+}
+
+.pw-status-icon.valid {
+  color: #2e7d32;
+}
+
+.pw-status-icon.invalid {
+  color: #c62828;
+}
+
+.register-input.valid-input {
+  border-color: #2e7d32;
+  box-shadow: 0 0 6px rgba(46, 125, 50, 0.4);
+}
+
+.register-input.invalid-input {
+  border-color: #c62828;
+  box-shadow: 0 0 6px rgba(198, 40, 40, 0.4);
+}
+/* ===== Salish Sea / Give Back tile ===== */
+:root{
+  --sage:#2e5339;
+  --sage-strong:#24422e;
+  --parchment:#f5efe2;
+  --ink:#1f3b2d;
+  --ink-soft:#3f4a44;
+}
+
 /* ===== Salish Sea / Give Back tile ===== */
 .fish-tile{
   background: #f3e9dc;
