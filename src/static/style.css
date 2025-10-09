@@ -1112,8 +1112,8 @@ body {
 
 .pw-status-icon {
   position: absolute;
-  right: 10px;
-  top: 50%;
+  right: 12px;
+  top: 35%;
   transform: translateY(-50%);
   font-size: 1.4rem;
   pointer-events: none;
