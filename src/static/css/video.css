@@ -1,0 +1,92 @@
+/* Dedicated styles for video enhancement */
+
+/* ----------- HERO VIDEO ----------- */
+.video-hero {
+  position: relative;
+  width: 100vw;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-hero video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* ensures no cropping */
+  background-color: #000;
+}
+
+/* ----------- MUTE BUTTON ----------- */
+.mb-mute-btn {
+  position: absolute;
+  bottom: 18px;
+  right: 22px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.25s;
+  z-index: 5;
+}
+.mb-mute-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.mb-mute-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* ----------- QUOTES OVERLAY ----------- */
+.mb-quote {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: grid;              /* rock-solid centering, no flex reflow */
+  place-items: center;
+  pointer-events: none;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  z-index: 4;
+  will-change: opacity, transform; /* prevent layout jank */
+}
+
+.mb-quote__text {
+  color: #fff;
+  font-family: "Great Vibes", cursive; /* handwriting look */
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 400;
+  line-height: 1.3;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  width: min(80%, 900px);   /* fixed box prevents pushing visuals */
+  margin: 0 auto;
+  transform: translateZ(0); /* avoid paint jumps */
+}
+
+/* Flash entrance animation (visible glow + micro-bounce) */
+@keyframes quoteFlash {
+  0%   { opacity: 0; transform: translateY(6px) scale(0.98); text-shadow: 0 0 0 rgba(255,255,255,0); }
+  35%  { opacity: 1; transform: translateY(0) scale(1.02);  text-shadow: 0 0 34px rgba(255,255,255,0.9); }
+  100% { opacity: 1; transform: translateY(0) scale(1);     text-shadow: 0 4px 12px rgba(0,0,0,0.8); }
+}
+
+/* Trigger flash each time a quote appears */
+.mb-quote.flash .mb-quote__text {
+  animation: quoteFlash 1.1s ease-out forwards;
+}
+
+.mb-quote--show { opacity: 1; }
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .mb-quote { transition: opacity .2s linear; }
+  .mb-quote.flash .mb-quote__text { animation: none; }
+}
