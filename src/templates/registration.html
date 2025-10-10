@@ -12,10 +12,13 @@
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
 
-  <main class="page-content">
-    <section class="basic-section">
-      <h1>Create Your Account</h1>
+  <main class="register-page">
+    <img class ="register-background-img" src="{{ url_for('static', filename='images/bay_view.png') }}" alt="Beautiful view from the lodge.">
+    <section class="register-section">
       <div class="register-form">
+        <header>
+          <h1>Create Your Account</h1>
+        </header>
       <!-- Flash Messages -->
       {% include "partials/error_flash_messages.html" %}
 
@@ -86,7 +89,7 @@
               value="{{ request.form.get('phone', '') }}"
             />
         
-            <button type="submit" class="btn-register">Register</button>
+            <button type="submit" class="btn-register">Sign Up</button>
         </form>
     </div>
     </section>
