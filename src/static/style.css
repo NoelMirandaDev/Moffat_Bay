@@ -1433,3 +1433,12 @@ body.landing-page {
   background: #f5efe2;
   outline: none;
 }
+
+/* Make 'button' links look like buttons, not links */
+.attraction-cta a.btn-brown,
+.attraction-cta a.btn-brown:link,
+.attraction-cta a.btn-brown:visited,
+.attraction-cta a.btn-brown:hover,
+.attraction-cta a.btn-brown:active {
+  text-decoration: none;
+}
