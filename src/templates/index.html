@@ -5,26 +5,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Moffat Bay Lodge Backend Connection</title>
+  <!-- Team stylesheet (unchanged) -->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <!-- NEW: your scoped video styles (loads AFTER team CSS) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/video.css') }}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
+  <!-- Handwriting Font for Quotes -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
 </head>
 
 <body class="landing-page">
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
- 
+
   <!-- Flash Messages -->
   {% include "partials/success_flash_messages.html" %}
   {% include "partials/error_flash_messages.html" %}
 
   <!-- HERO VIDEO SECTION (no overlay text) -->
   <section class="video-hero">
-  <video autoplay loop playsinline muted controls>
-    <source src="{{ url_for('static', filename='images/Moffat_video.mp4') }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</section>
+    <video autoplay loop playsinline muted controls>
+      <source src="{{ url_for('static', filename='images/moffat_video.mp4') }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </section>
 
   <!-- FEATURED LINKS SECTION (Photo Cards linking to main pages) -->
   <section class="feature-grid">
@@ -57,44 +63,43 @@
       </div>
     </a>
   </section>
-<!-- SALISH SEA / GIVE BACK TILE -->
-<section class="fish-tile" aria-labelledby="salish-title">
-  <div class="fish-tile-inner">
-    <!-- Left watermark fish -->
-    <div class="fish-tile-graphic" aria-hidden="true"></div>
 
-    <!-- Title/Sub-Title -->
-    <div class="fish-tile-content">
-      <h2 id="salish-title" class="section-title">Where the Forest Meets the Tide</h2>
-      <h3 class="section-subtitle">Honoring the Wild Heart of Moffat Bay</h3>
+  <!-- SALISH SEA / GIVE BACK TILE -->
+  <section class="fish-tile" aria-labelledby="salish-title">
+    <div class="fish-tile-inner">
+      <div class="fish-tile-graphic" aria-hidden="true"></div>
 
-      <p>
-        Moffat Bay Lodge sits where the forest meets the tide, home to salmon, eagles,
-        and the spirit of the sea. We’re dedicated to protecting these waters,
-        supporting local conservation, and promoting mindful travel that keeps
-        Moffat Bay thriving for generations to come.
-      </p>
+      <div class="fish-tile-content">
+        <h2 id="salish-title" class="section-title">Where the Forest Meets the Tide</h2>
+        <h3 class="section-subtitle">Honoring the Wild Heart of Moffat Bay</h3>
 
-      <ul>
-        <li><strong>12+</strong> local orgs supported</li>
-        <li><strong>5,000+</strong> trees protected</li>
-        <li><strong>100%</strong> shoreline trash-free days</li>
-      </ul>
+        <p>
+          Moffat Bay Lodge sits where the forest meets the tide, home to salmon, eagles,
+          and the spirit of the sea. We’re dedicated to protecting these waters,
+          supporting local conservation, and promoting mindful travel that keeps
+          Moffat Bay thriving for generations to come.
+        </p>
 
-      <div class="fish-cta">
-        <a href="https://www.pacificwild.org/" target="_blank" rel="noopener" class="help-button">Help Today</a>
-        <a href="/about.html" class="giveback-link">How we give back →</a>
+        <ul>
+          <li><strong>12+</strong> local orgs supported</li>
+          <li><strong>5,000+</strong> trees protected</li>
+          <li><strong>100%</strong> shoreline trash-free days</li>
+        </ul>
+
+        <div class="fish-cta">
+          <a href="https://www.pacificwild.org/" target="_blank" rel="noopener" class="help-button">Help Today</a>
+          <a href="/about.html" class="giveback-link">How we give back →</a>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Bottom wave -->
-<div class="wave-bottom" aria-hidden="true">
-  <svg viewBox="0 0 1440 110" preserveAspectRatio="none">
-    <path d="M0,70 C250,180 1190,-100 1440,70 L1440,110 L0,110 Z"></path>
-  </svg>
-</div>
+  <!-- Bottom wave -->
+  <div class="wave-bottom" aria-hidden="true">
+    <svg viewBox="0 0 1440 110" preserveAspectRatio="none">
+      <path d="M0,70 C250,180 1190,-100 1440,70 L1440,110 L0,110 Z"></path>
+    </svg>
+  </div>
 
   <!-- FOOTER WITH PAGE LINKS -->
   {% include "partials/footer.html" %}
@@ -112,5 +117,8 @@
 
   <!-- Account Menu Script -->
   <script src="{{ url_for('static', filename='js/accountMenu.js') }}"></script>
+
+  <!-- NEW: video behavior (loads LAST) -->
+  <script src="{{ url_for('static', filename='js/video_controls.js') }}"></script>
 </body>
 </html>
