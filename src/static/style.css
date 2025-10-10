@@ -1,11 +1,17 @@
-/* style.css */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+html,
 body {
+  min-height: 100vh;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
   font-family: "Open Sans", sans-serif;
   line-height: 1.6;
   background-color: #f3e9dc;
@@ -17,9 +23,9 @@ body.landing-page {
 }
 
 .site-header {
-  background: #f5efe2;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 1.2rem 3rem;
+  padding: 1rem;
+  background: linear-gradient(to bottom, #f5efe2, #f2ebdf);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .header-inner {
@@ -46,17 +52,17 @@ body.landing-page {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
   flex-grow: 1;
 }
 
 .navbar a {
   text-decoration: none;
   color: #2e5339;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 0.3px;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1rem;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -74,6 +80,24 @@ body.landing-page {
 
 .navbar button {
   margin-left: 0;
+}
+
+@media (max-width: 850px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+
+  .logo img {
+    height: 80px;
+  }
 }
 
 .hero {
@@ -1005,23 +1029,6 @@ body.landing-page {
   cursor: not-allowed;
 }
 
-/* =========================================================
-    - Sticky footer (without removing the team’s original code)
-   - Profile modal (About page) fix for Mac: scrollable content
-     + sticky close button so “X” is always visible.
-   - Kept generic modal styles untouched to avoid regressions.
-   ========================================================= */
-
-/* Sticky footer enhancement (safe, global) */
-html,
-body {
-  min-height: 100vh;
-}
-body {
-  display: flex;
-  flex-direction: column;
-}
-
 /* About page: Profile modal overrides (more specific = no conflict) */
 #profile-modal .modal-content {
   max-height: 90vh; /* prevent off-screen content */
@@ -1029,6 +1036,7 @@ body {
   -webkit-overflow-scrolling: touch; /* smoother iOS scroll */
   padding-top: 2.4rem; /* space so sticky close won’t overlap content */
 }
+
 #profile-modal .modal-close {
   position: sticky; /* stays visible while scrolling modal content */
   top: 10px;
@@ -1044,6 +1052,7 @@ body {
   cursor: pointer;
   transition: background 0.15s;
 }
+
 #profile-modal .modal-close:hover {
   background: #d8d8d8;
 }
@@ -1053,6 +1062,7 @@ body {
 #send-message-modal {
   z-index: 1000;
 }
+
 /* ===== Attractions Page Styles ===== */
 .attractions {
   max-width: 1000px;
