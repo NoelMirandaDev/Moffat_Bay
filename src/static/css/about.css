@@ -1,375 +1,344 @@
 /* ==========================================================
-   File: about.css
-   Purpose: Styles specific to About page
-   Author: Steve Stylin
-   Notes:
-     - Sticky footer
-     - Pentagon layout
-     - Profile + message modals
-     - 🚫 No hover/active transforms (debugging dancing issue)
+   About page (clean & final)
+   Layout: Noel left + 2×2 grid right
+   Modals: two-tab profile + 500-word message
    ========================================================== */
 
-/* -------- Layout + Sticky Footer -------- */
-html,
-body {
-  height: 100%;
+:root {
+  --brand: #2e5339;
+  --text: #1f2937;
+  --muted: #4b5563;
+  --ring: #d1d5db;
+  --card-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --thumb-shadow: 0 8px 28px rgba(0, 0, 0, 0.10);
 }
+
+/* Base */
+html, body { height: 100%; }
+
 body {
   display: flex;
   flex-direction: column;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  color: #1f2937;
-}
-.page-content {
-  flex: 1;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans";
+  color: var(--text);
+  background-color: #f4efe6; /* screenshot tone */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.site-footer {
-  background-color: #2e5339;
-  color: #fff;
+.page-content { flex: 1; }
+
+/* Footer (unchanged) */
+.site-footer { background: var(--brand); color: #fff; text-align: center; padding: 1rem; margin-top: auto; }
+.site-footer .footer-links { margin-bottom: .5rem; }
+.site-footer .footer-credit { font-size: .9rem; color: #e0e0e0; }
+
+/* ==========================================================
+   Hero
+   ========================================================== */
+.team-hero {
   text-align: center;
-  padding: 1rem;
-  margin-top: auto;
-}
-.site-footer .footer-links {
-  margin-bottom: 0.5rem;
-}
-.site-footer .footer-credit {
-  font-size: 0.9rem;
-  color: #e0e0e0;
+  max-width: 800px;
+  margin: 0 auto 1rem;   /* reduced space below paragraph */
+  padding-top: 2.5rem;
 }
 
-/* -------- About section -------- */
-.about-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 2rem;
-  gap: 2.5rem;
-  min-height: 600px;
-}
-.team-header h1 {
-  font-size: 2.6rem;
+.team-hero__title {
   font-family: "Playfair Display", serif;
-  color: #2e5339;
-  margin-bottom: 0.7rem;
+  color: var(--brand);
+  font-size: clamp(2.2rem, 4vw, 3rem);
+  margin: 0 0 .6rem;
 }
-.team-header p {
-  font-size: 1.05rem;
+
+.team-hero__tagline {
   color: #4b5563;
+  font-size: 1.05rem;
   line-height: 1.6;
+  margin: 0 auto;
+  max-width: 680px;
 }
 
-/* -------- Pentagon layout -------- */
-.pentagon-wrap {
-  flex: 1 1 430px;
-  display: flex;
-  justify-content: center;
-}
-.pentagon-layout {
-  position: relative;
-  width: 430px;
-  height: 430px;
-}
-.profile-pentagon {
-  position: absolute;
-  width: 130px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
-  text-align: center;
-  cursor: pointer;
-  padding: 1rem;
-  outline: none;
-}
-.profile-img {
-  width: 96px;
-  height: 96px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #2e5339;
-  margin-bottom: 0.7rem;
-  pointer-events: none; /* clicks always go to card */
-}
-.profile-name {
-  font-weight: 600;
-}
-.profile-role {
-  font-size: 0.9rem;
-  color: #6b7280;
-}
+/* ==========================================================
+   Team layout
+   ========================================================== */
 
-/* Pentagon positions */
-.noel {
-  left: 50%;
-  top: 0%;
-  transform: translate(-50%, 0);
-}
-.kyle {
-  left: 93%;
-  top: 29%;
-  transform: translate(-50%, -50%);
-}
-.steve {
-  left: 77%;
-  top: 89%;
-  transform: translate(-50%, -50%);
-}
-.riese {
-  left: 23%;
-  top: 89%;
-  transform: translate(-50%, -50%);
-}
-.amit {
-  left: 7%;
-  top: 29%;
-  transform: translate(-50%, -50%);
-}
-
-/* Responsive pentagon */
-@media (max-width: 900px) {
-  .about-flex {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .pentagon-wrap {
-    order: -1;
-  }
-}
-@media (max-width: 600px) {
-  .pentagon-layout {
-    width: 95vw;
-    height: 95vw;
-  }
-  .profile-pentagon {
-    width: 100px;
-    padding: 0.5rem;
-  }
-  .profile-img {
-    width: 72px;
-    height: 72px;
-  }
-}
-
-/* -------- Modal Base -------- */
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 1rem;
-}
-.modal.active {
-  display: flex;
-}
-.modal-content {
-  background: #fff;
-  border-radius: 16px;
-  max-width: 720px;
-  width: min(92vw, 720px);
-  padding: 1.5rem 1.25rem;
-  position: relative;
-  box-shadow: 0 8px 40px rgba(46, 83, 57, 0.25);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.modal-close {
-  position: sticky;
-  top: 8px;
-  float: right;
-  background: #eef2f7;
-  border: none;
-  font-size: 1.5rem;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-}
-.modal-close:hover {
-  background: #e2e8f0;
-}
-
-/* -------- Buttons -------- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.7rem 1rem;
-  border-radius: 10px;
-  border: 1px solid transparent;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  text-decoration: none;
-}
-.btn-primary {
-  background: #2e5339;
-  color: #fff;
-}
-.btn-primary:hover {
-  background: #25432f;
-}
-.btn-ghost {
+/* The team block sits directly under hero and is centered */
+.team-wrap {
+  display: block;
+  margin-top: 0.5rem;     /* reduced from 1rem */
+  padding-bottom: 4rem;
   background: transparent;
-  color: #374151;
-  border-color: #d1d5db;
-}
-.btn-ghost:hover {
-  background: #f3f4f6;
-}
-.btn-link {
-  background: #f1f5f9;
-  color: #1f2937;
-  border-color: #e5e7eb;
-}
-.btn-link:hover {
-  background: #e2e8f0;
-}
-.btn-lg {
-  padding: 0.9rem 1.2rem;
-  font-size: 1.05rem;
-  width: 100%;
 }
 
-/* -------- Profile Modal -------- */
-.profile-modal-content {
-  padding: 2rem 1.5rem;
+/* Grid: left column for Noel, right column for 2×2 grid */
+.team-layout{
+  display:grid;
+  /* Right column shrinks to content instead of filling the page */
+  grid-template-columns: 360px max-content;
+  gap: 0 5rem;
+  align-items:start;
+  justify-content:center;     /* center tracks inside container */
+  max-width:1100px;
+  width:100%;
+  margin:0 auto;              /* center the container itself */
 }
-.profile-modal-header {
-  display: grid;
-  grid-template-columns: 128px 1fr;
-  gap: 1rem;
+
+/* Left (Noel) */
+.team-left {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
+  text-align: center;
 }
-.modal-profile-img {
-  width: 128px;
-  height: 128px;
+
+.avatar-large {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 20px;
-  border: 3px solid #2e5339;
-}
-.modal-profile-name {
-  font-size: 1.6rem;
-  margin: 0;
-}
-.modal-profile-role {
-  color: #6b7280;
-  margin-top: 0.25rem;
-}
-.modal-section {
-  margin-top: 1.25rem;
-}
-.section-title {
-  font-size: 1.05rem;
-  color: #2e5339;
-  margin-bottom: 0.5rem;
-}
-.modal-profile-bio {
-  line-height: 1.6;
-}
-.contrib-list {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-.contrib-bullet {
-  list-style: disc;
-  margin: 0.25rem 0;
-}
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.modal-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 2rem; /* add breathing space above button */
-  align-items: center;
+  border: none;
+  box-shadow: var(--card-shadow);
 }
 
-/* -------- Message Modal -------- */
-.message-to-name {
-  font-weight: 600;
-  margin: 0.5rem 0 1rem;
-  color: #2e5339;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-.form-field {
-  display: grid;
-  gap: 0.35rem;
-}
-.form-field-full {
-  grid-column: 1 / -1;
-}
-.form-label {
-  font-weight: 600;
-}
-input[type="text"],
-input[type="email"],
-textarea {
-  width: 100%;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  padding: 0.65rem 0.75rem;
-  font: inherit;
-}
-#messageTextarea {
-  resize: vertical;
-  min-height: 130px;
-}
-.word-count {
-  font-size: 0.9rem;
-  margin-top: 0.3em;
-  color: #374151;
-  display: flex;
-  gap: 0.5rem;
-}
-#wordLimitWarning {
-  color: #b91c1c;
-  display: none;
-}
-.form-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  align-items: center;
-}
-.status-success {
-  color: #065f46;
-}
-.status-error {
-  color: #991b1b;
+.team-lead .name { font-weight: 700; font-size: 1.2rem; margin-top: .6rem; color: var(--text); }
+.team-lead .bio-link { display: inline-block; margin-top: .25rem; color: #1b74c2; text-decoration: none; font-weight: 700; }
+.team-lead .bio-link:hover { text-decoration: underline; }
+
+/* Right grid (2×2) */
+.team-right { display: flex; justify-content: center; }
+
+.right-grid{
+  display:grid;
+  grid-template-columns: repeat(2, 280px);  /* exact avatar width */
+  gap: 3rem 5rem;                            /* row x col gap */
+  justify-content:center;                    /* center cards in the right column */
+  align-items:start;
+  width:max-content;                         /* shrink-wrap to content */
 }
 
-/* -------- Responsive -------- */
-@media (max-width: 640px) {
-  .modal-content {
-    width: 100%;
-    padding: 1.25rem 1rem;
-  }
-  .profile-modal-header {
-    grid-template-columns: 96px 1fr;
-  }
-  .modal-profile-img {
-    width: 96px;
-    height: 96px;
-  }
-  .btn-lg {
-    width: 100%;
-  }
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
+/* Member cards */
+.member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: none;
+  cursor: pointer;
 }
+
+/* Make everyone the same size as Noel */
+.avatar,
+.avatar-large{
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  object-fit:cover;
+  border:none;
+  box-shadow: var(--card-shadow);
+}
+
+.member-info { display: flex; flex-direction: column; align-items: center; }
+.member-info .name { font-weight: 700; font-size: 1.1rem; margin-top: .6rem; letter-spacing: .2px; color: var(--text); }
+.member-info .bio-link { color: #1b74c2; margin-top: .25rem; text-decoration: none; font-weight: 700; }
+.member-info .bio-link:hover { text-decoration: underline; }
+
+/* ==========================================================
+   Modals (Profile + Message)
+   ========================================================== */
+.modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.6); justify-content: center; align-items: center;
+  z-index: 1000; padding: 1rem; overscroll-behavior: contain;
+}
+.modal.active { display: flex; }
+
+.modal-content{
+  background:#fff; border-radius:16px; max-width:720px; width:min(92vw,720px);
+  padding:1.5rem 1.25rem; position:relative; box-shadow:0 8px 40px rgba(46,83,57,.25);
+  max-height:90vh; overflow-y:auto; scrollbar-gutter:stable;
+}
+.modal-close{ position:sticky; top:8px; float:right; background:#eef2f7; border:none; font-size:1.5rem; border-radius:50%; width:36px; height:36px; cursor:pointer; }
+.modal-close:hover{ background:#e2e8f0; }
+
+/* Profile modal */
+.profile-modal-content{ padding:2rem 1.5rem; }
+.profile-modal-header{ display:grid; grid-template-columns:128px 1fr; gap:1rem; align-items:center; margin-bottom:1rem; }
+.modal-profile-img{ width:128px; height:128px; object-fit:cover; border-radius:20px; border:3px solid var(--brand); }
+.modal-profile-name{ font-size:1.6rem; margin:0; color:var(--text); }
+.modal-profile-role{ color:#6b7280; margin-top:.25rem; }
+
+/* Tabs */
+.tabbar{ display:flex; gap:.5rem; margin:.75rem 0 1rem; }
+.tabbar .tab{ border:1px solid #d1d5db; background:#f7faf9; color:var(--text); padding:.45rem .8rem; border-radius:999px; font-weight:600; cursor:pointer; }
+.tabbar .tab.is-active{ background:var(--brand); border-color:var(--brand); color:#fff; }
+.tab-panel[hidden]{ display:none !important; }
+
+/* Sections in modal */
+.modal-section{ margin-top:1rem; }
+.section-title{ font-size:1.05rem; color:var(--brand); margin-bottom:.5rem; }
+.modal-profile-bio{ line-height:1.7; }
+.contact-links{ display:flex; flex-wrap:wrap; gap:.5rem; }
+.modal-actions{ display:flex; gap:.75rem; margin-top:1.25rem; align-items:center; }
+
+/* Message modal */
+.message-to-name{ font-weight:600; margin:.5rem 0 1rem; color:var(--brand); }
+.form-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.form-field{ display:grid; gap:.35rem; }
+.form-field-full{ grid-column:1 / -1; }
+.form-label{ font-weight:600; }
+
+input[type="text"], input[type="email"], textarea{
+  width:100%; border-radius:10px; border:1px solid var(--ring); padding:.65rem .75rem; font:inherit;
+}
+#messageTextarea{ resize:vertical; min-height:130px; }
+.word-count{ font-size:.9rem; margin-top:.3em; color:#374151; display:flex; gap:.5rem; }
+#wordLimitWarning{ color:#b91c1c; display:none; }
+
+.form-actions{ display:flex; gap:.75rem; margin-top:1rem; align-items:center; }
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; padding:.7rem 1rem; border-radius:10px; border:1px solid transparent; font-weight:600; cursor:pointer; transition:background .2s ease; text-decoration:none; }
+.btn-primary{ background:var(--brand); color:#fff; }
+.btn-primary:hover{ background:#25432f; }
+.btn-ghost{ background:transparent; color:#374151; border-color:var(--ring); }
+.btn-ghost:hover{ background:#f3f4f6; }
+.btn-link{ background:#f1f5f9; color:var(--text); border-color:#e5e7eb; }
+.btn-link:hover{ background:#e2e8f0; }
+.btn-lg{ padding:.9rem 1.2rem; font-size:1.05rem; width:100%; }
+
+/* Focus */
+:where(a,button).focus-visible,
+:where(.bio-link,.tab,.btn).focus-visible{
+  outline:3px solid rgba(46,83,57,.45); outline-offset:2px; border-radius:10px;
+}
+
+/* ==========================================================
+   Responsive
+   ========================================================== */
+@media (max-width: 900px) {
+  .team-layout { grid-template-columns: 1fr; gap: 2rem; justify-items: center; }
+  .right-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+
+@media (max-width: 600px) {
+  .right-grid { grid-template-columns: 1fr; }
+  .avatar, .avatar-large { width: 240px; height: 240px; }
+  .profile-modal-header { grid-template-columns: 96px 1fr; }
+  .modal-profile-img { width: 96px; height: 96px; }
+  .btn-lg { width: 100%; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+/* ==== Remove ALL vertical gap between hero paragraph and team cards ==== */
+
+/* Kill default h1/p margins inside the hero and control spacing explicitly */
+.team-hero { margin: 0 auto 0 !important; padding-top: 2.5rem; }
+.team-hero > .team-hero__title { margin: 0 0 .5rem !important; }
+.team-hero > .team-hero__tagline { margin: 0 !important; }
+
+/* If a global style adds margins to sections, override it here */
+.page-content .team-wrap { margin-top: 0 !important; }
+
+/* Extra guard for any “main > *” or sibling spacing rules */
+.page-content .team-hero + .team-wrap { margin-top: 0 !important; }
+
+/* ===== One-card container for hero + team grid ===== */
+.team-card{
+  max-width: 1200px;
+  margin: 24px auto;           /* centers the whole card */
+  padding: 28px 28px 36px;
+  background: #fffefb;         /* subtle off-white inside the site beige */
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.08);
+  border: 1px solid rgba(0,0,0,.04);
+}
+
+/* Control the internal spacing precisely */
+.team-card .team-hero{ 
+  margin: 0 0 16px;            /* only small gap to the grid */
+  padding-top: 0;              /* header spacing now owned by the card */
+}
+.team-card .team-hero__title{ margin: 0 0 .5rem; }
+.team-card .team-hero__tagline{ margin: 0; }
+
+.team-card .team-wrap{
+  margin: 0;                   /* kill any section top margin */
+  padding: 0;
+}
+
+/* Optional: small tweak so the whole grid feels optically centered */
+.team-card .team-layout{
+  margin: 0 auto;              /* center the grid inside the card */
+}
+/* Final polish: spacing, image size, and card blend */
+
+/* 1) Blend the card with the page background */
+.team-card{
+  background: transparent;   /* same as page */
+  box-shadow: none;          /* remove drop shadow */
+  border: 0;                 /* remove subtle border */
+}
+
+/* 2) Add a small gap between paragraph and the team grid */
+.team-card .team-hero{
+  margin: 0 0 24px;          /* ~24px space below the paragraph */
+}
+
+/* 3) Make all portraits smaller (uniform) */
+.avatar,
+.avatar-large{
+  width: 240px;
+  height: 240px;
+}
+
+/* Keep the right grid locked to the new image size */
+.right-grid{
+  grid-template-columns: repeat(2, 240px);
+  gap: 2.25rem 4rem;         /* slightly tighter gaps to match new size */
+}
+/* --- Final spacing & sizing adjustments --- */
+
+/* 1) Add more space under the paragraph (hero -> team grid) */
+.team-card .team-hero{
+  margin: 0 0 36px;            /* increase if you want even more (e.g., 44px) */
+}
+
+/* 2) Make all portraits smaller */
+.avatar,
+.avatar-large{
+  width: 200px;                /* was 240/280 */
+  height: 200px;
+}
+
+/* Keep the right grid locked to the new size and airy */
+.right-grid{
+  grid-template-columns: repeat(2, 200px);
+  gap: 2.75rem 5rem;           /* row gap, column gap */
+  width: max-content;
+}
+
+/* 3) Center Noel vertically between the two right-side rows */
+.team-left{
+  align-self: center;          /* vertical centering within the grid row */
+}
+
+/* Give Noel and the grid more breathing room between columns */
+.team-layout{
+  grid-template-columns: 320px max-content;  /* slightly narrower left col */
+  column-gap: 6rem;                           /* more space between Noel & Kyle */
+}
+
+/* Optional tiny nudge if you want Noel a hair higher/lower:
+.team-left{ transform: translateY(-6px); }
+*/
+
+/* More space between the hero paragraph and the team grid */
+.team-card .team-hero{ 
+  margin: 0 0 56px !important;   /* increase/decrease this value as you like */
+}
+
+/* guard against any global section spacing */
+.team-hero + .team-wrap{
+  margin-top: 0 !important;
+}
+
