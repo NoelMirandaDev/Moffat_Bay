@@ -64,7 +64,7 @@
         <form method="POST">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <button type="submit" name="action" value="confirm" class="btn-brown">Confirm Reservation</button>
-          <button type="submit" name="action" value="cancel" class="btn">Cancel</button>
+          <button type="submit" name="action" value="cancel" class="btn-green">Cancel</button>
         </form>
       </div>
     </div>
@@ -76,30 +76,10 @@
   <!-- LOGIN MODAL (Pop-up Overlay) -->
   {% include "partials/login_modal.html" %}
 
-  <script>
-    // Login Modal functionality
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+  <!-- Login Modal Script -->
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
-    }
-
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
-      }
-    });
-  </script>
-
+  <!-- Account Menu Script -->
+  <script src="{{ url_for('static', filename='js/accountMenu.js') }}"></script>
 </body>
 </html>

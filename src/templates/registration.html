@@ -16,29 +16,75 @@
     <section class="basic-section">
       <h1>Create Your Account</h1>
       <div class="register-form">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-      <div>
-        {% for category, message in messages %}
-          <div class="flash {{ category }}">{{ message }}</div>
-        {% endfor %}
-      </div>
-      {% endif %}
-      {% endwith %}
+      <!-- Flash Messages -->
+      {% include "partials/error_flash_messages.html" %}
 
         <form action="{{ url_for('registration') }}" method ="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             
             <div class ="name-grouping">
-              <input name="first" type="text" class="name-input" placeholder="First Name" required/>
-              <input name="last" type="text" class="name-input" placeholder="Last Name" required/>
+              <input
+                name="first"
+                type="text"
+                class="name-input"
+                placeholder="First Name"
+                required
+                maxlength="50"
+                value="{{ request.form.get('first', '') }}"
+              />
+              <input
+                name="last"
+                type="text"
+                class="name-input"
+                placeholder="Last Name"
+                required
+                maxlength="50"
+                value="{{ request.form.get('last', '') }}"
+              />
             </div>
 
-            <input name="email" type="email" class="register-input" placeholder="Email" required/>
+            <input
+              name="email"
+              type="email"
+              class="register-input"
+              placeholder="Email"
+              required 
+              maxlength="100"
+              value="{{ request.form.get('email', '') }}"
+            />
             
-            <input name="password" type="password" class="register-input" placeholder="Password" required pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}" title="Password must be at least 8 characters, contain an uppercase and lowercase letter, and a number."/>
+            <input
+              name="password"
+              type="password"
+              class="register-input"
+              placeholder="Password"
+              required
+              maxlength="128"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}"
+              title="Password must be at least 8 characters, contain an uppercase and lowercase letter, and a number."
+            />
+
+            <div class="password-confirm-group">
+              <input
+                name="confirm_password"
+                type="password"
+                class="register-input"
+                placeholder="Confirm Password"
+                required
+                maxlength="128"
+              />
+              <span class="pw-status-icon"></span>
+            </div>
             
-            <input name="phone" type="tel" class="register-input" placeholder="Phone Number" required/>
+            <input
+              name="phone"
+              type="tel"
+              class="register-input"
+              placeholder="Phone Number"
+              required
+              maxlength="20"
+              value="{{ request.form.get('phone', '') }}"
+            />
         
             <button type="submit" class="btn-register">Register</button>
         </form>
@@ -46,36 +92,23 @@
     </section>
   </main>
 
-<!-- FOOTER WITH PAGE LINKS -->
-{% include "partials/footer.html" %}
+  <!-- FOOTER WITH PAGE LINKS -->
+  {% include "partials/footer.html" %}
 
-<!-- LOGIN MODAL (Pop-up Overlay) -->
-{% include "partials/login_modal.html" %}
+  <!-- LOGIN MODAL (Pop-up Overlay) -->
+  {% include "partials/login_modal.html" %}
 
-<script>
-    // Login Modal functionality
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+  <!-- Login Modal Script -->
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
-    }
+  <!-- Opens Login Modal Automatically Script -->
+  {% if show_login %}
+    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
+  {% endif %}
 
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
-      }
-    });
-  </script>
-
+  <!-- Account Menu Script -->
+  <script src="{{ url_for('static', filename='js/accountMenu.js') }}"></script>
+  <!-- Confirming Password Script -->
+  <script src="{{ url_for('static', filename='js/confirming_password_ux.js') }}"></script>
 </body>
 </html>

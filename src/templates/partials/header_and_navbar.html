@@ -7,20 +7,28 @@
     </div>
     
     <nav class="navbar">
-      <a href="{{ url_for('landing') }}">Home</a>
-      <a href="{{ url_for('attraction') }}">Attraction</a>
-      <a href="{{ url_for('lodge_reservation') }}">Lodge Reservation</a>
-      <a href="{{ url_for('reservation_lookup') }}">Reservation Lookup</a>
-      <a href="{{ url_for('about') }}">About Us</a>
+      <a href="{{ url_for('landing') }}" class="{% if request.endpoint == 'landing' %}active{% endif %}">Home</a>
+      <a href="{{ url_for('attraction') }}" class="{% if request.endpoint == 'attraction' %}active{% endif %}">Attraction</a>
+      <a href="{{ url_for('lodge_reservation') }}" class="{% if request.endpoint == 'lodge_reservation' %}active{% endif %}">Lodge Reservation</a>
+      <a href="{{ url_for('reservation_lookup') }}" class="{% if request.endpoint == 'reservation_lookup' %}active{% endif %}">Reservation Lookup</a>
+      <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">About Us</a>
       
       {% if session.get("customer_id") %}
-        <!-- Logout button -->
-        <form method="GET" action="{{ url_for('logout') }}" style="display:inline;">
-          <button type="submit" class="btn-brown">Logout</button>
-        </form>
+        <!-- User initials Account Menu -->
+        <div class="account-menu">
+          <button class="avatar-btn" id="accountMenuButton" type="button">
+            <span class="user-initials">{{ session.get("initials") }}</span>
+          </button>
+
+          <div class="menu" id="accountMenuList">
+            <form method="GET" action="{{ url_for('logout') }}">
+              <button type="submit" class="menu-item">Sign Out</button>
+            </form>
+          </div>
+        </div>
       {% else %}
         <!-- Login button -->
-        <button class="btn-brown" id="loginBtn">Login</button>
+        <button class="btn-brown" id="loginBtn">Sign In</button>
       {% endif %}
     </nav>
   </div>

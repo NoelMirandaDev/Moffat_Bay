@@ -8,52 +8,15 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background: #f5f8fa;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .video-hero {
-    width: 100vw;
-    max-width: 100%;
-    height: 340px;           /* Fixed, elegant height */
-    background: #F5EFE2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 40px;
-    overflow: hidden;
-    position: relative;
-  }
-  .video-hero video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;    /* Show full video, no crop */
-    background: #F5EFE2;
-    display: block;
-    max-width: 100vw;
-    max-height: 100%;
-  }
-  @media (max-width: 800px) {
-    .video-hero {
-      height: 220px;        /* Smaller on tablets/phones */
-    }
-  }
-  @media (max-width: 500px) {
-    .video-hero {
-      height: 140px;        /* Very compact on mobile */
-    }
-  }
-  </style>
 </head>
 
-<body>
-
+<body class="landing-page">
   <!-- HEADER + NAVIGATION BAR -->
   {% include "partials/header_and_navbar.html" %}
  
   <!-- Flash Messages -->
   {% include "partials/success_flash_messages.html" %}
+  {% include "partials/error_flash_messages.html" %}
 
   <!-- HERO VIDEO SECTION (no overlay text) -->
   <section class="video-hero">
@@ -94,6 +57,44 @@
       </div>
     </a>
   </section>
+<!-- SALISH SEA / GIVE BACK TILE -->
+<section class="fish-tile" aria-labelledby="salish-title">
+  <div class="fish-tile-inner">
+    <!-- Left watermark fish -->
+    <div class="fish-tile-graphic" aria-hidden="true"></div>
+
+    <!-- Title/Sub-Title -->
+    <div class="fish-tile-content">
+      <h2 id="salish-title" class="section-title">Where the Forest Meets the Tide</h2>
+      <h3 class="section-subtitle">Honoring the Wild Heart of Moffat Bay</h3>
+
+      <p>
+        Moffat Bay Lodge sits where the forest meets the tide, home to salmon, eagles,
+        and the spirit of the sea. We’re dedicated to protecting these waters,
+        supporting local conservation, and promoting mindful travel that keeps
+        Moffat Bay thriving for generations to come.
+      </p>
+
+      <ul>
+        <li><strong>12+</strong> local orgs supported</li>
+        <li><strong>5,000+</strong> trees protected</li>
+        <li><strong>100%</strong> shoreline trash-free days</li>
+      </ul>
+
+      <div class="fish-cta">
+        <a href="https://www.pacificwild.org/" target="_blank" rel="noopener" class="help-button">Help Today</a>
+        <a href="/about.html" class="giveback-link">How we give back →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bottom wave -->
+<div class="wave-bottom" aria-hidden="true">
+  <svg viewBox="0 0 1440 110" preserveAspectRatio="none">
+    <path d="M0,70 C250,180 1190,-100 1440,70 L1440,110 L0,110 Z"></path>
+  </svg>
+</div>
 
   <!-- FOOTER WITH PAGE LINKS -->
   {% include "partials/footer.html" %}
@@ -101,39 +102,15 @@
   <!-- LOGIN MODAL (Pop-up Overlay) -->
   {% include "partials/login_modal.html" %}
 
-  <script>
-    // Login Modal functionality
-    const loginModal = document.getElementById('loginModal');
-    const loginBtn = document.getElementById('loginBtn');
-    const closeTriggers = document.querySelectorAll('[data-close-modal]');
+  <!-- Login Modal Script -->
+  <script src="{{ url_for('static', filename='js/loginModal.js') }}"></script>
 
-    if (loginBtn) {
-      loginBtn.addEventListener('click', () => {
-        loginModal.classList.add('show');
-      });
-    }
-
-    closeTriggers.forEach(el => {
-      el.addEventListener('click', () => {
-        loginModal.classList.remove('show');
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === "Escape") {
-        loginModal.classList.remove('show');
-      }
-    });
-  </script>
-
+  <!-- Opens Login Modal Automatically Script -->
   {% if show_login %}
-  <script>
-    window.onload = () => {
-      const modal = document.getElementById('loginModal');
-      if (modal) modal.classList.add('show');
-    };
-  </script>
+    <script src="{{ url_for('static', filename='js/if_show_login.js') }}"></script>
   {% endif %}
 
+  <!-- Account Menu Script -->
+  <script src="{{ url_for('static', filename='js/accountMenu.js') }}"></script>
 </body>
 </html>

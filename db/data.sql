@@ -18,6 +18,8 @@ TRUNCATE TABLE room;
 TRUNCATE TABLE amenity;
 TRUNCATE TABLE roomtype;
 TRUNCATE TABLE customer;
+TRUNCATE TABLE team_member_contribution;
+TRUNCATE TABLE team_member;
 
 -- 3) Re-enable FK checks
 SET FOREIGN_KEY_CHECKS = 1;
@@ -70,19 +72,19 @@ INSERT INTO roomamenity (RoomID, AmenityID) VALUES
 -- =========================
 -- Note: The PasswordHash data is hashed (use Password123 for testing)
 INSERT INTO customer (CustomerID, FirstName, LastName, Email, Phone, PasswordHash, RegistrationDate) VALUES
-(1, 'Amit', 'Rizal', 'amit@example.com', '555-1000',
+(1, 'Amit', 'Rizal', 'amit@example.com', '773-555-1000',
 'scrypt:32768:8:1$qf39ADPITLzbzecX$57a22d2620dbf5dd3ee8e93e9b0a4dc6bfacb18152e7d6048596849e0aba97078796a84d736317983992c38212a5f12e7b86c83770242041da112160ab63b6ae',
 NOW()),
-(2, 'Noel', 'Miranda', 'noel@example.com', '555-1001',
+(2, 'Noel', 'Miranda', 'noel@example.com', '773-555-1001',
 'scrypt:32768:8:1$H7Q2OgjMdZZ9Tcdj$dc94b8678b5a1cc7b98b32311d5c8ac9b01caf1810d767566db9d36ebd0a0afd40c6f96ef1cca11ba98c631dfccbebd23d1ba040ef317026995ae1d7bd03bf08',
 NOW()),
-(3, 'Kyle', 'Marlia-Conner', 'kyle@example.com', '555-1002',
+(3, 'Kyle', 'Marlia-Conner', 'kyle@example.com', '773-555-1002',
 'scrypt:32768:8:1$NTfSLirCkDBcUAfL$0e7cfadfee241137a205c52231b81812346ab729fe23157eb0586b245592bea741ede17edc7c28e4b98042364368ba5115e1685af95540c397f75a3f1e9cb741',
 NOW()),
-(4, 'Steve', 'Stylin', 'steve@example.com', '555-1003',
+(4, 'Steve', 'Stylin', 'steve@example.com', '773-555-1003',
 'scrypt:32768:8:1$0ihRndprtPUGeWmJ$722f006e4b0e229318f5704e46b82e71afd5073efca789fc01786969dd5afc21ca7dba0039fe6a93a5050a0bb5e67529c3e3b8e6f5bfd018b975494a34f3ac47',
 NOW()),
-(5, 'Riese', 'Bohnak', 'riese@example.com', '555-1004',
+(5, 'Riese', 'Bohnak', 'riese@example.com', '773-555-1004',
 'scrypt:32768:8:1$Qy6h6ICLkhLk2L8e$d289243739d17306d3ff3e817be2e4512480e4223abbedf6eee80fbf2026a1cf6eea2488bb7e62c19c2b80fdfd68b1cc89f02e7bb35587f90eb32561b4560693',
 NOW());
 
@@ -91,7 +93,7 @@ NOW());
 -- =========================
 INSERT INTO reservation (ReservationID, CustomerID, RoomID, CheckInDate, CheckOutDate, NumberOfGuests, ReservationStatus, DateReserved) VALUES
 (1001, 1, 201, '2025-09-06', '2025-09-09', 2, 'Confirmed', NOW()),
-(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Confirmed',   NOW()),
+(1002, 2, 101, '2025-09-02', '2025-09-04', 2, 'Confirmed', NOW()),
 (1003, 3, 301, '2025-09-29', '2025-10-02', 3, 'Confirmed', NOW()),
 (1004, 1, 103, '2025-10-14', '2025-10-16', 2, 'Cancelled', NOW());
 
@@ -104,27 +106,6 @@ INSERT INTO auditlog (AuditLogID, CustomerID, Action, Description, Timestamp) VA
 (5003, 2, 'Reservation Created', 'Reservation 1002 created for Room 101',       NOW()),
 (5004, 3, 'Reservation Created', 'Reservation 1003 created for Room 301',       NOW()),
 (5005, NULL, 'System',           'Nightly job: availability refresh completed', NOW());
-
--- =========================
--- Auto-increment adjustments (for nicer ID ranges)
--- =========================
-ALTER TABLE roomtype    AUTO_INCREMENT = 100;
-ALTER TABLE amenity     AUTO_INCREMENT = 100;
-ALTER TABLE room        AUTO_INCREMENT = 500;
-ALTER TABLE customer    AUTO_INCREMENT = 1000;
-ALTER TABLE reservation AUTO_INCREMENT = 2000;
-ALTER TABLE auditlog    AUTO_INCREMENT = 6000;
-
---=================================================
--- DEVELOPMENT SEED SCRIPT
--- WARNING: This script will ERASE ALL data in
--- team_member_contribution and team_member; tables.
--- Use ONLY for local development or testing!
---=================================================
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE  team_member_contribution;
-TRUNCATE TABLE team_member;
-SET FOREIGN_KEY_CHECKS = 1;
 
 -- ===========================
 -- Team Member TABLE
@@ -179,13 +160,21 @@ INSERT INTO team_member (first_name, middle_name, last_name, role, bio, fun_fact
 -- ========================
 -- Team Member_contribution 
 -- ========================
--- Assumes auto-increment IDs start at 1 and match the order above.
-
 INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Noel
-(1, 'Implemented user Login system'),
-(1, 'Initialized the Moffat Bay GitHub repository and project structure'),
-(1, 'Implemented the room reservation system'),
+(1, 'Initialized the Moffat Bay project and repository structure'),
+(1, 'Created the project README file'),
+(1, 'Connected the database and configured application settings'),
+(1, 'Implemented CSRF protection across all forms'),
+(1, 'Developed the login (backend) and logout (frontend and backend) functionality'),
+(1, 'Built the room reservation system: frontend and backend for room listings with pagination and detailed room booking page, and backend for the reservation summary page'),
+(1, 'Implemented the reservation lookup backend'),
+(1, 'Implemented secure password hashing during registration and contributed to backend validation for the registration process'),
+(1, 'Handled session management across the application'),
+(1, 'Refactored and modularized the codebase to improve reusability and scalability'),
+(1, 'Broke down the routes page into a dedicated services layer to separate concerns and improve maintainability'),
+(1, 'Led the team by breaking down tasks, updating the Kanban board, reviewing code, and providing constructive feedback throughout development'),
+(1, 'Added a custom 404 error page with styled message and image to improve user experience when navigating to invalid URLs'),
 -- Kyle
 (2, 'Created the main blueprint for the style guide the website will utilize'),
 (2, 'Designed and implemented a pop-up login window (much like AirBnB or Kayak) that keeps the user on the page they were on'),
@@ -201,3 +190,13 @@ INSERT INTO team_member_contribution (team_member_id, contribution) VALUES
 -- Amit
 (5, 'Registration and reservation pages.'),
 (5, 'Collaborated on user interface design and prototype');
+
+-- =========================
+-- Auto-increment adjustments (for nicer ID ranges)
+-- =========================
+ALTER TABLE roomtype    AUTO_INCREMENT = 100;
+ALTER TABLE amenity     AUTO_INCREMENT = 100;
+ALTER TABLE room        AUTO_INCREMENT = 500;
+ALTER TABLE customer    AUTO_INCREMENT = 1000;
+ALTER TABLE reservation AUTO_INCREMENT = 2000;
+ALTER TABLE auditlog    AUTO_INCREMENT = 6000;
