@@ -191,6 +191,14 @@ body.landing-page {
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
+.lookup-container h2{
+  font-family: "Playfair Display", serif;
+  color: #2e5339;
+}
+
+.lookup-container p{
+  color: #555
+}
 .lookup-container table {
   background-color: #D3D3D3;
   padding: 10px;
@@ -199,6 +207,8 @@ body.landing-page {
 }
 
 .lookup-container th {
+  font-family: "Playfair Display", serif;
+  font-size: 1.1rem;
   color: #2E5339;
   padding: 12px;
   text-align: center;
@@ -207,6 +217,7 @@ body.landing-page {
 .lookup-container td {
   padding: 12px;
   text-align: center;
+  color:#555;
 }
 
 .lookup-container tbody tr:hover {
@@ -270,6 +281,8 @@ body.landing-page {
 
   .lookup-container td::before {
     content: attr(data-label);
+    font-family: "Playfair Display", serif;
+    font-size: 1.05rem;
     color: #2E5339;
     font-weight: bold;
     width: 50%;
